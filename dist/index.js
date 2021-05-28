@@ -40,14 +40,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fastify_1 = __importDefault(require("fastify"));
+var metadata_1 = __importDefault(require("./metadata"));
 var server = fastify_1.default();
 server.get('/metadata', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
-    var response;
     return __generator(this, function (_a) {
-        response = {
-            resourceType: "CapabilityStatement"
-        };
-        reply.send(response);
+        reply.send(metadata_1.default);
         return [2 /*return*/];
     });
 }); });

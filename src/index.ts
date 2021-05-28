@@ -1,14 +1,10 @@
 import fastify from 'fastify'
-import FHIR from '@automate-medical/fhir-schema-types'
+import metadata from './metadata'
 
 const server = fastify()
 
 server.get('/metadata', async (request, reply) => {
-  const response: FHIR.CapabilityStatement = {
-    resourceType: "CapabilityStatement"
-  }
-
-  reply.send(response)
+  reply.send(metadata)
 })
 
 server.listen(8080, (err, address) => {

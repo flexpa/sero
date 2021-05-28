@@ -2,7 +2,7 @@
   "name": "fhir.ts",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "watch": "tsc --watch --preserveWatchOutput --pretty",
     "dev": "NODE_ENV=development nodemon",
