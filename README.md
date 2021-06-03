@@ -8,6 +8,11 @@ fhir.ts is an unnamed FHIR implementation targeting all three major definitions 
 
 It currently has no published build.
 
+## Progress
+
+- Support for /metadata and the Conformance/CapabilityStatement retrieval is working
+- Mocked functions for the instance level, type level, and system level REST APIs
+
 ## Contributing
 
 ```
