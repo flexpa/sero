@@ -2,9 +2,11 @@
 
 fhir.ts is an unnamed FHIR implementation targeting all three major definitions with Rust and TypeScript:
 
-- FHIR Document support through persistence, typing, and validation tools
-- FHIR REST API support through configurable server
-- FHIR Messaging support
+- [ ] FHIR Document support through persistence, typing, and validation tools
+- [ ] FHIR REST API support through configurable server
+  - [ ] HTTP client and server
+  - [ ] GraphQL
+- [ ] FHIR Messaging support
 
 It currently has no published build.
 
