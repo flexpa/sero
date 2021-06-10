@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fastify_1 = __importDefault(require("fastify"));
 var operations_1 = require("./routes/operations");
 exports.default = (function (config) {
-    if (config === void 0) { config = {}; }
+    if (config === void 0) { config = {
+        resources: ["Patient"]
+    }; }
     var http = fastify_1.default();
     // Whole System Interactions
     // Get a capability statement for the system
@@ -33,9 +35,8 @@ exports.default = (function (config) {
         url: '/',
         handler: operations_1.batch
     });
-    var resourceList = ["Patient"];
     // Instance Level Interactions
-    resourceList.forEach(function (resource) {
+    config.resources.forEach(function (resource) {
         // Read the current state of the resource
         http.route({
             method: 'GET',
@@ -74,7 +75,7 @@ exports.default = (function (config) {
         });
     });
     // Type Level Interactions
-    resourceList.forEach(function (resource) {
+    config.resources.forEach(function (resource) {
         // Create a new resource with a server assigned id
         http.route({
             method: 'POST',

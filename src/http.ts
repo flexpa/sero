@@ -1,11 +1,17 @@
 import fastify from 'fastify'
 import { capabilities, batch, read, vread, update, patch, destroy, history, create, search } from './routes/operations'
 
+// Stubbed for now - need ResourceList
+type FHIRResource = "Patient"
+
 interface IConfig {
   store?: "memory";
+  resources: FHIRResource[]
 }
 
-export default (config: IConfig = {}) => {
+export default (config: IConfig = {
+  resources: ["Patient"]
+}) => {
   const http = fastify()
 
   // Whole System Interactions
@@ -36,9 +42,8 @@ export default (config: IConfig = {}) => {
     handler: batch
   })
 
-  const resourceList = ["Patient"]
   // Instance Level Interactions
-  resourceList.forEach((resource) => {
+  config.resources.forEach((resource) => {
     // Read the current state of the resource
     http.route({
       method: 'GET',
@@ -78,7 +83,7 @@ export default (config: IConfig = {}) => {
   })
 
   // Type Level Interactions
-  resourceList.forEach((resource) => {
+  config.resources.forEach((resource) => {
     // Create a new resource with a server assigned id
     http.route({
       method: 'POST',
