@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml)
 
-Serotiny is a modular TypeScript toolchain for FHIR (and friends).
+Serotiny is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.
 
 Health data is spreading everywhere. FHIR is a big part of that. Serotiny is built for developers who need tools in the languages they know, with opinionated answers to solve common problems.
 
@@ -63,15 +63,14 @@ Building support for this protocol as a distribution/access channel for novel cl
 - Loading Services from `PlanDefinition` is not currently possible
 - Currently passes Touchstone with a warning
 
-## Progress
+### Links
+- https://www.hl7.org/fhir/clinicalreasoning-cds-on-fhir.html
+- https://cds-hooks.org/
 
-- Support for /metadata and the Conformance/CapabilityStatement retrieval is working
-- Mocked functions for the instance level, type level, and system level REST APIs
-- CDS Hooks
-  - https://www.hl7.org/fhir/clinicalreasoning-cds-on-fhir.html
-  - https://cds-hooks.org/
 
-## Contributing
+## Development
+
+We currently target the Node 14.x runtime. You can use nodemon to watch + compile on file system events with `npm run watch` + `npm run dev`.
 
 ```
 npm install
@@ -80,5 +79,19 @@ npm run dev
 ```
 
 ## License
+
+Copyright 2021 Automate Medical Inc
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 Copyright Automate Medical Inc.
