@@ -4,6 +4,8 @@
 
 Serotiny is a modular TypeScript toolchain for FHIR (and friends) sponsored by [Automate Medical Inc.](https://www.automatemedical.com/)
 
+<img width="176" alt="logo-@2x (2)" src="https://user-images.githubusercontent.com/704789/123880097-31e0ac80-d8ff-11eb-996b-1b852b187e6a.png">
+
 Health data is spreading everywhere. FHIR is a big part of that. Serotiny is built for developers who need tools in the languages they know, with opinionated answers to solve common problems.
 
 Features:
@@ -24,9 +26,13 @@ Roadmap:
 - Deployment configurations
 - Subscriptions/Streams
 
+
 ## Docs
 * [Quick Start](#quick-start)
-* 
+* [REST](#rest)
+* [CDS Hooks](#cds-hooks)
+* [Development](#development)
+* [License](#license)
 
 ### Quick Start
 
@@ -56,19 +62,18 @@ Serotiny automatically scaffolds all of the necessary API routes in the spec whe
 
 Building support for this protocol as a distribution/access channel for novel clinical decision making techniques is super easy with Serotiny. Because of its modular design, CDS Hooks can be run as a totally standalone service: `example/cds-hooks.ts` shows an instance of Serotiny in this configuration.
 
-### Conformance notes
+#### Conformance notes
 - Implements Discovery service call
 - Implements HookRequest call, and invoking a service
 - Implements Feedback call
 - Loading Services from `PlanDefinition` is not currently possible
 - Currently passes Touchstone with a warning
 
-### Links
+#### Links
 - https://www.hl7.org/fhir/clinicalreasoning-cds-on-fhir.html
 - https://cds-hooks.org/
 
-
-## Development
+### Development
 
 We currently target the Node 14.x runtime. You can use nodemon to watch + compile on file system events with `npm run watch` + `npm run dev`.
 
@@ -78,7 +83,7 @@ npm run watch
 npm run dev
 ```
 
-## License
+### License
 
 Copyright 2021 Automate Medical Inc
 
