@@ -7,34 +7,46 @@ Serotiny is a modular TypeScript toolchain for FHIR (and friends).
 Health data is spreading everywhere. FHIR is a big part of that. Serotiny is built for developers who need tools in the languages they know, with opinionated answers to solve common problems.
 
 Features:
-- A broken [FHIR](https://www.hl7.org/fhir/http.html) [REST](#rest)ful API implementation of base resources
-- A non-existence [FHIR] GraphQL API implementation of base resources
-- Actually good [CDS Hooks](#cds-hooks) Service support
-- Modular design so that you can run 1 service or many
-- In-memory persistence (please don't actually use this)
-- Out of box typings support for FHIR R4 with generics
+- Multiple feature-specific composable modules 
+- REST API implementation for [FHIR](https://www.hl7.org/fhir/http.html) with base R4 resources and unfinished operations
+- A functional [CDS Hooks](#cds-hooks) Service implementation
+- Alpha In-memory Store design for persisting FHIR as a log
+- Out of box typings support for FHIR R4 with generics, CDS Hooks 
 
-We're thinking about:
+Roadmap:
+- Resource specific routing engine
+- GraphQL API implementation of base resources
 - SMART Apps/Launching
 - Access control
-- Building a Validator so
-- CQL
+- Building a TS native Validator
+- Executing CQL 
 - Profile support
 - Deployment configurations
 - Subscriptions/Streams
 
 ## Docs
 * [Quick Start](#quick-start)
+* 
 
-## Quick Start
+### Quick Start
 
-`
+Install node 14.x on your platform.
 
-## REST
+The default example will boot at port 8080. You can see the full example at [example/full-server.ts](.example/full-server.ts)
 
-Serotiny exposes a `Rest` service that
+```shell
+git clone https://github.com/automate-medical/sero
+npm install
+npm start
+```
 
-## CDS Hooks
+### REST
+
+Serotiny exposes a `Rest` service that adds routes for `batch`, `capabilityStatement`, `instanceOperations`, and `typeOperations` routes and handlers.
+
+It consomes an instance of `http` and appends the configurable list above.
+
+### CDS Hooks
 
 Serotiny exposes `Service` and `Card` classes which can be used from the `@sero/cds-hooks` module.
 
@@ -45,45 +57,11 @@ Serotiny automatically scaffolds all of the necessary API routes in the spec whe
 Building support for this protocol as a distribution/access channel for novel clinical decision making techniques is super easy with Serotiny. Because of its modular design, CDS Hooks can be run as a totally standalone service: `example/cds-hooks.ts` shows an instance of Serotiny in this configuration.
 
 ### Conformance notes
-- Discovery service call
+- Implements Discovery service call
+- Implements HookRequest call, and invoking a service
+- Implements Feedback call
 - Loading Services from `PlanDefinition` is not currently possible
 - Currently passes Touchstone with a warning
-
-### Example
-
-```typescript
-import { Service, Card } from "@sero/cds-hooks";
-
-interface PatientPrefetch {
-	patient: fhir4.Patient;
-}
-
-export default new Service(
-	{
-		title: "Echo service",
-		hook: "patient-view",
-		description: "A demo service",
-		prefetch: {
-			patient: "Patient/{{context.patientId}}"
-		}
-	},
-	(request: CDSHooks.HookRequest<PatientPrefetch>) => {
-		const { patient } = request.prefetch;
-
-		return {
-			cards: [
-				new Card({
-					detail: "CDS Card Response",
-					source: {
-						label: "Serotiny Server",
-					},
-					summary: "Info"
-				})
-			]
-		}
-	}
-)
-```
 
 ## Progress
 
@@ -94,8 +72,6 @@ export default new Service(
   - https://cds-hooks.org/
 
 ## Contributing
-
-
 
 ```
 npm install
