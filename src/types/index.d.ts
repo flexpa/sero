@@ -1,2 +1,2 @@
-/// <reference path="./cds-hooks/index.d.ts" />
-/// <reference path="./smart/index.d.ts" />
+import "./cds-hooks/index.d.ts"
+import "./smart/index.d.ts"

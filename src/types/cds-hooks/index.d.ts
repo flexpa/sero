@@ -1,3 +1,5 @@
+import { info } from "console"
+
 export as namespace CDSHooks
 
 export interface Coding {

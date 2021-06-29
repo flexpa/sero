@@ -47,10 +47,8 @@ const TerminologyCapabilities: fhir4.TerminologyCapabilities = {
   codeSystem: []
 }
 
-async function capabilities(request: FastifyRequest, reply: FastifyReply) {
-  // @ts-expect-error
+async function capabilities(request: FastifyRequest<{ Querystring: { mode: string }}>, reply: FastifyReply) {
   switch (request.query.mode) {
-
     case "normative":
       // the entirety of the capability statement is normative today
       reply.send(CapabilityStatement)

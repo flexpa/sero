@@ -1,9 +1,5 @@
 import { Service, Card } from "../../src/cds-hooks";
 
-interface PatientPrefetch {
-	patient: fhir4.Patient;
-}
-
 export default new Service(
 	{
 		title: "Static CDS Service Example",
@@ -13,7 +9,7 @@ export default new Service(
 			patient: "Patient/{{context.patientId}}"
 		}
 	},
-	(request: CDSHooks.HookRequest<PatientPrefetch>) => {
+	(request: CDSHooks.HookRequest<{ patient: fhir4.Patient }>) => {
 		const { patient } = request.prefetch;
 
 		return {
@@ -23,7 +19,8 @@ export default new Service(
 					source: {
 						label: "Warning service",
 					},
-					summary: "Warning"
+					summary: "Warning",
+					indicator: "info"
 				})
 			]
 		}

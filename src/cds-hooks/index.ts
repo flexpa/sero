@@ -11,10 +11,22 @@ export function getService(services: Service[], id: string): Service | undefined
 	return services.find((service) => service.id == id)
 }
 
+/**
+ * ServiceHandler is a function signature for the function invoked on the service
+ * to resolve a HookRequest
+ *
+ * @todo Is it possible to structure the generic here on something other than `any`?
+ */
 type ServiceHandler = {
-  (request: CDSHooks.HookRequest<CDSHooks.PrefetchTemplate>): CDSHooks.HookResponse;
+  (request: CDSHooks.HookRequest<any>): CDSHooks.HookResponse;
 };
 
+/**
+ * Service implements the idea of the same name in the CDS Hooks specification
+ *
+ * @todo Support warning message if prefetch query restrictions are broken
+ * https://cds-hooks.org/specification/current/#prefetch-query-restrictions
+ */
 export class Service implements CDSHooks.Service {
   public id: string;
   public title?: string;
@@ -23,10 +35,8 @@ export class Service implements CDSHooks.Service {
   public prefetch?: CDSHooks.PrefetchTemplate;
   public fn: ServiceHandler;
 
-  // https://cds-hooks.org/specification/current/#prefetch-query-restrictions
-  // Support warning message if prefretch query restrictions are broken (possible to do this or not...)
   constructor(
-    options: CDSHooks.Service,
+    options: Partial<CDSHooks.Service> & { hook: string; description: string },
     fn: ServiceHandler
   ) {
     this.hook = options.hook;
@@ -38,18 +48,24 @@ export class Service implements CDSHooks.Service {
   }
 }
 
+/**
+ * Card implements the idea of the same name in the CDS Hooks specification
+ *
+ * @todo Support warning message if prefetch query restrictions are broken
+ * https://cds-hooks.org/specification/current/#prefetch-query-restrictions
+ */
 export class Card implements CDSHooks.Card {
   uuid: string;
   summary: string;
   detail?: string;
-  indicator: ('info' | 'warning' | 'critical') = 'info';
+  indicator: 'info' | 'warning' | 'critical';
   source: CDSHooks.Source;
   suggestions?: CDSHooks.Suggestion[];
   selectionBehavior?: 'at-most-one' | 'any';
   overrideReasons?: CDSHooks.OverrideReason[];
   links?: CDSHooks.Link[];
 
-  constructor(options: CDSHooks.Card) {
+  constructor(options: Partial<CDSHooks.Card> & { source: CDSHooks.Source; summary: string; indicator: 'info' } ) {
     this.uuid = options.uuid || randomUUID();
     this.detail = options.detail;
     this.suggestions = options.suggestions;

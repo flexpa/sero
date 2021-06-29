@@ -2,12 +2,28 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { getService } from ".";
 import Config from "../config";
 
+/**
+ * @deprecated
+ * @param reply
+ */
 function addCorsHeaders(reply: FastifyReply): void {
 	reply.header("Access-Control-Allow-Origin", "*");
 	reply.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 	reply.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 }
 
+/**
+ * Validates that the hook request:
+ * 	 - Is for a real service
+ *   - Meets the input requirements
+ *   - ???
+ *
+ * @todo not actually implemented and return value should be the service maybe
+ *
+ * @param hookRequest
+ * @param reply
+ * @returns boolean
+ */
 function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<string, any>>, reply: FastifyReply): boolean {
 	return true
 }
@@ -40,7 +56,10 @@ function invoke(options: Config["cdsHooks"]) {
 }
 
 /**
- * Responsible for accepting feedback requests as defined by the protocol
+ * Responsible for accepting feedback requests as defined by the protocol. Logs the request
+ * but doesn't otherwise process or validate it.
+ *
+ * @todo validate that the feedback has referrential integrity to some original HookRequest
  *
  * @param options
  */
@@ -50,6 +69,7 @@ function invoke(options: Config["cdsHooks"]) {
 
 		const feedback = request.body as CDSHooks.Feedback;
 
+		request.log.info('Feedback received', feedback);
 
 		reply.send()
 	}
@@ -116,7 +136,7 @@ export default (http: FastifyInstance, options: Config["cdsHooks"]) => {
 		method: 'POST',
 		url: '/cds-services/:id/feedback',
 		schema: feedbackSchema,
-		handler: feedback
+		handler: feedback(options)
 	})
 
 	if (options?.cors) {
