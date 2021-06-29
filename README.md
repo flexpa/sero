@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml)
 
-Serotiny is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.
+Serotiny is a modular TypeScript toolchain for FHIR (and friends) sponsored by [Automate Medical Inc.](https://www.automatemedical.com/)
 
 Health data is spreading everywhere. FHIR is a big part of that. Serotiny is built for developers who need tools in the languages they know, with opinionated answers to solve common problems.
 
