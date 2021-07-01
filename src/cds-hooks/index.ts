@@ -21,6 +21,8 @@ type ServiceHandler = {
   (request: CDSHooks.HookRequest<any>): CDSHooks.HookResponse;
 };
 
+export type Hooks = "patient-view" | "order-sign" | "order-select" | "order-review" | "medication-prescribe" | "encounter-start" | "encounter-discharge" | "appointment-book"
+
 /**
  * Service implements the idea of the same name in the CDS Hooks specification
  *
@@ -31,12 +33,12 @@ export class Service implements CDSHooks.Service {
   public id: string;
   public title?: string;
   public description: string;
-  public hook: string;
+  public hook: Hooks;
   public prefetch?: CDSHooks.PrefetchTemplate;
   public fn: ServiceHandler;
 
   constructor(
-    options: Partial<CDSHooks.Service> & { hook: string; description: string },
+    options: Partial<CDSHooks.Service> & { hook: Hooks; description: string },
     fn: ServiceHandler
   ) {
     this.hook = options.hook;

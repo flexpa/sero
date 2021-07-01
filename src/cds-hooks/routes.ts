@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { getService } from ".";
 import Config from "../config";
+import { validateHookRequest } from "./util";
 
 /**
  * @deprecated
@@ -10,22 +11,6 @@ function addCorsHeaders(reply: FastifyReply): void {
 	reply.header("Access-Control-Allow-Origin", "*");
 	reply.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 	reply.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-}
-
-/**
- * Validates that the hook request:
- * 	 - Is for a real service
- *   - Meets the input requirements
- *   - ???
- *
- * @todo not actually implemented and return value should be the service maybe
- *
- * @param hookRequest
- * @param reply
- * @returns boolean
- */
-function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<string, any>>, reply: FastifyReply): boolean {
-	return true
 }
 
 /**
@@ -43,15 +28,25 @@ function invoke(options: Config["cdsHooks"]) {
 	return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
 		if (options?.cors) addCorsHeaders(reply);
 
-		const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
-		const valid = validateHookRequest(hookRequest, reply);
-
-		if (!valid) return
+		if (request.validationError) console.log(request.validationError)
 
 		const service = getService(options?.services || [], request.params.id);
-		const response = service?.fn(hookRequest);
 
-		reply.send(response);
+		if (!service) {
+			reply.statusCode = 404;
+			reply.send();
+		} else {
+			const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
+			const valid = validateHookRequest(hookRequest, service);
+
+			if (!valid) {
+				reply.statusCode = 400;
+				reply.send({ error: 'bad' })
+			} else {
+				const response = service.fn(hookRequest);
+				reply.send(response);
+			}
+		}
 	}
 }
 
@@ -80,13 +75,146 @@ const hookRequestSchema = {
 		type: 'object',
 		required: ['hook', 'hookInstance', 'context'],
 		properties: {
-			hook: { type: 'string' },
+			hook: {
+				type: 'string',
+				enum: [
+					'appointment-book',
+					'encounter-discharge',
+					'encounter-start',
+					'medication-prescribe',
+					'order-review',
+					'order-select',
+					'order-sign',
+					'patient-view'
+				]
+			},
 			hookInstance: { type: 'string' },
 			fhirServer: { type: 'string' },
 			fhirAuthorization: { type: 'object' },
 			context: { type: 'object' },
 			prefetch: { type: 'object' }
-		}
+		},
+		// Pattern from https://stackoverflow.com/questions/38717933/jsonschema-attribute-conditionally-required/38781027#38781027
+		oneOf: [
+			{
+				properties: {
+					hook: { const: 'appointment-book' },
+					context: {
+						type: 'object',
+						required: ['userId', 'patientId', 'appointments'],
+						properties: {
+							userId: { type: 'string' },
+							patientId: { type: 'string' },
+							appointments: { type: 'object' },
+							encounterId: { type: 'string' }
+						}
+					}
+				}
+			},
+			{
+				properties: {
+					hook: { const: 'encounter-discharge' },
+					context: {
+						type: 'object',
+						required: ['userId', 'patientId', 'encounterId'],
+						properties: {
+							userId: { type: 'string' },
+							patientId: { type: 'string' },
+							encounterId: { type: 'string' }
+						}
+					}
+				}
+			},
+			{
+				properties: {
+					hook: { const: 'encounter-start' },
+					context: {
+						type: 'object',
+						required: ['userId', 'patientId', 'encounterId'],
+						properties: {
+							userId: { type: 'string' },
+							patientId: { type: 'string' },
+							encounterId: { type: 'string' }
+						}
+					}
+				}
+			},
+			{
+				properties: {
+					hook: { const: 'medication-prescribe' },
+					context: {
+						type: 'object',
+						required: ['userId', 'patientId'],
+						properties: {
+							userId: { type: 'string' },
+							patientId: { type: 'string' },
+							encounterId: { type: 'string' },
+							medications: { type: 'object' },
+						}
+					}
+				}
+			},
+			{
+				properties: {
+					hook: { const: 'order-review' },
+					context: {
+						type: 'object',
+						required: ['userId', 'patientId', 'orders'],
+						properties: {
+							userId: { type: 'string' },
+							patientId: { type: 'string' },
+							encounterId: { type: 'string' },
+							orders: { type: 'object' },
+						}
+					}
+				}
+			},
+			{
+				properties: {
+					hook: { const: 'order-select' },
+					context: {
+						type: 'object',
+						required: ['userId', 'patientId', 'selections', 'draftOrders'],
+						properties: {
+							userId: { type: 'string' },
+							patientId: { type: 'string' },
+							encounterId: { type: 'string' },
+							selections: { type: 'array' },
+							draftOrders: { type: 'object' }
+						}
+					}
+				}
+			},
+			{
+				properties: {
+					hook: { const: 'order-sign' },
+					context: {
+						type: 'object',
+						required: ['userId', 'patientId', 'draftOrders'],
+						properties: {
+							userId: { type: 'string' },
+							patientId: { type: 'string' },
+							encounterId: { type: 'string' },
+							draftOrders: { type: 'object' }
+						}
+					}
+				}
+			},
+			{
+				properties: {
+					hook: { const: 'patient-view' },
+					context: {
+						type: 'object',
+						required: ['userId', 'patientId'],
+						properties: {
+							userId: { type: 'string' },
+							patientId: { type: 'string' },
+							encounterId: { type: 'string' }
+						}
+					}
+				}
+			}
+		]
 	}
 }
 
@@ -129,6 +257,7 @@ export default (http: FastifyInstance, options: Config["cdsHooks"]) => {
 		method: 'POST',
 		url: '/cds-services/:id',
 		schema: hookRequestSchema,
+		attachValidation: true,
 		handler: invoke(options)
 	})
 
