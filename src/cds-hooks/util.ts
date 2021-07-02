@@ -1,4 +1,6 @@
 import { Service } from "./index";
+import Ajv, { ValidateFunction, ErrorObject } from "ajv";
+import { Hooks } from "./index"
 
 /**
  * Validates that the hook request:
@@ -12,8 +14,31 @@ import { Service } from "./index";
  * @param reply
  * @returns boolean
  */
-export function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<string, any>>, service: Service): boolean {
-	return validatePrefetchContract(hookRequest.prefetch, service)
+export function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<string, any>>, service: Service): Error | undefined {
+  // @ts-ignore
+  const context = validateContext(hookRequest.context, hookRequest.hook)
+
+  if (context.errors) {
+    const error = schemaErrorFormatter(context.errors, 'body.context')
+    // @ts-ignore
+    error.validation = context.errors;
+    // @ts-ignore
+    error.validationContext = 'body.context'
+
+    return error
+  }
+}
+
+function schemaErrorFormatter (errors: ErrorObject[], dataVar: string) {
+  let text = ''
+  const separator = ', '
+
+  for (var i = 0; i !== errors.length; ++i) {
+    const e = errors[i]
+    // @ts-ignore
+    text += dataVar + (e.dataPath || '') + ' ' + e.message + separator
+  }
+  return new Error(text.slice(0, -separator.length))
 }
 
 function validatePrefetchContract(prefetch: Record<string, any> | undefined, service: Service): boolean {
@@ -29,4 +54,110 @@ function validatePrefetchContract(prefetch: Record<string, any> | undefined, ser
 	else {
 		return true;
 	}
+}
+
+function validateContext(context: Record<string, any>, hook: Hooks) {
+  const ajv = new Ajv({
+    removeAdditional: true,
+    useDefaults: true,
+    coerceTypes: true,
+    allErrors: false
+  })
+
+  function contextFor(hook: Hooks) {
+    switch (hook) {
+      case "appointment-book":
+        return {
+          type: 'object',
+          required: ['userId', 'patientId', 'appointments'],
+          properties: {
+            userId: { type: 'string' },
+            patientId: { type: 'string' },
+            appointments: { type: 'object' },
+            encounterId: { type: 'string' }
+          }
+        }
+      case "encounter-discharge":
+        return {
+          type: 'object',
+          required: ['userId', 'patientId', 'encounterId'],
+          properties: {
+            userId: { type: 'string' },
+            patientId: { type: 'string' },
+            encounterId: { type: 'string' }
+          }
+        };
+      case "encounter-start":
+        return {
+          type: 'object',
+          required: ['userId', 'patientId', 'encounterId'],
+          properties: {
+            userId: { type: 'string' },
+            patientId: { type: 'string' },
+            encounterId: { type: 'string' }
+          }
+        };
+      case "medication-prescribe":
+        return {
+          type: 'object',
+          required: ['userId', 'patientId'],
+          properties: {
+            userId: { type: 'string' },
+            patientId: { type: 'string' },
+            encounterId: { type: 'string' },
+            medications: { type: 'object' },
+          }
+        };
+      case "order-review":
+        return {
+          type: 'object',
+          required: ['userId', 'patientId', 'orders'],
+          properties: {
+            userId: { type: 'string' },
+            patientId: { type: 'string' },
+            encounterId: { type: 'string' },
+            orders: { type: 'object' },
+          }
+        };
+      case "order-select":
+        return {
+          type: 'object',
+          required: ['userId', 'patientId', 'selections', 'draftOrders'],
+          properties: {
+            userId: { type: 'string' },
+            patientId: { type: 'string' },
+            encounterId: { type: 'string' },
+            selections: { type: 'array' },
+            draftOrders: { type: 'object' }
+          }
+        };
+      case "order-sign":
+        return {
+          type: 'object',
+          required: ['userId', 'patientId', 'draftOrders'],
+          properties: {
+            userId: { type: 'string' },
+            patientId: { type: 'string' },
+            encounterId: { type: 'string' },
+            draftOrders: { type: 'object' }
+          }
+        };
+      case "patient-view":
+        return {
+          type: 'object',
+          required: ['userId', 'patientId'],
+          properties: {
+            userId: { type: 'string' },
+            patientId: { type: 'string' },
+            encounterId: { type: 'string' }
+          }
+        };
+    }
+  }
+
+  const schema = contextFor(hook)
+
+  const compiled = ajv.compile(schema)
+  compiled(context)
+  return compiled
 }

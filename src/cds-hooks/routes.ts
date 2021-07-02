@@ -27,21 +27,16 @@ function addCorsHeaders(reply: FastifyReply): void {
 function invoke(options: Config["cdsHooks"]) {
 	return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
 		if (options?.cors) addCorsHeaders(reply);
-
-		if (request.validationError) console.log(request.validationError)
-
 		const service = getService(options?.services || [], request.params.id);
 
-		if (!service) {
-			reply.statusCode = 404;
-			reply.send();
+    if (!service) {
+			reply.code(404).send();
 		} else {
 			const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
-			const valid = validateHookRequest(hookRequest, service);
-
-			if (!valid) {
-				reply.statusCode = 400;
-				reply.send({ error: 'bad' })
+			const validationError = validateHookRequest(hookRequest, service);
+      
+      if (validationError) {
+				reply.code(400).send(validationError)
 			} else {
 				const response = service.fn(hookRequest);
 				reply.send(response);
@@ -95,126 +90,6 @@ const hookRequestSchema = {
 			prefetch: { type: 'object' }
 		},
 		// Pattern from https://stackoverflow.com/questions/38717933/jsonschema-attribute-conditionally-required/38781027#38781027
-		oneOf: [
-			{
-				properties: {
-					hook: { const: 'appointment-book' },
-					context: {
-						type: 'object',
-						required: ['userId', 'patientId', 'appointments'],
-						properties: {
-							userId: { type: 'string' },
-							patientId: { type: 'string' },
-							appointments: { type: 'object' },
-							encounterId: { type: 'string' }
-						}
-					}
-				}
-			},
-			{
-				properties: {
-					hook: { const: 'encounter-discharge' },
-					context: {
-						type: 'object',
-						required: ['userId', 'patientId', 'encounterId'],
-						properties: {
-							userId: { type: 'string' },
-							patientId: { type: 'string' },
-							encounterId: { type: 'string' }
-						}
-					}
-				}
-			},
-			{
-				properties: {
-					hook: { const: 'encounter-start' },
-					context: {
-						type: 'object',
-						required: ['userId', 'patientId', 'encounterId'],
-						properties: {
-							userId: { type: 'string' },
-							patientId: { type: 'string' },
-							encounterId: { type: 'string' }
-						}
-					}
-				}
-			},
-			{
-				properties: {
-					hook: { const: 'medication-prescribe' },
-					context: {
-						type: 'object',
-						required: ['userId', 'patientId'],
-						properties: {
-							userId: { type: 'string' },
-							patientId: { type: 'string' },
-							encounterId: { type: 'string' },
-							medications: { type: 'object' },
-						}
-					}
-				}
-			},
-			{
-				properties: {
-					hook: { const: 'order-review' },
-					context: {
-						type: 'object',
-						required: ['userId', 'patientId', 'orders'],
-						properties: {
-							userId: { type: 'string' },
-							patientId: { type: 'string' },
-							encounterId: { type: 'string' },
-							orders: { type: 'object' },
-						}
-					}
-				}
-			},
-			{
-				properties: {
-					hook: { const: 'order-select' },
-					context: {
-						type: 'object',
-						required: ['userId', 'patientId', 'selections', 'draftOrders'],
-						properties: {
-							userId: { type: 'string' },
-							patientId: { type: 'string' },
-							encounterId: { type: 'string' },
-							selections: { type: 'array' },
-							draftOrders: { type: 'object' }
-						}
-					}
-				}
-			},
-			{
-				properties: {
-					hook: { const: 'order-sign' },
-					context: {
-						type: 'object',
-						required: ['userId', 'patientId', 'draftOrders'],
-						properties: {
-							userId: { type: 'string' },
-							patientId: { type: 'string' },
-							encounterId: { type: 'string' },
-							draftOrders: { type: 'object' }
-						}
-					}
-				}
-			},
-			{
-				properties: {
-					hook: { const: 'patient-view' },
-					context: {
-						type: 'object',
-						required: ['userId', 'patientId'],
-						properties: {
-							userId: { type: 'string' },
-							patientId: { type: 'string' },
-							encounterId: { type: 'string' }
-						}
-					}
-				}
-			}
-		]
 	}
 }
 

@@ -28,6 +28,26 @@ test('Discovery service call returns a list of services', async () => {
   expect(body).toEqual({"services":[{"hook":"appointment-book","description":"An example","prefetch":{"patient":"Patient/{{context.patientId}}"},"title":"appointment-book Hook Service Example","id":"1"},{"hook":"medication-prescribe","description":"An example","prefetch":{"patient":"Patient/{{context.patientId}}"},"title":"medication-prescribe Hook Service Example","id":"4"},{"hook":"encounter-discharge","description":"An example","prefetch":{"patient":"Patient/{{context.patientId}}"},"title":"encounter-discharge Hook Service Example","id":"2"},{"hook":"encounter-start","description":"An example","prefetch":{"patient":"Patient/{{context.patientId}}"},"title":"encounter-start Hook Service Example","id":"3"},{"hook":"order-review","description":"An example","prefetch":{"patient":"Patient/{{context.patientId}}"},"title":"order-review Hook Service Example","id":"5"},{"hook":"order-select","description":"An example","prefetch":{"patient":"Patient/{{context.patientId}}"},"title":"order-select Hook Service Example","id":"6"},{"hook":"order-sign","description":"An example","prefetch":{"patient":"Patient/{{context.patientId}}"},"title":"order-sign Hook Service Example","id":"7"},{"hook":"patient-view","description":"An example","prefetch":{"patient":"Patient/{{context.patientId}}"},"title":"patient-view Hook Service Example","id":"8"}]});
 })
 
+test('A HookRequest must be for a registered kind of hook', async () => {
+  // This maps up to patient-view
+  const response = await app.inject({
+    method: 'POST',
+    url: '/cds-services/8',
+    payload: {
+      hook: "fake-hook",
+      hookInstance: randomUUID(),
+      context: {
+        userId: "Practitioner/123"
+      }
+    }
+  });
+
+  const body = JSON.parse(response.body);
+  console.log(body)
+  expect(response.statusCode).toEqual(404)
+  expect(body).toEqual({"statusCode":404,"error":"Bad Request","message":"body.hook should be equal to one of the allowed values"})
+})
+
 test('A HookRequest without a required context parameter should fail', async () => {
   // This maps up to patient-view
   const response = await app.inject({
@@ -37,35 +57,35 @@ test('A HookRequest without a required context parameter should fail', async () 
       hook: "patient-view",
       hookInstance: randomUUID(),
       context: {
-        userId: "Practitioner/123",
+        userId: "Practitioner/123"
       }
     }
   });
 
+  console.log(response.body)
   const body = JSON.parse(response.body);
 
   expect(response.statusCode).toEqual(400)
-  // @todo requires fixing the error messages
-  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.context should have required property 'patientId'"})
+  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.context must have required property 'patientId'"})
 })
 
-test('A HookRequest without a required prefetch parameter should fail', async () => {
-  // This maps up to patient-view
-  const response = await app.inject({
-    method: 'POST',
-    url: '/cds-services/8',
-    payload: {
-      hook: "patient-view",
-      hookInstance: randomUUID(),
-      context: {
-        userId: "Practitioner/123",
-        patientId: "Patient/123"
-      }
-    }
-  });
+// test('A HookRequest without a required prefetch parameter should fail', async () => {
+//   // This maps up to patient-view
+//   const response = await app.inject({
+//     method: 'POST',
+//     url: '/cds-services/8',
+//     payload: {
+//       hook: "patient-view",
+//       hookInstance: randomUUID(),
+//       context: {
+//         userId: "Practitioner/123",
+//         patientId: "Patient/123"
+//       }
+//     }
+//   });
 
-  const body = JSON.parse(response.body);
+//   const body = JSON.parse(response.body);
 
-  expect(response.statusCode).toEqual(400)
-  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.prefetch should have required property 'patient'"})
-})
+//   expect(response.statusCode).toEqual(400)
+//   expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.prefetch should have required property 'patient'"})
+// })

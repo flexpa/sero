@@ -8,7 +8,7 @@
     "dev": "NODE_ENV=development nodemon",
     "format": "prettier --write \"src/**/*.ts\"",
     "build": "eslint . && tsc",
-    "start": "node dist/example/full-server.js",
+    "start": "node dist/example/index.js",
     "test": "jest --detectOpenHandles",
     "lint": "eslint ."
   },
@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ajv-errors": "^1.0.1",
     "fastify": "^3.18.0"
   },
   "devDependencies": {
