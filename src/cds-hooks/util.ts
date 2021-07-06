@@ -12,16 +12,16 @@ import { Hooks } from "./index"
  * @param reply
  * @returns Error | undefined
  */
-export function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<string, any>>, service: Service): Error | undefined {
-  // @ts-ignore
+export function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<string, unknown>>, service: Service): Error | undefined {
+  // @ts-expect-error hookRequest.hook needs to be co-erced into the type...
   const context = validateContext(hookRequest, hookRequest.hook);
   const prefetch = validatePrefetch(hookRequest, service);
 
   if (context.errors) {
     const error = schemaErrorFormatter(context.errors, 'body.context')
-    // @ts-ignore
+    // @ts-expect-error Shape to trick fastify
     error.validation = context.errors;
-    // @ts-ignore
+    // @ts-expect-error Shape to trick fastify
     error.validationContext = 'body.context'
 
     return error
@@ -29,27 +29,41 @@ export function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<str
 
   if (prefetch.errors) {
     const error = schemaErrorFormatter(prefetch.errors, 'body')
-    // @ts-ignore
+    // @ts-expect-error Shape to trick fastify
     error.validation = prefetch.errors;
-    // @ts-ignore
+    // @ts-expect-error shape to trick fastify
     error.validationContext = 'body'
 
     return error
   }
 }
 
+/**
+ * Formats dynamic schema errors - mimics the defaultSchemaErrorFormatter from Fastify internals
+ * (unfortunately not exported)
+ *
+ * @param errors
+ * @param dataVar
+ * @returns Error
+ */
 function schemaErrorFormatter(errors: ErrorObject[], dataVar: string) {
   let text = ''
   const separator = ', '
 
-  for (var i = 0; i !== errors.length; ++i) {
+  for (let i = 0; i !== errors.length; ++i) {
     const e = errors[i]
-    // @ts-ignore
     text += dataVar + (e.dataPath || '') + ' ' + e.message + separator
   }
   return new Error(text.slice(0, -separator.length))
 }
 
+/**
+ *  
+ * 
+ * @param request 
+ * @param service 
+ * @returns 
+ */
 function validatePrefetch(request: CDSHooks.HookRequest<Record<string, any>>, service: Service): ValidateFunction {
   const ajv = new Ajv({
     removeAdditional: false,
@@ -73,7 +87,8 @@ function validatePrefetch(request: CDSHooks.HookRequest<Record<string, any>>, se
     }
     // Service expects prefetch and it's present
     else if (service.prefetch && prefetch) {
-      let properties: Record<string, any> = {}
+      // eslint forces this into a const but the runtime never complains about the object assignemnt
+      const properties: Record<string, any> = {}
 
       Object.keys(service.prefetch).forEach((key) => {
         // @todo not sure this is always actually an object...

@@ -5,7 +5,7 @@ async function handler() {
   throw new Error("Not Implemented");
 }
 
-export function batch(_config: Config, http: FastifyInstance) {
+export function batch(_config: Config, http: FastifyInstance): void {
   http.route({
     method: 'POST',
     url: '/',

@@ -1,6 +1,5 @@
 import { FastifyServerOptions } from "fastify";
 import { Service } from "./cds-hooks";
-import Resource from "./resources";
 
 type RestModule =
 	"batch" |

@@ -1,5 +1,5 @@
 /**
- * @module @sero/sero
+ * @module \@sero/sero
  */
 
 export { default as Rest } from "./rest";
