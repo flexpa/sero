@@ -1,3 +1,6 @@
+/**
+ * @module \@sero/rest
+ */
 import { FastifyInstance } from 'fastify'
 import Config from '../config';
 import * as routes from './routes';

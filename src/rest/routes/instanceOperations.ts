@@ -1,32 +1,32 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
+import { FastifyInstance } from "fastify"
 import Config from "../../config";
 import Resources from "../../resources";
 
-async function read(request: FastifyRequest, reply: FastifyReply) {
+async function read() {
   throw new Error("Not Implemented");
 }
 
-async function vread(request: FastifyRequest, reply: FastifyReply) {
+async function vread() {
   throw new Error("Not Implemented");
 }
 
-async function update(request: FastifyRequest, reply: FastifyReply) {
+async function update() {
   throw new Error("Not Implemented");
 }
 
-async function patch(request: FastifyRequest, reply: FastifyReply) {
+async function patch() {
   throw new Error("Not Implemented");
 }
 
-async function destroy(request: FastifyRequest, reply: FastifyReply) {
+async function destroy() {
   throw new Error("Not Implemented");
 }
 
-async function history(request: FastifyRequest, reply: FastifyReply) {
+async function history() {
   throw new Error("Not Implemented");
 }
 
-export function instanceOperations(config: Config, http: FastifyInstance) {
+export function instanceOperations(_config: Config, http: FastifyInstance): void {
   for (const resource in Resources) {
      // Read the current state of the resource
      http.route({

@@ -1,7 +1,6 @@
 import { Config, Http, CDSHooks, Rest } from "../src"
-import { start } from "../src/http";
 
-import cdsServiceExample from "./cds-hooks/medication-prescribe_echo"
+import cdsServiceExample from "./cds-hooks/medication-prescribe"
 
 const config: Config = {
   cdsHooks: {
@@ -16,9 +15,7 @@ const config: Config = {
 	]
 }
 
-const http = Http(config);
+export const http = Http(config);
 
 CDSHooks(config, http);
 Rest(config, http);
-
-start(http);

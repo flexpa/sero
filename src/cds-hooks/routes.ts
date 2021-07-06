@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { getService } from ".";
 import Config from "../config";
+import { validateHookRequest } from "./util";
 
 /**
  * @deprecated
@@ -10,22 +11,6 @@ function addCorsHeaders(reply: FastifyReply): void {
 	reply.header("Access-Control-Allow-Origin", "*");
 	reply.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 	reply.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-}
-
-/**
- * Validates that the hook request:
- * 	 - Is for a real service
- *   - Meets the input requirements
- *   - ???
- *
- * @todo not actually implemented and return value should be the service maybe
- *
- * @param hookRequest
- * @param reply
- * @returns boolean
- */
-function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<string, any>>, reply: FastifyReply): boolean {
-	return true
 }
 
 /**
@@ -42,16 +27,30 @@ function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<string, an
 function invoke(options: Config["cdsHooks"]) {
 	return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
 		if (options?.cors) addCorsHeaders(reply);
-
-		const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
-		const valid = validateHookRequest(hookRequest, reply);
-
-		if (!valid) return
-
 		const service = getService(options?.services || [], request.params.id);
-		const response = service?.fn(hookRequest);
 
-		reply.send(response);
+    // 1. Is there actually a service??
+    if (!service) {
+			reply.code(404).send();
+
+		}
+    // 2. Is there a schema validation error already?
+    else if (request.validationError) {
+      reply.code(400).send(request.validationError);
+    } else {
+			const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
+			const validationError = validateHookRequest(hookRequest, service);
+      
+    // 3. Is there a dynamic validation error on this HookRequest?
+      if (validationError) {
+				reply.code(400).send(validationError)
+    // 4. Otherwise execute the service
+    // @todo error handling response (412)
+			} else {
+				const response = service.fn(hookRequest);
+				reply.send(response);
+			}
+		}
 	}
 }
 
@@ -80,13 +79,25 @@ const hookRequestSchema = {
 		type: 'object',
 		required: ['hook', 'hookInstance', 'context'],
 		properties: {
-			hook: { type: 'string' },
+			hook: {
+				type: 'string',
+				enum: [
+					'appointment-book',
+					'encounter-discharge',
+					'encounter-start',
+					'medication-prescribe',
+					'order-review',
+					'order-select',
+					'order-sign',
+					'patient-view'
+				]
+			},
 			hookInstance: { type: 'string' },
 			fhirServer: { type: 'string' },
 			fhirAuthorization: { type: 'object' },
 			context: { type: 'object' },
 			prefetch: { type: 'object' }
-		}
+		},
 	}
 }
 
@@ -129,6 +140,7 @@ export default (http: FastifyInstance, options: Config["cdsHooks"]) => {
 		method: 'POST',
 		url: '/cds-services/:id',
 		schema: hookRequestSchema,
+		attachValidation: true,
 		handler: invoke(options)
 	})
 

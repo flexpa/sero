@@ -1,11 +1,11 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
+import { FastifyInstance } from "fastify"
 import Config from "../../config"
 
-async function handler(request: FastifyRequest, reply: FastifyReply) {
+async function handler() {
   throw new Error("Not Implemented");
 }
 
-export function batch(config: Config, http: FastifyInstance) {
+export function batch(_config: Config, http: FastifyInstance): void {
   http.route({
     method: 'POST',
     url: '/',

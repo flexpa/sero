@@ -3,3 +3,4 @@ dist/
 # config for fly.io version used for public conformance testing
 fly.toml
 .DS_Store
+docs/
