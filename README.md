@@ -15,11 +15,11 @@ Serotinous trees like the sequoia only spread when they are [exposed to the heat
 Health data is spreading everywhere. FHIR is a big part of that. Sero is built for developers who need tools in the languages they know, with opinionated answers to solve common problems.
 
 Features:
-- Multiple feature-specific composable modules 
+- Multiple feature-specific composable modules
 - REST API implementation for [FHIR](https://www.hl7.org/fhir/http.html) with base R4 resources and unfinished operations
 - A functional [CDS Hooks](#cds-hooks) Service implementation
 - Alpha In-memory Store design for persisting FHIR as a log
-- Out of box typings support for FHIR R4 with generics, CDS Hooks 
+- Out of box typings support for FHIR R4 with generics, CDS Hooks
 
 Roadmap:
 - Resource specific routing engine
@@ -27,17 +27,17 @@ Roadmap:
 - SMART Apps/Launching
 - Access control
 - Building a TS native Validator
-- Executing CQL 
+- Executing CQL
 - Profile support
 - Deployment configurations
 - Subscriptions/Streams
 
 
-## Table of Contents  
+## Table of Contents
 * [Quick Start](#quick-start)
 * [Docs](#docs)
-* [CDS Hooks](#cds-hooks) 
-- [FHIR REST API](#rest)
+* [CDS Hooks](#cds-hooks)
+* [FHIR REST API](#rest)
 * [Development](#development)
 * [License](#license)
 

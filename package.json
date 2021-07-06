@@ -1,7 +1,7 @@
 {
-  "name": "Sero",
-  "version": "0.0.0",
-  "description": "",
+  "name": "@sero/sero",
+  "version": "0.0.1",
+  "description": "Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.",
   "main": "dist/example/full-server.js",
   "scripts": {
     "watch": "tsc --watch --preserveWatchOutput --pretty",
@@ -13,9 +13,13 @@
     "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/rest/index.ts --readme ./README.md",
     "lint": "eslint . --fix"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "fhir",
+    "hl7",
+    "cds-hooks"
+  ],
+  "author": "Automate Medical Inc.",
+  "license": "Apache 2.0",
   "dependencies": {
     "fastify": "^3.18.0"
   },
