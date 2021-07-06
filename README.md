@@ -33,10 +33,11 @@ Roadmap:
 - Subscriptions/Streams
 
 
-## Docs
+## Table of Contents  
 * [Quick Start](#quick-start)
-* [REST](#rest)
-* [CDS Hooks](#cds-hooks)
+* [Docs](#docs)
+* [CDS Hooks](#cds-hooks) 
+- [FHIR REST API](#rest)
 * [Development](#development)
 * [License](#license)
 
@@ -52,11 +53,9 @@ npm install
 npm start
 ```
 
-### REST
+### Docs
 
-Serotiny exposes a `Rest` service that adds routes for `batch`, `capabilityStatement`, `instanceOperations`, and `typeOperations` routes and handlers.
-
-It consomes an instance of `http` and appends the configurable list above.
+Documentation built from code is available on the `gh-pages` branch and at (automate-medical.github.io/sero/docs)[https://automate-medical.github.io/sero/docs/]
 
 ### CDS Hooks
 
@@ -78,6 +77,13 @@ Building support for this protocol as a distribution/access channel for novel cl
 #### Links
 - https://www.hl7.org/fhir/clinicalreasoning-cds-on-fhir.html
 - https://cds-hooks.org/
+
+### REST
+
+Serotiny exposes a `Rest` service that adds routes for `batch`, `capabilityStatement`, `instanceOperations`, and `typeOperations` routes and handlers.
+
+It consomes an instance of `http` and appends the configurable list above.
+
 
 ### Development
 
