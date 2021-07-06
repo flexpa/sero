@@ -55,7 +55,7 @@ npm start
 
 ### Docs
 
-Documentation built from code is available on the `gh-pages` branch and at (automate-medical.github.io/sero/docs)[https://automate-medical.github.io/sero/docs/]
+Documentation built from code is available on the `gh-pages` branch and at [automate-medical.github.io/sero/docs](https://automate-medical.github.io/sero/docs/)
 
 ### CDS Hooks
 
