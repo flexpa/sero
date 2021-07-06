@@ -2,6 +2,8 @@
   "name": "@sero.run/sero",
   "version": "0.0.2",
   "description": "Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.",
+  "homepage": "https://sero.run",
+  "bugs": "https://github.com/automate-medical/sero/issues",
   "main": "dist/example/full-server.js",
   "scripts": {
     "watch": "tsc --watch --preserveWatchOutput --pretty",

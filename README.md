@@ -2,7 +2,6 @@
 
 [![Build](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml) [![Test](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml)
 
-
 Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by [Automate Medical Inc.](https://www.automatemedical.com/)
 
 <img width="176" alt="Automate Medical Inc." src="https://user-images.githubusercontent.com/704789/123880097-31e0ac80-d8ff-11eb-996b-1b852b187e6a.png">
@@ -10,7 +9,6 @@ Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by [Auto
 Serotinous trees like the sequoia only spread when they are [exposed to the heat of fire](https://www.nps.gov/parkhistory/online_books/science/12/chap5.htm):
 
 > These serotinous cones may remain green and closed for over twenty years (Buchholz 1938).
-
 
 Health data is spreading everywhere. FHIR is a big part of that. Sero is built for developers who need tools in the languages they know, with opinionated answers to solve common problems.
 
@@ -55,7 +53,7 @@ npm start
 
 ### Docs
 
-Documentation built from code is available on the `gh-pages` branch and at [automate-medical.github.io/sero/docs](https://automate-medical.github.io/sero/docs/)
+Documentation built from code is available on the `gh-pages` branch and at [docs.sero.run](https://docs.sero.run)
 
 ### CDS Hooks
 
