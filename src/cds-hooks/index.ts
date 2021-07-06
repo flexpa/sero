@@ -1,5 +1,5 @@
 /**
- * @module @sero/cds-hooks
+ * @module sero/cds-hooks
  */
 
 import { randomUUID } from "crypto";
@@ -12,7 +12,7 @@ export default (config: Config, http: FastifyInstance): void => {
 }
 
 export function getService(services: Service[], id: string): Service | undefined {
-	return services.find((service) => service.id == id)
+  return services.find((service) => service.id == id)
 }
 
 /**

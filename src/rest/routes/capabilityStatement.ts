@@ -49,19 +49,19 @@ const TerminologyCapabilities: fhir4.TerminologyCapabilities = {
 
 async function capabilities(request: FastifyRequest<{ Querystring: { mode: string }}>, reply: FastifyReply) {
   switch (request.query.mode) {
-    case "normative":
-      // the entirety of the capability statement is normative today
-      reply.send(CapabilityStatement)
-      break;
+  case "normative":
+    // the entirety of the capability statement is normative today
+    reply.send(CapabilityStatement)
+    break;
 
-    case "terminology":
-      reply.send(TerminologyCapabilities)
-      break;
+  case "terminology":
+    reply.send(TerminologyCapabilities)
+    break;
 
-    default:
-      // default is to send the full statement
-      reply.send(CapabilityStatement)
-      break;
+  default:
+    // default is to send the full statement
+    reply.send(CapabilityStatement)
+    break;
   }
 }
 

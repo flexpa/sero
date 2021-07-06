@@ -7,12 +7,12 @@ const config: Config = {
     services: [ cdsServiceExample ],
     cors: true
   },
-	rest: [
-		"capabilityStatement",
-		"batch",
-		"instanceOperations",
-		"typeOperations"
-	]
+  rest: [
+    "capabilityStatement",
+    "batch",
+    "instanceOperations",
+    "typeOperations"
+  ]
 }
 
 export const http = Http(config);

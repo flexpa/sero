@@ -24,29 +24,29 @@ import { Service, Card } from "../../src/cds-hooks";
  *	hookMaturity						1 - Submitted
  */
 export default new Service(
-	{
-		id: "2",
-		title: "encounter-discharge Hook Service Example",
-		hook: "encounter-discharge",
-		description: "An example",
-		prefetch: {
-			patient: "Patient/{{context.patientId}}"
-		}
-	},
-	(request: CDSHooks.HookRequest<{ patient: fhir4.Patient }>) => {
-		const { patient } = request.prefetch;
+  {
+    id: "2",
+    title: "encounter-discharge Hook Service Example",
+    hook: "encounter-discharge",
+    description: "An example",
+    prefetch: {
+      patient: "Patient/{{context.patientId}}"
+    }
+  },
+  (request: CDSHooks.HookRequest<{ patient: fhir4.Patient }>) => {
+    const { patient } = request.prefetch;
 
-		return {
-			cards: [
-				new Card({
-					detail: "This is a card",
-					source: {
-						label: "CDS Services Inc",
-					},
-					summary: "A summary of the findings",
-					indicator: "info"
-				})
-			]
-		}
-	}
+    return {
+      cards: [
+        new Card({
+          detail: "This is a card",
+          source: {
+            label: "CDS Services Inc",
+          },
+          summary: "A summary of the findings",
+          indicator: "info"
+        })
+      ]
+    }
+  }
 )

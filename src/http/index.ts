@@ -9,7 +9,7 @@ export default (config: Config): FastifyInstance => {
 }
 
 export function start(http: FastifyInstance): void {
-	http.listen(8080, '0.0.0.0', (err, address) => {
+  http.listen(8080, '0.0.0.0', (err, address) => {
     if (err) {
       console.error(err)
       process.exit(1)

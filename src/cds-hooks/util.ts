@@ -130,92 +130,92 @@ function validateContext(request: CDSHooks.HookRequest<Record<string, any>>, hoo
 
   function contextFor(hook: Hooks) {
     switch (hook) {
-      case "appointment-book":
-        return {
-          type: 'object',
-          required: ['userId', 'patientId', 'appointments'],
-          properties: {
-            userId: { type: 'string' },
-            patientId: { type: 'string' },
-            appointments: { type: 'object' },
-            encounterId: { type: 'string' }
-          }
+    case "appointment-book":
+      return {
+        type: 'object',
+        required: ['userId', 'patientId', 'appointments'],
+        properties: {
+          userId: { type: 'string' },
+          patientId: { type: 'string' },
+          appointments: { type: 'object' },
+          encounterId: { type: 'string' }
         }
-      case "encounter-discharge":
-        return {
-          type: 'object',
-          required: ['userId', 'patientId', 'encounterId'],
-          properties: {
-            userId: { type: 'string' },
-            patientId: { type: 'string' },
-            encounterId: { type: 'string' }
-          }
-        };
-      case "encounter-start":
-        return {
-          type: 'object',
-          required: ['userId', 'patientId', 'encounterId'],
-          properties: {
-            userId: { type: 'string' },
-            patientId: { type: 'string' },
-            encounterId: { type: 'string' }
-          }
-        };
-      case "medication-prescribe":
-        return {
-          type: 'object',
-          required: ['userId', 'patientId'],
-          properties: {
-            userId: { type: 'string' },
-            patientId: { type: 'string' },
-            encounterId: { type: 'string' },
-            medications: { type: 'object' },
-          }
-        };
-      case "order-review":
-        return {
-          type: 'object',
-          required: ['userId', 'patientId', 'orders'],
-          properties: {
-            userId: { type: 'string' },
-            patientId: { type: 'string' },
-            encounterId: { type: 'string' },
-            orders: { type: 'object' },
-          }
-        };
-      case "order-select":
-        return {
-          type: 'object',
-          required: ['userId', 'patientId', 'selections', 'draftOrders'],
-          properties: {
-            userId: { type: 'string' },
-            patientId: { type: 'string' },
-            encounterId: { type: 'string' },
-            selections: { type: 'array' },
-            draftOrders: { type: 'object' }
-          }
-        };
-      case "order-sign":
-        return {
-          type: 'object',
-          required: ['userId', 'patientId', 'draftOrders'],
-          properties: {
-            userId: { type: 'string' },
-            patientId: { type: 'string' },
-            encounterId: { type: 'string' },
-            draftOrders: { type: 'object' }
-          }
-        };
-      case "patient-view":
-        return {
-          type: 'object',
-          required: ['userId', 'patientId'],
-          properties: {
-            userId: { type: 'string' },
-            patientId: { type: 'string' },
-            encounterId: { type: 'string' }
-          }
-        };
+      }
+    case "encounter-discharge":
+      return {
+        type: 'object',
+        required: ['userId', 'patientId', 'encounterId'],
+        properties: {
+          userId: { type: 'string' },
+          patientId: { type: 'string' },
+          encounterId: { type: 'string' }
+        }
+      };
+    case "encounter-start":
+      return {
+        type: 'object',
+        required: ['userId', 'patientId', 'encounterId'],
+        properties: {
+          userId: { type: 'string' },
+          patientId: { type: 'string' },
+          encounterId: { type: 'string' }
+        }
+      };
+    case "medication-prescribe":
+      return {
+        type: 'object',
+        required: ['userId', 'patientId'],
+        properties: {
+          userId: { type: 'string' },
+          patientId: { type: 'string' },
+          encounterId: { type: 'string' },
+          medications: { type: 'object' },
+        }
+      };
+    case "order-review":
+      return {
+        type: 'object',
+        required: ['userId', 'patientId', 'orders'],
+        properties: {
+          userId: { type: 'string' },
+          patientId: { type: 'string' },
+          encounterId: { type: 'string' },
+          orders: { type: 'object' },
+        }
+      };
+    case "order-select":
+      return {
+        type: 'object',
+        required: ['userId', 'patientId', 'selections', 'draftOrders'],
+        properties: {
+          userId: { type: 'string' },
+          patientId: { type: 'string' },
+          encounterId: { type: 'string' },
+          selections: { type: 'array' },
+          draftOrders: { type: 'object' }
+        }
+      };
+    case "order-sign":
+      return {
+        type: 'object',
+        required: ['userId', 'patientId', 'draftOrders'],
+        properties: {
+          userId: { type: 'string' },
+          patientId: { type: 'string' },
+          encounterId: { type: 'string' },
+          draftOrders: { type: 'object' }
+        }
+      };
+    case "patient-view":
+      return {
+        type: 'object',
+        required: ['userId', 'patientId'],
+        properties: {
+          userId: { type: 'string' },
+          patientId: { type: 'string' },
+          encounterId: { type: 'string' }
+        }
+      };
     }
   }
 

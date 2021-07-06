@@ -30,40 +30,40 @@ import { Service, Card } from "../../src/cds-hooks";
  * clinical studies the patient is enrolled in, identifying any documentation or
  * other requirements associated with patient insurance, etc.
  *
- *  Field											Prefetch?					Description
+ *  Field                      Prefetch?          Description
  *
- *  userId				Required		Yes			string		The id of the current user. For this hook, the user is expected to be of type Practitioner or PractitionerRole. For example, PractitionerRole/123
- *  patientId			Required		Yes			string		The FHIR Patient.id of the current patient in context
- * 	encounterId		Required		Yes			string		The FHIR Encounter.id of the current encounter in context
+ *  userId         Required    Yes      string    The id of the current user. For this hook, the user is expected to be of type Practitioner or PractitionerRole. For example, PractitionerRole/123
+ *  patientId      Required    Yes      string    The FHIR Patient.id of the current patient in context
+ *  encounterId    Required    Yes      string    The FHIR Encounter.id of the current encounter in context
  *
- * 	specificationVersion		1.0
- * 	hookVersion							1.0
- *	hookMaturity						1 - Submitted
+ *  specificationVersion    1.0
+ *  hookVersion             1.0
+ *  hookMaturity            1 - Submitted
  */
 export default new Service(
-	{
-		id: "3",
-		title: "encounter-start Hook Service Example",
-		hook: "encounter-start",
-		description: "An example",
-		prefetch: {
-			patient: "Patient/{{context.patientId}}"
-		}
-	},
-	(request: CDSHooks.HookRequest<{ patient: fhir4.Patient }>) => {
-		const { patient } = request.prefetch;
+  {
+    id: "3",
+    title: "encounter-start Hook Service Example",
+    hook: "encounter-start",
+    description: "An example",
+    prefetch: {
+      patient: "Patient/{{context.patientId}}"
+    }
+  },
+  (request: CDSHooks.HookRequest<{ patient: fhir4.Patient }>) => {
+    const { patient } = request.prefetch;
 
-		return {
-			cards: [
-				new Card({
-					detail: "This is a card",
-					source: {
-						label: "CDS Services Inc",
-					},
-					summary: "A summary of the findings",
-					indicator: "info"
-				})
-			]
-		}
-	}
+    return {
+      cards: [
+        new Card({
+          detail: "This is a card",
+          source: {
+            label: "CDS Services Inc",
+          },
+          summary: "A summary of the findings",
+          indicator: "info"
+        })
+      ]
+    }
+  }
 )

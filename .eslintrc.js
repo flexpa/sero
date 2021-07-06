@@ -3,16 +3,17 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: [
     '@typescript-eslint',
-		'eslint-plugin-tsdoc'
+    'eslint-plugin-tsdoc'
   ],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-	rules: {
-    "tsdoc/syntax": "warn"
+  rules: {
+    "tsdoc/syntax": "warn",
+    "indent": ["error", 2]
   },
-	env: {
+  env: {
     node: true
   }
 };

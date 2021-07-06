@@ -11,7 +11,7 @@
     "start": "node dist/example/index.js",
     "test": "jest --detectOpenHandles",
     "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/rest/index.ts --readme ./README.md",
-    "lint": "eslint ."
+    "lint": "eslint . --fix"
   },
   "keywords": [],
   "author": "",

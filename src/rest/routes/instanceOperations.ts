@@ -28,8 +28,8 @@ async function history() {
 
 export function instanceOperations(_config: Config, http: FastifyInstance): void {
   for (const resource in Resources) {
-     // Read the current state of the resource
-     http.route({
+    // Read the current state of the resource
+    http.route({
       method: 'GET',
       url: `/${resource}/:id`,
       handler: read
