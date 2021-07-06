@@ -185,6 +185,7 @@ test('A HookRequest satisfying all requirements should pass for the patient-view
   const body = JSON.parse(response.body);
 
   expect(response.statusCode).toEqual(200)
+  expect(response.headers["content-type"]).toEqual("application/json; charset=utf-8")
 })
 
 test.skip('A HookRequest for prefetch validation case where the expected results are array vs object is successful', async () => {

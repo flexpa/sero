@@ -10,7 +10,7 @@
     "build": "eslint . && tsc",
     "start": "node dist/example/index.js",
     "test": "jest --detectOpenHandles",
-    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/rest/index.ts src/store/index.ts src/graphql/index.ts --readme ./README.md",
+    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/rest/index.ts src/graphql/index.ts --readme ./README.md",
     "lint": "eslint ."
   },
   "keywords": [],

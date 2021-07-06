@@ -1,18 +1,18 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
+import { FastifyInstance } from "fastify"
 import Config from "../../config";
 import Resources from "../../resources";
 
-async function search(request: FastifyRequest, reply: FastifyReply) {
+async function search() {
   throw new Error("Not Implemented");
 }
-async function create(request: FastifyRequest, reply: FastifyReply) {
+async function create() {
   throw new Error("Not Implemented");
 }
-async function history(request: FastifyRequest, reply: FastifyReply) {
+async function history() {
   throw new Error("Not Implemented");
 }
 
-export function typeOperations(config: Config, http: FastifyInstance) {
+export function typeOperations(_config: Config, http: FastifyInstance): void {
   for (const resource in Resources) {
     // Create a new resource with a server assigned id
     http.route({
