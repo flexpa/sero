@@ -30,6 +30,7 @@ test('Discovery service call returns a list of services', async () => {
 
 test('A HookRequest must be for a registered kind of hook', async () => {
   // This maps up to patient-view
+
   const response = await app.inject({
     method: 'POST',
     url: '/cds-services/8',
@@ -37,15 +38,39 @@ test('A HookRequest must be for a registered kind of hook', async () => {
       hook: "fake-hook",
       hookInstance: randomUUID(),
       context: {
-        userId: "Practitioner/123"
+        userId: "Practitioner/123",
+        patientId: "Patient/123"
+      },
+      prefetch: {
+        patient: "Patient/123"
       }
     }
   });
 
   const body = JSON.parse(response.body);
-  console.log(body)
-  expect(response.statusCode).toEqual(404)
-  expect(body).toEqual({"statusCode":404,"error":"Bad Request","message":"body.hook should be equal to one of the allowed values"})
+
+  expect(response.statusCode).toEqual(400)
+  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.hook should be equal to one of the allowed values"})
+})
+
+test('A HookRequest without a context parameter should fail', async () => {
+  // This maps up to patient-view
+  const response = await app.inject({
+    method: 'POST',
+    url: '/cds-services/8',
+    payload: {
+      hook: "patient-view",
+      hookInstance: randomUUID(),
+      prefetch: {
+        patient: "Patient/123"
+      }
+    }
+  });
+
+  const body = JSON.parse(response.body);
+
+  expect(response.statusCode).toEqual(400)
+  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body should have required property 'context'"})
 })
 
 test('A HookRequest without a required context parameter should fail', async () => {
@@ -58,34 +83,148 @@ test('A HookRequest without a required context parameter should fail', async () 
       hookInstance: randomUUID(),
       context: {
         userId: "Practitioner/123"
+      },
+      prefetch: {
+        patient: "Patient/123"
       }
     }
   });
 
-  console.log(response.body)
   const body = JSON.parse(response.body);
 
   expect(response.statusCode).toEqual(400)
-  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.context must have required property 'patientId'"})
+  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.context should have required property 'patientId'"})
 })
 
-// test('A HookRequest without a required prefetch parameter should fail', async () => {
-//   // This maps up to patient-view
-//   const response = await app.inject({
-//     method: 'POST',
-//     url: '/cds-services/8',
-//     payload: {
-//       hook: "patient-view",
-//       hookInstance: randomUUID(),
-//       context: {
-//         userId: "Practitioner/123",
-//         patientId: "Patient/123"
-//       }
-//     }
-//   });
+test('A HookRequest without prefetch parameter should fail when service requires it', async () => {
+  // This maps up to patient-view
+  const response = await app.inject({
+    method: 'POST',
+    url: '/cds-services/8',
+    payload: {
+      hook: "patient-view",
+      hookInstance: randomUUID(),
+      context: {
+        userId: "Practitioner/123",
+        patientId: "Patient/123"
+      }
+    }
+  });
 
-//   const body = JSON.parse(response.body);
+  const body = JSON.parse(response.body);
 
-//   expect(response.statusCode).toEqual(400)
-//   expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.prefetch should have required property 'patient'"})
-// })
+  expect(response.statusCode).toEqual(400)
+  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body should have required property 'prefetch'"})
+})
+
+test('A HookRequest without a badly formatted prefetch parameter should fail', async () => {
+  // This maps up to patient-view
+  const response = await app.inject({
+    method: 'POST',
+    url: '/cds-services/8',
+    payload: {
+      hook: "patient-view",
+      hookInstance: randomUUID(),
+      context: {
+        userId: "Practitioner/123",
+        patientId: "Patient/123"
+      },
+      prefetch: null
+    }
+  });
+
+  const body = JSON.parse(response.body);
+
+  expect(response.statusCode).toEqual(400)
+  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.prefetch should be object"})
+})
+
+test('A HookRequest without a required prefetch parameter should fail', async () => {
+  // This maps up to patient-view
+  const response = await app.inject({
+    method: 'POST',
+    url: '/cds-services/8',
+    payload: {
+      hook: "patient-view",
+      hookInstance: randomUUID(),
+      context: {
+        userId: "Practitioner/123",
+        patientId: "Patient/123"
+      },
+      prefetch: {
+        notPatient: "something-else"
+      }
+    }
+  });
+
+  const body = JSON.parse(response.body);
+
+  expect(response.statusCode).toEqual(400)
+  expect(body).toEqual({"statusCode":400,"error":"Bad Request","message":"body.prefetch should have required property 'patient'"})
+});
+
+test('A HookRequest satisfying all requirements should pass for the patient-view example', async () => {
+  const response = await app.inject({
+    method: 'POST',
+    url: '/cds-services/8',
+    payload: {
+      hook: "patient-view",
+      hookInstance: randomUUID(),
+      context: {
+        userId: "Practitioner/123",
+        patientId: "Patient/123"
+      },
+      prefetch: {
+        patient: {
+          id: "Patient/123"
+        }
+      }
+    }
+  });
+
+  const body = JSON.parse(response.body);
+
+  expect(response.statusCode).toEqual(200)
+})
+
+test.skip('A HookRequest for prefetch validation case where the expected results are array vs object is successful', async () => {
+  throw "Not implemented"
+})
+
+test.skip('A HookRequest for appointment-book functions minimally', async () => {
+  throw "Not implemented"
+})
+
+test.skip('A HookRequest for encounter-discharge functions minimally', async () => {
+  throw "Not implemented"
+})
+
+test.skip('A HookRequest for encounter-start functions minimally', async () => {
+  throw "Not implemented"
+})
+
+test.skip('A HookRequest for medication-prescribe functions minimally', async () => {
+  throw "Not implemented"
+})
+
+test.skip('A HookRequest for order-review functions minimally', async () => {
+  throw "Not implemented"
+})
+
+test.skip('A HookRequest for order-select functions minimally', async () => {
+  throw "Not implemented"
+})
+
+test.skip('A HookRequest for order-sign functions minimally', async () => {
+  throw "Not implemented"
+})
+
+test.skip('A HookRequest for patient-view functions minimally', async () => {
+  throw "Not implemented"
+})
+
+test.skip('A HookFeedback service call succeeds', async () => {
+  throw "Not implemented"
+})
+
+

@@ -1,6 +1,5 @@
 import fastify, { FastifyInstance } from 'fastify'
 import Config from '../config';
-// import AjvErrors from "ajv-errors";
 
 export default (config: Config): FastifyInstance => {
 

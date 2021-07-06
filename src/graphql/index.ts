@@ -1,3 +1,6 @@
+/**
+ * @module @sero/graphql
+ */
 import { FastifyInstance } from 'fastify'
 import Config from '../config';
 

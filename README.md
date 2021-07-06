@@ -1,8 +1,8 @@
-# Serotiny
+# Sero
 
-Serotiny is a modular TypeScript toolchain for FHIR (and friends).
+Sero is a modular TypeScript toolchain for FHIR (and friends).
 
-Health data is spreading everywhere. FHIR is a big part of that. Serotiny is built for developers who need tools in the languages they know, with opinionated answers to solve common problems.
+Health data is spreading everywhere. FHIR is a big part of that. Sero is built for developers who need tools in the languages they know, with opinionated answers to solve common problems. The name is short for serotiny. Serotinous trees like the sequoia depend on the heat of forest fires to release their seeds.
 
 Features:
 - A broken [FHIR](https://www.hl7.org/fhir/http.html) [REST](#rest)ful API implementation of base resources

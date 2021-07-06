@@ -29,14 +29,23 @@ function invoke(options: Config["cdsHooks"]) {
 		if (options?.cors) addCorsHeaders(reply);
 		const service = getService(options?.services || [], request.params.id);
 
+    // 1. Is there actually a service??
     if (!service) {
 			reply.code(404).send();
-		} else {
+
+		}
+    // 2. Is there a schema validation error already?
+    else if (request.validationError) {
+      reply.code(400).send(request.validationError);
+    } else {
 			const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
 			const validationError = validateHookRequest(hookRequest, service);
       
+    // 3. Is there a dynamic validation error on this HookRequest?
       if (validationError) {
 				reply.code(400).send(validationError)
+    // 4. Otherwise execute the service
+    // @todo error handling response (412)
 			} else {
 				const response = service.fn(hookRequest);
 				reply.send(response);
@@ -89,7 +98,6 @@ const hookRequestSchema = {
 			context: { type: 'object' },
 			prefetch: { type: 'object' }
 		},
-		// Pattern from https://stackoverflow.com/questions/38717933/jsonschema-attribute-conditionally-required/38781027#38781027
 	}
 }
 
