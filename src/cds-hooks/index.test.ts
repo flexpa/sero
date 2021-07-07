@@ -4,7 +4,7 @@ import { http as app } from "../../example/cds-hooks"
 /**
  * Setting a mock UUID for all tests
  */
- jest.mock('crypto', () => ({
+jest.mock('crypto', () => ({
   randomUUID: () => "0fe932e4-0e10-4ce4-b6a8-324ce858924d"
 }));
 
