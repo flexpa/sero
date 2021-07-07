@@ -1,6 +1,13 @@
 import { randomUUID } from "crypto";
 import { http as app } from "../../example/cds-hooks"
 
+/**
+ * Setting a mock UUID for all tests
+ */
+jest.mock('crypto', () => ({
+  randomUUID: () => "0fe932e4-0e10-4ce4-b6a8-324ce858924d"
+}));
+
 test('Discovery service call returns 200', async () => {
   const response = await app.inject({
     method: 'GET',
