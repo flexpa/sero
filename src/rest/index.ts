@@ -1,5 +1,5 @@
 /**
- * @module sero/rest
+ * @module rest
  */
 import { FastifyInstance } from 'fastify'
 import Config from '../config';
