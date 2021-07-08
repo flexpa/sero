@@ -1,4 +1,4 @@
-FROM node:16-alpine AS packages
+FROM node:14-alpine AS packages
 
 ADD package.json /app/package.json
 
