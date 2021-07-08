@@ -21,6 +21,7 @@ function addCorsHeaders(reply: FastifyReply): void {
  * we support the delegated FHIR Resource Access workflow.
  *
  * @todo FHIR Resource Access workflow?
+ * @todo error handling response for step 4 (412)
  *
  * @param options
  */
@@ -44,10 +45,9 @@ function invoke(options: Config["cdsHooks"]) {
       // 3. Is there a dynamic validation error on this HookRequest?
       if (validationError) {
         reply.code(400).send(validationError)
-        // 4. Otherwise execute the service
-        // @todo error handling response (412)
+      // 4. Otherwise execute the service
       } else {
-        const response = service.fn(hookRequest);
+        const response = service.handler(hookRequest);
         reply.send(response);
       }
     }
@@ -108,8 +108,14 @@ const feedbackSchema = {
     properties: {
       card: { type: 'string' },
       outcome: { type: 'string' },
-      acceptedSuggestions: { type: 'string' },
-      overrideReason: { type: 'object' },
+      acceptedSuggestions: { type: 'array' },
+      overrideReason: {
+        type: 'object',
+        properties: {
+          reason: { type: 'object' },
+          userComment: { type: 'string' }
+        }
+      },
       outcomeTimestamp	: { type: 'string' },
     }
   }

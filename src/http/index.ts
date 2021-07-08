@@ -1,3 +1,7 @@
+/**
+ * @module http
+ */
+
 import fastify, { FastifyInstance } from 'fastify'
 import Config from '../config';
 
