@@ -33,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # run
+      - uses: actions/checkout@v2
       - name: Run npm run docs with ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
