@@ -22,11 +22,11 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
   # deploy step deploys to pages
   deploy:
     runs-on: ubuntu-latest
