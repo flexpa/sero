@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      # run
+      # run docs
       - name: Run npm run docs with ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
@@ -36,6 +36,7 @@ jobs:
       - run: npm run docs
   # deploy step deploys to pages
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       # deploy
