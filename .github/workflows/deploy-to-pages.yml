@@ -33,13 +33,13 @@ jobs:
     steps:
       # run
       - name: Run npm run docs with ${{ matrix.node-version }}
-      - uses: actions/setup-node@v2
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm run docs
       # deploy
       - name: Deploy to pages
-      - uses: peaceiris/actions-gh-pages@v3.7.3
+        uses: peaceiris/actions-gh-pages@v3.7.3
         with:
           publish_branch: gh-pages
           publish_dir: ./docs
