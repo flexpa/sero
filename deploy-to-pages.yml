@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy to pages
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: master
+  pull_request:
+    branches: feature/deploy-to-pages-action
+
+  # Allows you to run this workflow manually from t he Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # build step runs npm ci
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+    - uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+  # deploy step deploys to pages
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # run
+      - name: Run npm run docs
+      - run: npm run docs
+      # deploy
+      - name: Deploy to pages
+      - uses: peaceiris/actions-gh-pages@v3.7.3
+        with:
+          publish_branch: gh-pages
+          publish_dir: ./docs
+          destination_dir: ./public
+          allow_empty_commit: false
+          keep_files: false
+          full_commit_message: "Pushed most recent master deploy to github pages"
