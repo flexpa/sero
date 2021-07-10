@@ -12,7 +12,7 @@
     "build": "eslint . && tsc",
     "start": "node dist/example/index.js",
     "test": "jest --detectOpenHandles",
-    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/rest/index.ts --readme ./README.md",
+    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/client/index.ts src/rest/index.ts --readme ./README.md",
     "lint": "eslint . --fix"
   },
   "keywords": [
@@ -23,6 +23,7 @@
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
   "dependencies": {
+    "cross-fetch": "^3.1.4",
     "fastify": "^3.18.0"
   },
   "devDependencies": {
