@@ -1,5 +1,7 @@
 /**
  * @module cds-hooks
+ *
+ * @note https://open.epic.com/Content/specs/staged/Epic%20CDS%20Hooks%20Support.pdf
  */
 
 import { FastifyInstance } from "fastify";
