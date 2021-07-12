@@ -171,10 +171,6 @@ test('A HookRequest without a required prefetch parameter should fail', async ()
 });
 
 test('A HookRequest satisfying all requirements should pass for the patient-view example', async () => {
-  jest.mock('crypto', () => ({
-    randomUUID: () => "0fe932e4-0e10-4ce4-b6a8-324ce858924d"
-  }));
-
   const response = await app.inject({
     method: 'POST',
     url: '/cds-services/8',

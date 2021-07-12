@@ -8,5 +8,4 @@ import * as routes from './routes';
 export default (config: Config, http: FastifyInstance): void => {
   routes.capabilityStatement(config, http);
   routes.interactions(config, http);
-  routes.resources(config, http);
 }

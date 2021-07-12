@@ -22,6 +22,9 @@ const config: Config = {
       patientViewExample
     ],
     cors: true
+  },
+  http: {
+    logger: true
   }
 }
 

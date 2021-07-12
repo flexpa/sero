@@ -13,16 +13,16 @@ export const defaultRestReourceCapability: RestResourceCapability = {
   conditionalUpdate: false, // @todo
   interaction: [
     { code: 'create' },
-    { code: 'delete' },
-    { code: 'history-instance' },
-    { code: 'history-type' },
-    { code: 'patch' },
+    // { code: 'delete' }, @todo
+    // { code: 'history-instance' }, @todo
+    // { code: 'history-type' }, @todo
+    // { code: 'patch' }, @todo
     { code: 'read' },
-    { code: 'search-type' },
-    { code: 'update' },
-    { code: 'vread' }
+    // { code: 'search-type' }, @todo
+    // { code: 'update' }, @todo
+    // { code: 'vread' } @todo
   ],
-  readHistory: true,
+  readHistory: false,
   // @todo top level config or documentation/feature?
   // referencePolicy: "literal",
   // @todo are things like $validate defined here?
@@ -34,7 +34,7 @@ export const defaultRestReourceCapability: RestResourceCapability = {
   // @todo
   // searchRevInclude?: string[]; // @todo
   updateCreate: false,
-  versioning: 'versioned-update'
+  versioning: 'no-version' // @todo
 }
 
 const version = process.env.version;
