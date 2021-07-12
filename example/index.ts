@@ -1,5 +1,4 @@
-// import { http } from "./full-server";
-import { http } from "./cds-hooks";
+import { http } from "./full-server";
 import { start } from "../src/http";
 
 start(http);

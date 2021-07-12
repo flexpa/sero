@@ -60,7 +60,7 @@ type ServiceHandler = {
  */
 export default class Service implements CDSHooks.Service {
   /**
-   * The {id} portion of the URL to this service which is available at
+   * The id portion of the URL to this service which is available at
    * `{baseUrl}/cds-services/{id}`
    */
   public id: string;
@@ -92,8 +92,8 @@ export default class Service implements CDSHooks.Service {
    * Pass any options along with a function that will execute on HookRequest
    * invocation events
    *
-   * @param options 
-   * @param fn 
+   * @param options -
+   * @param fn -
    */
   constructor(
     options: Partial<CDSHooks.Service> & { hook: Hooks; description: string },

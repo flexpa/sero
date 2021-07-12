@@ -1,20 +1,22 @@
 import { FastifyServerOptions } from "fastify";
 import { Service } from "./cds-hooks";
+import { RestResourceCapability } from "./rest/capabilities";
 
-type RestModule =
-	"batch" |
-	"instanceOperations" |
-	"typeOperations" |
-	"capabilityStatement";
-
-interface cdsHooksConfiguration {
+interface cdsHooksConfig {
 	services: Service[];
 	cors: boolean;
 }
 
-export default interface SerotinyConfiguration {
+interface restConfig {
+	capabilityStatement: fhir4.CapabilityStatement;
+	restResourceCapabilities: {
+		[key: string]: RestResourceCapability;
+	};
+}
+
+export default interface SeroConfiguration {
 	store?: Storage,
-	rest?: RestModule[];
-	fastifyOpts?: FastifyServerOptions;
-	cdsHooks?: cdsHooksConfiguration;
+	rest?: restConfig;
+	http?: FastifyServerOptions;
+	cdsHooks?: cdsHooksConfig;
 }

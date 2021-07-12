@@ -1,4 +1,3 @@
-export { batch } from "./batch";
+export { interactions } from "./interactions";
 export { capabilityStatement } from "./capabilityStatement";
-export { instanceOperations } from "./instanceOperations";
-export { typeOperations } from "./typeOperations"
+export { resources } from "./resources";

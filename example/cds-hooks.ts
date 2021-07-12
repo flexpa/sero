@@ -1,4 +1,4 @@
-import { Config, Http, CDSHooks } from "../src"
+import { Config, Http, CDSHooks, Rest } from "../src"
 
 import appointmentBookExample from "./cds-hooks/appointment-book";
 import encounterDischargeExample from "./cds-hooks/encounter-discharge";

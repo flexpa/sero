@@ -1,15 +1,15 @@
 /**
  * @module client
  * @beta
- * 
+ *
  * A Fetch-ful FHIR Client in TypeScript
- * 
+ *
  * @example Grab a capabilities statement:
  * ```typescript
  *  const { capabilities } = Client("https://r4.smarthealthit.org", {});
  *  await capabilities().json() as fhir4.CapabilityStatement;
  * ```
- * 
+ *
  * @example Easily read a Patient resource:
  * ```typescript
  *  const { read } = Client("https://r4.smarthealthit.org", {})
@@ -21,7 +21,20 @@ import fetch from "cross-fetch";
 
 type Summary = "true" | "false" | "text" | "count" | "data";
 
-export default function(baseUrl: string, init: RequestInit) {
+export default function(baseUrl: string, init: RequestInit): {
+  read: { (type: string, id: string, summary?: Summary): Promise<Response> };
+  vread: { (type: string, id: string, vid: string): Promise<Response> };
+  update: { (type: string, id: string, resource: fhir4.FhirResource): Promise<Response> };
+  patch: { (type: string, id: string, resource: fhir4.FhirResource ): Promise<Response> };
+  destroy: { (type: string, id: string): Promise<Response> };
+  searchType: { (type: string): Promise<Response> };
+  create: { (type: string): Promise<Response> };
+  historyType: any;
+  historyInstance: any;
+  capabilities: { (): Promise<Response> }
+  batch: { (bundle: fhir4.Bundle): Promise<Response> }
+  transaction: { (bundle: fhir4.Bundle): Promise<Response> }
+} {
   /**
    * Read the current state of the resource
    */
@@ -41,11 +54,11 @@ export default function(baseUrl: string, init: RequestInit) {
       ...init
     });
   }
-  
+
   /**
    * Update an existing resource by its id (or create it if it is new)
    */
-  async function update(type: string, id: string, resource: fhir3.FhirResource | fhir4.FhirResource) {
+  async function update(type: string, id: string, resource: fhir4.FhirResource) {
     return fetch(`${baseUrl}/${type}/${id}`, {
       method: "PUT",
       body: JSON.stringify(resource),
@@ -56,7 +69,7 @@ export default function(baseUrl: string, init: RequestInit) {
   /**
    * Update an existing resource by posting a set of changes to it
    */
-  async function patch(type: string, id: string, resource: fhir3.FhirResource | fhir4.FhirResource) {
+  async function patch(type: string, id: string, resource: fhir4.FhirResource) {
     return fetch(`${baseUrl}/${type}/${id}`, {
       method: "PATCH",
       body: JSON.stringify(resource),
@@ -78,7 +91,7 @@ export default function(baseUrl: string, init: RequestInit) {
    * Search the resource type based on some filter criteria OR Search across all resource types based on some filter criteria
    * @todo not complete
    */
-  async function search(type: string) {
+  async function searchType(type: string) {
     return fetch(`${baseUrl}/${type}`, {
       method: "GET",
       ...init
@@ -88,7 +101,7 @@ export default function(baseUrl: string, init: RequestInit) {
   /**
    * Create a new resource with a server assigned id
    */
-  async function create(type: string, id: string) {
+  async function create(type: string) {
     return fetch(`${baseUrl}/${type}`, {
       method: "POST",
       ...init
@@ -96,9 +109,16 @@ export default function(baseUrl: string, init: RequestInit) {
   }
 
   /**
-   * Retrieve the change history for a particular resource type OR Retrieve the change history for all resources
+   * Retrieve the change history for a particular resource instance
    */
-  async function history() {
+  async function historyInstance() {
+    throw new Error("Not Implemented");
+  }
+
+  /**
+   * Retrieve the change history for a particular resource type
+   */
+  async function historyType() {
     throw new Error("Not Implemented");
   }
 
@@ -115,7 +135,7 @@ export default function(baseUrl: string, init: RequestInit) {
   /**
    * Update, create or delete a set of resources in a single interaction
    */
-  async function batch(bundle: fhir3.Bundle | fhir4.Bundle) {
+  async function batch(bundle: fhir4.Bundle) {
     return fetch(`${baseUrl}/`, {
       method: "POST",
       body: JSON.stringify(bundle),
@@ -126,7 +146,7 @@ export default function(baseUrl: string, init: RequestInit) {
   /**
    * Update, create or delete a set of resources in a single interaction
    */
-  async function transaction(bundle: fhir3.Bundle | fhir4.Bundle) {
+  async function transaction(bundle: fhir4.Bundle) {
     return fetch(`${baseUrl}/`, {
       method: "POST",
       body: JSON.stringify(bundle),
@@ -140,9 +160,10 @@ export default function(baseUrl: string, init: RequestInit) {
     update,
     patch,
     destroy,
-    search,
+    searchType,
     create,
-    history,
+    historyInstance,
+    historyType,
     capabilities,
     batch,
     transaction
