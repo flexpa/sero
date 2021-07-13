@@ -13,11 +13,12 @@ Serotinous trees like the sequoia only spread when they are [exposed to the heat
 Health data is spreading everywhere. FHIR is a big part of that. Sero is built for developers who need tools in the languages they know, with opinionated answers to solve common problems.
 
 Features:
-- Multiple feature-specific composable modules
-- REST API implementation for [FHIR](https://www.hl7.org/fhir/http.html) with base R4 resources and unfinished operations
-- A functional [CDS Hooks](#cds-hooks) Service implementation
+- Multiple feature-specific composable modules - including http clients and servers
+- A minimal HTTP client for FHIR RESTful API operations as wrapper for [Fetch](https://fetch.spec.whatwg.org/)
+- A conformant (1.0 and 1.1) [CDS Hooks](#cds-hooks) Service implementation
+- An unfinished REST API implementation for [FHIR](https://www.hl7.org/fhir/http.html) with base R4 resources
 - Alpha In-memory Store design for persisting FHIR as a log
-- Out of box typings support for FHIR R4 with generics, CDS Hooks
+- Out of box typings support for FHIR R3 and R4 with generics, CDS Hooks
 
 Roadmap:
 - Resource specific routing engine
@@ -34,6 +35,7 @@ Roadmap:
 ## Table of Contents
 * [Quick Start](#quick-start)
 * [Docs](#docs)
+* [Client](#client)
 * [CDS Hooks](#cds-hooks)
 * [FHIR REST API](#rest)
 * [Development](#development)
@@ -54,6 +56,15 @@ npm start
 ### Docs
 
 Documentation built from code is available on the `gh-pages` branch and at [docs.sero.run](https://docs.sero.run)
+
+### Client
+
+A Fetch-ful FHIR client. Easily read a Patient resource or most other FHIR operations as a thin wrapper over Fetch.
+
+```typescript
+  const { read } = Client("https://r4.smarthealthit.org", {})
+  await read("Patient", "87a339d0-8cae-418e-89c7-8651e6aab3c6").json() as fhir4.Patient;
+```
 
 ### CDS Hooks
 
@@ -78,7 +89,7 @@ Building support for this protocol as a distribution/access channel for novel cl
 
 ### REST
 
-Serotiny exposes a `Rest` service that adds routes for `batch`, `capabilityStatement`, `instanceOperations`, and `typeOperations` routes and handlers.
+Sero exposes a `Rest` service that adds routes for `batch`, `capabilityStatement`, `instanceOperations`, and `typeOperations` routes and handlers.
 
 It consomes an instance of `http` and appends the configurable list above.
 

@@ -1,6 +1,10 @@
 {
   "name": "@sero.run/sero",
+<<<<<<< HEAD
   "version": "0.0.3",
+=======
+  "version": "0.0.5",
+>>>>>>> 47d39d1b0f9dc23b192d18457f5164f2084eeec4
   "description": "Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.",
   "homepage": "https://sero.run",
   "bugs": "https://github.com/automate-medical/sero/issues",
@@ -12,7 +16,7 @@
     "build": "eslint . && tsc",
     "start": "node dist/example/index.js",
     "test": "jest --detectOpenHandles",
-    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/rest/index.ts --readme ./README.md",
+    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/client/index.ts src/rest/index.ts --readme ./README.md",
     "lint": "eslint . --fix"
   },
   "keywords": [
@@ -23,6 +27,7 @@
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
   "dependencies": {
+    "cross-fetch": "^3.1.4",
     "fastify": "^3.18.0"
   },
   "devDependencies": {

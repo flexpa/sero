@@ -197,9 +197,6 @@ test('A HookRequest satisfying all requirements should pass for the patient-view
 
   expect(response.statusCode).toEqual(200)
   expect(response.headers["content-type"]).toEqual("application/json; charset=utf-8")
-
-  console.log(response.body, body)
-
   expect(body).toEqual({"cards":[{"uuid":"0fe932e4-0e10-4ce4-b6a8-324ce858924d","detail":"This is a card","source":{"label":"CDS Services Inc"},"summary":"A summary of the findings","indicator":"info"}]})
 })
 
