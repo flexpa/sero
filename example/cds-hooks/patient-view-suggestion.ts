@@ -24,22 +24,26 @@ export default new Service(
     id: "9",
     title: "patient-view-suggestion Hook Service Example",
     hook: "patient-view",
-    description: "An example",
+    description:
+      "An example of a patient view hook with a summary with information received from the pre-fetch response",
     prefetch: {
       patient: "Patient/{{context.patientId}}",
     },
   },
   (request: CDSHooks.HookRequest<{ patient: fhir4.Patient }>) => {
     const { patient } = request.prefetch;
-
+    const patientNames: Array<fhir4.HumanName> = [];
+    patient?.name?.forEach((name) => {
+      patientNames.push(name);
+    });
     return {
       cards: [
         new Card({
           detail: "This is a card",
           source: {
-            label: "CDS Services Inc",
+            label: "Automate Medical, LLC",
           },
-          summary: `Now seeing: ${patient}`,
+          summary: `Now seeing: ${patientNames[0].text}`,
           indicator: `info`,
         }),
       ],
