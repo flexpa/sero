@@ -44,7 +44,7 @@ async function search() {
   throw new Error("Not Implemented");
 }
 
-function batch(): void {
+export function batchOrTransaction() {
   throw new Error("Not Implemented");
 }
 
@@ -181,6 +181,16 @@ export function interactions(config: Config, http: FastifyInstance): void {
   http.route({
     method: 'POST',
     url: '/',
-    handler: batch
+    schema: {
+      body: {
+        type: 'object',
+        required: ['resourceType', 'type'],
+        properties: {
+          resourceType: { const: 'Bundle' },
+          type: { enum: ['batch', 'transaction'] }
+        }
+      }
+    },
+    handler: batchOrTransaction
   })
 }
