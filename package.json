@@ -4,10 +4,10 @@
   "description": "Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.",
   "homepage": "https://sero.run",
   "bugs": "https://github.com/automate-medical/sero/issues",
-  "main": "dist/example/full-server.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "watch": "tsc --watch --preserveWatchOutput --pretty",
-    "dev": "NODE_ENV=development nodemon",
+    "dev": "nodemon",
     "format": "prettier --write \"src/**/*.ts\"",
     "build": "eslint . && tsc",
     "start": "node dist/example/index.js",
@@ -23,6 +23,7 @@
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
     "cross-fetch": "^3.1.4",
     "fastify": "^3.18.0"
   },

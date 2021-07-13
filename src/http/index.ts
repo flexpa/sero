@@ -7,7 +7,7 @@ import Config from '../config';
 
 export default (config: Config): FastifyInstance => {
 
-  const http = fastify(config.fastifyOpts);
+  const http = fastify(config.http);
 
   return http;
 }

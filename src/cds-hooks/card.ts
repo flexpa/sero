@@ -2,18 +2,18 @@ import { randomUUID } from "crypto";
 import Suggestion from "./suggestion";
 
 /**
- * A **Card** contains decision support from a CDS Service. 
+ * A **Card** contains decision support from a CDS Service.
  *
  * Generally speaking, cards are intended for display to an end user. The data
  * format of a card defines a very minimal set of required attributes with
  * several more optional attributes to suit a variety of use cases. For
  * instance, narrative informational decision support, actionable suggestions to
  * modify data, and links to SMART apps.
- * 
+ *
  * One or many {@link Suggestion} can be created with each card.
- * 
+ *
  * @version https://cds-hooks.hl7.org/ballots/2020Sep/
- * 
+ *
  * @example Here's an example of creating a Card without any suggestions:
  * ```typescript
  * new Card({
@@ -39,8 +39,8 @@ export default class Card implements CDSHooks.Card {
    */
   uuid: string;
   /**
-   * One-sentence, <140-character summary message for display to the user inside
-   * of this card.
+   * One-sentence, less than 140-character summary message for display to the user
+   * inside of this card.
    */
   summary: string;
   /**

@@ -1,7 +1,7 @@
 import Client from ".";
 
 test('Calling Capabilities returns a 200', async () => {
-  // @todo this test should use a mock, not the live 
+  // @todo this test should use a mock, not the live
   const { capabilities } = Client("https://r4.smarthealthit.org", {})
 
   const statement = await capabilities()
@@ -12,10 +12,10 @@ test('Calling Capabilities returns a 200', async () => {
 });
 
 test('Calling Patient query returns some', async () => {
-  // @todo this test should use a mock, not the live 
-  const { search, read } = Client("https://r4.smarthealthit.org", {})
+  // @todo this test should use a mock, not the live
+  const { searchType, read } = Client("https://r4.smarthealthit.org", {})
 
-  const searchQuery = await search("Patient");
+  const searchQuery = await searchType("Patient");
   const searchResponse = await searchQuery.json() as fhir4.Bundle;
 
   expect(searchQuery.status).toEqual(200)
