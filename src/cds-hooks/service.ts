@@ -7,10 +7,9 @@ import { Hooks } from ".";
  *
  * @todo Is it possible to structure the generic here on something other than
  * `any`?
- * @todo async?
  */
 type ServiceHandler = {
-  (request: CDSHooks.HookRequest<any>): CDSHooks.HookResponse;
+  (request: CDSHooks.HookRequest<any>): Promise<CDSHooks.HookResponse> | CDSHooks.HookResponse;
 };
 
 /**

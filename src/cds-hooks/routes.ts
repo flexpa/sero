@@ -26,7 +26,7 @@ function addCorsHeaders(reply: FastifyReply): void {
  * @param options -
  */
 function invoke(options: Config["cdsHooks"]) {
-  return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
+  return async (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
     if (options?.cors) addCorsHeaders(reply);
     const service = getService(options?.services || [], request.params.id);
 
@@ -47,7 +47,7 @@ function invoke(options: Config["cdsHooks"]) {
         reply.code(400).send(validationError)
       // 4. Otherwise execute the service
       } else {
-        const response = service.handler(hookRequest);
+        const response = await service.handler(hookRequest);
         reply.send(response);
       }
     }
