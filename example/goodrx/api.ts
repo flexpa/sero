@@ -4,7 +4,7 @@ const hmac = createHmac('sha256', 'a secret');
 
 export default async function goodRxRequest(path: string, options: Record<string, any>) {
   if (!process.env.GOOD_RX_API_KEY) throw new Error("process.env.GOOD_RX_API_KEY must be set")
-  
+
   const params = queryParams({
     ...options,
     api_key: process.env.GOOD_RX_API_KEY
@@ -26,7 +26,7 @@ function queryParams(options: ComparePriceOptions & { api_key: string }) {
 
 function sign(params: string) {
   if (!process.env.GOOD_RX_SECRET_KEY) throw new Error("process.env.GOOD_RX_SECRET_KEY must be set")
-  
+
   const hmac = createHmac("sha256", process.env.GOOD_RX_SECRET_KEY);
   hmac.update(params)
   const digest = hmac.digest("base64").replace(/\+/g, "_").replace(/\//g, "_")
