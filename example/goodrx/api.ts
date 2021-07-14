@@ -1,14 +1,27 @@
 import fetch from "cross-fetch";
 
-export default function goodRxRequest(path: string, query: Record<string, any>): Promise<Response> {
-  Object.keys(query)
+export default async function goodRxRequest(path: string, options: Record<string, any>) {
+  const params = queryParams({
+    api_key: process.env.GOOD_RX_API_KEY || "123",
+    ...options
+  })
 
-  return fetch(`https://api.goodrx.com${path}?${sign(query)}`)
+  const response = await fetch(`https://api.goodrx.com${path}?${sign(params)}`)
+
+  const { data, errors }: { data: ComparePriceJSONResponse, errors: any } = await response.json()
+  if (response.ok) {
+    return data
+  } else {
+    return Promise.reject(errors)
+  }
 }
 
-function sign(query: string) {
-  // @todo
-  return query;
+function queryParams(options: ComparePriceOptions & { api_key: string }) {
+  return new URLSearchParams(options as Record<string,any>).toString()
+}
+
+function sign(params: string) {
+  return params;
 }
 
 interface ComparePriceOptions {
@@ -20,6 +33,25 @@ interface ComparePriceOptions {
   manufacturer?: "brand" | "generic" | "match";
 }
 
-export function comparePrice(query: ComparePriceOptions): Promise<Response> {
+export function comparePrice(query: ComparePriceOptions) {
   return goodRxRequest("/compare-price", query);
+}
+
+interface ComparePriceJSONResponse {
+  brand: string[];
+  generic: string[];
+  display: string;
+  form: string;
+  dosage: string;
+  quantity: number;
+  prices: number[];
+  price_detail: {
+    url: (number | null)[];
+    price: number[];
+    savings: (string | null)[];
+    type: string[];
+    pharmacy: string[];
+  }
+  url: string;
+  manufacturer: string;
 }

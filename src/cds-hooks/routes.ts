@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { getService } from ".";
+import { getService, NoDecisionResponse } from ".";
 import Config from "../config";
 import { validateHookRequest } from "./util";
 import CDSHooks from "../types/cds-hooks"
@@ -48,8 +48,18 @@ function invoke(options: Config["cdsHooks"]) {
         reply.code(400).send(validationError)
       // 4. Otherwise execute the service
       } else {
-        const response = await service.handler(hookRequest);
-        reply.send(response);
+        try {
+          const response = await service.handler(hookRequest);
+          reply.send(response);
+        } catch (error) {
+          if (error instanceof NoDecisionResponse) {
+            reply.send({
+              cards: []
+            })
+          } else {
+            throw error;
+          }
+        }
       }
     }
   }

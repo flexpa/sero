@@ -1,7 +1,7 @@
 import { start } from "../../src/http";
 import { Config, Http, CDSHooks } from "../../src"
 
-import goodRxCompare from "./good-rx-compare-service";
+import goodRxCompare from "./good-rx-compare-price-service";
 
 const config: Config = {
   cdsHooks: {
