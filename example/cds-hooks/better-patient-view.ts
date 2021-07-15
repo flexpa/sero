@@ -28,20 +28,17 @@ export default new Service(
       "An example of a patient view hook with a summary with information received from the pre-fetch response",
     prefetch: {
       patient: "Patient/{{context.patientId}}",
-      encounter: "Encounter?subject=Patient/{{context.patientId}}&_sort=date",
     },
   },
   (
     request: CDSHooks.HookRequest<{
       patient: fhir4.Patient;
-      encounter: fhir4.Encounter;
     }>
   ) => {
-    const patient = request.prefetch.patient;
-    const encounter = request.prefetch.encounter;
+    const data = request.prefetch;
     // extract name(s)
     const patientNames: Array<fhir4.HumanName> = [];
-    patient?.name?.forEach((name) => {
+    data.patient.name?.forEach((name) => {
       patientNames.push(name);
     });
     return {
@@ -64,17 +61,7 @@ export default new Service(
             label: "Automate Medical, LLC",
             url: "https://www.automatemedical.com/",
           },
-          summary: `Date of birth: ${patient.birthDate}`,
-          indicator: "info",
-        }),
-        // Contact
-        new Card({
-          detail: `Last encounter: ${encounter.text}`,
-          source: {
-            label: "Automate Medical, LLC",
-            url: "https://www.automatemedical.com/",
-          },
-          summary: `Contact information`,
+          summary: `Date of birth: ${data.patient.birthDate}`,
           indicator: "info",
         }),
       ],
