@@ -1,8 +1,10 @@
 import fetch from "cross-fetch";
 
 export default async function goodRxRequest(path: string, options: Record<string, any>) {
+  if (!process.env.GOOD_RX_API_KEY) throw new Error("process.env.GOOD_RX_API_KEY must be set")
+  
   const params = queryParams({
-    api_key: process.env.GOOD_RX_API_KEY || "123",
+    api_key: process.env.GOOD_RX_API_KEY,
     ...options
   })
 
