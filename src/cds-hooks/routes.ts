@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { getService } from ".";
 import Config from "../config";
 import { validateHookRequest } from "./util";
+import CDSHooks from "../types/cds-hooks"
 
 /**
  * @deprecated This should be invoked some other way

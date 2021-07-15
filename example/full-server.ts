@@ -24,7 +24,9 @@ const config: Config = {
     cors: true
   },
   http: {
-    logger: true
+    logger: {
+      prettyPrint: true
+    },
   }
 }
 

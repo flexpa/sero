@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { http as app } from "../../example/cds-hooks"
+import { http as app } from "../../test/fixtures/server"
 
 /**
  * Setting a mock UUID for all tests
