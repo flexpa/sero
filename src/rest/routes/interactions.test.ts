@@ -1,4 +1,4 @@
-import { http as app } from "../../../example/full-server"
+import { http as app } from "../../../test/fixtures/server"
 
 /**
  * Setting a mock UUID for all tests

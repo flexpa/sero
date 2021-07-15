@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Service, Card } from "../../dist/cds-hooks";
+import { Service, Card } from "../../src/cds-hooks";
 
 /**
- * order-review
+ * medication-prescribe
  *
  * Workflow
  *
@@ -17,22 +17,22 @@ import { Service, Card } from "../../dist/cds-hooks";
  * to this effect while CDS Hooks determines the appropriate process for
  * deprecating hooks.
  *
- *  Field                     Prefetch?          Description
+ *  Field                      Prefetch?          Description
  *
- *  userId        Required    Yes      string    The id of the current user. For this hook, the user is expected to be of type Practitioner. For example, Practitioner/123
- *  patientId     Required    Yes      string    The FHIR Patient.id of the current patient in context
- *  encounterId   Optional    Yes      string    The FHIR Encounter.id of the current encounter in context
- *  orders        Required    No       object    DSTU2 - FHIR Bundle of MedicationOrder, DiagnosticOrder, DeviceUseRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status. STU3 - FHIR Bundle of MedicationRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status
+ *  userId         Required    Yes      string    The id of the current user. For this hook, the user is expected to be of type Practitioner. For example, Practitioner/123
+ *  patientId      Required    Yes      string    The FHIR Patient.id of the current patient in context
+ *  encounterId    Optional    Yes      string    The FHIR Encounter.id of the current encounter in context
+ *  medications    Required    No       object    DSTU2 - FHIR Bundle of draft MedicationOrder resources STU3 - FHIR Bundle of draft MedicationRequest resources
  *
  *  specificationVersion    1.0
  *  hookVersion             1.0
- *  hookMaturity            3 - Tested
+ *  hookMaturity            2 - Tested
  */
 export default new Service(
   {
-    id: "5",
-    title: "order-review Hook Service Example",
-    hook: "order-review",
+    id: "4",
+    title: "medication-prescribe Hook Service Example",
+    hook: "medication-prescribe",
     description: "An example",
     prefetch: {
       patient: "Patient/{{context.patientId}}"

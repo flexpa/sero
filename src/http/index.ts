@@ -18,6 +18,6 @@ export function start(http: FastifyInstance): void {
       console.error(err)
       process.exit(1)
     }
-    console.log(`Server listening at ${address} - booted`)
+    console.log(`Sero booting at ${address}`)
   })
 }
