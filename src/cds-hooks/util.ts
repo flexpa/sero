@@ -1,6 +1,5 @@
 import { Service } from "./index";
-// @todo - should try to deliberately unify/install ajv version to match fastify at all times
-import Ajv, { ValidateFunction, ErrorObject } from "@fastify/ajv-compiler/node_modules/ajv";
+import Ajv, { ValidateFunction, ErrorObject } from "ajv";
 import { Hooks } from "./index"
 
 /**

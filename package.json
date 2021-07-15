@@ -4,16 +4,17 @@
   "description": "Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.",
   "homepage": "https://sero.run",
   "bugs": "https://github.com/automate-medical/sero/issues",
-  "main": "dist/example/full-server.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "watch": "tsc --watch --preserveWatchOutput --pretty",
-    "dev": "NODE_ENV=development nodemon",
+    "dev": "nodemon",
     "format": "prettier --write \"src/**/*.ts\"",
     "build": "eslint . && tsc",
     "start": "node dist/example/index.js",
     "test": "jest --detectOpenHandles",
     "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/client/index.ts src/rest/index.ts --readme ./README.md",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "examples": "npm run build && npm run start"
   },
   "keywords": [
     "fhir",
@@ -23,13 +24,14 @@
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
     "cross-fetch": "^3.1.4",
     "fastify": "^3.18.0"
   },
   "devDependencies": {
-    "@types/fhir": "^0.0.32",
+    "@types/fhir": "^0.0.34",
     "@types/jest": "^26.0.23",
-    "@types/node": "^14.17.1",
+    "@types/node": "14.17.5",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "eslint": "^7.29.0",

@@ -4,8 +4,8 @@ import Config from "../config";
 import { validateHookRequest } from "./util";
 
 /**
- * @deprecated
- * @param reply
+ * @deprecated This should be invoked some other way
+ * @param reply -
  */
 function addCorsHeaders(reply: FastifyReply): void {
   reply.header("Access-Control-Allow-Origin", "*");
@@ -23,7 +23,7 @@ function addCorsHeaders(reply: FastifyReply): void {
  * @todo FHIR Resource Access workflow?
  * @todo error handling response for step 4 (412)
  *
- * @param options
+ * @param options -
  */
 function invoke(options: Config["cdsHooks"]) {
   return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
@@ -41,7 +41,7 @@ function invoke(options: Config["cdsHooks"]) {
     } else {
       const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
       const validationError = validateHookRequest(hookRequest, service);
-      
+
       // 3. Is there a dynamic validation error on this HookRequest?
       if (validationError) {
         reply.code(400).send(validationError)
@@ -60,7 +60,7 @@ function invoke(options: Config["cdsHooks"]) {
  *
  * @todo validate that the feedback has referrential integrity to some original HookRequest
  *
- * @param options
+ * @param options -
  */
 function feedback(options: Config["cdsHooks"]) {
   return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
@@ -129,7 +129,7 @@ const feedbackSchema = {
  * @param http - A fastify instance
  * @param options - The services and
  */
-export default (http: FastifyInstance, options: Config["cdsHooks"]) => {
+export default (http: FastifyInstance, options: Config["cdsHooks"]): void => {
   http.route({
     method: 'GET',
     url: '/cds-services',

@@ -3,12 +3,12 @@
  *
  * @deprecated Deprecating this at the at the same time as writing it
  * - it needs to be parsed from schema instead, and version selection
- * needs to be done when using Serotiny
+ * needs to be done when using Sero
  *
  * @todo remove
  */
 
-enum Resources {
+enum ResourceType {
   Account = "Account",
   ActivityDefinition = "ActivityDefinition",
   AdverseEvent = "AdverseEvent",
@@ -157,4 +157,4 @@ enum Resources {
   VisionPrescription = "VisionPrescription"
 }
 
-export default Resources;
+export default ResourceType;

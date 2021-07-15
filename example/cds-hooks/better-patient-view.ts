@@ -1,7 +1,7 @@
 import { Service, Card } from "../../src/cds-hooks";
 
 /**
- * patient-view-suggestion
+ * patient-view-kitchen-sink
  *
  * Workflow
  *
@@ -22,29 +22,60 @@ import { Service, Card } from "../../src/cds-hooks";
 export default new Service(
   {
     id: "9",
-    title: "patient-view-suggestion Hook Service Example",
+    title: "A better patient view service example",
     hook: "patient-view",
     description:
       "An example of a patient view hook with a summary with information received from the pre-fetch response",
     prefetch: {
       patient: "Patient/{{context.patientId}}",
+      encounter: "Encounter?subject=Patient/{{context.patientId}}&_sort=date",
     },
   },
-  (request: CDSHooks.HookRequest<{ patient: fhir4.Patient }>) => {
-    const { patient } = request.prefetch;
+  (
+    request: CDSHooks.HookRequest<{
+      patient: fhir4.Patient;
+      encounter: fhir4.Encounter;
+    }>
+  ) => {
+    const patient = request.prefetch.patient;
+    const encounter = request.prefetch.encounter;
+    // extract name(s)
     const patientNames: Array<fhir4.HumanName> = [];
     patient?.name?.forEach((name) => {
       patientNames.push(name);
     });
     return {
       cards: [
+        // Name(s)
         new Card({
-          detail: "This is a card",
+          detail: `This patient has ${patientNames.length} name${
+            patientNames.length === 0 ? "s" : ""
+          } on record.`,
           source: {
             label: "Automate Medical, LLC",
+            url: "https://www.automatemedical.com/",
           },
-          summary: `Now seeing: ${patientNames[0].text}`,
-          indicator: `info`,
+          summary: `Now seeing: ${patientNames[0].given} ${patientNames[0].family}.`,
+          indicator: "info",
+        }),
+        // DOB
+        new Card({
+          source: {
+            label: "Automate Medical, LLC",
+            url: "https://www.automatemedical.com/",
+          },
+          summary: `Date of birth: ${patient.birthDate}`,
+          indicator: "info",
+        }),
+        // Contact
+        new Card({
+          detail: `Last encounter: ${encounter.text}`,
+          source: {
+            label: "Automate Medical, LLC",
+            url: "https://www.automatemedical.com/",
+          },
+          summary: `Contact information`,
+          indicator: "info",
         }),
       ],
     };

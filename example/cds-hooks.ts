@@ -1,4 +1,4 @@
-import { Config, Http, CDSHooks } from "../src";
+import { Config, Http, CDSHooks, Rest } from "../src";
 
 import appointmentBookExample from "./cds-hooks/appointment-book";
 import encounterDischargeExample from "./cds-hooks/encounter-discharge";
@@ -8,7 +8,7 @@ import orderReviewExample from "./cds-hooks/order-review";
 import orderSelectExample from "./cds-hooks/order-select";
 import orderSignExample from "./cds-hooks/order-sign";
 import patientViewExample from "./cds-hooks/patient-view";
-import patientViewSuggestion from "./cds-hooks/patient-view-suggestion";
+import betterPatientView from "./cds-hooks/better-patient-view";
 
 const config: Config = {
   cdsHooks: {
@@ -21,11 +21,11 @@ const config: Config = {
       orderSelectExample,
       orderSignExample,
       patientViewExample,
-      patientViewSuggestion
+      betterPatientView,
     ],
-    cors: true
-  }
-}
+    cors: true,
+  },
+};
 
 export const http = Http(config);
 
