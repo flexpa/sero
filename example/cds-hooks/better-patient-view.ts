@@ -1,5 +1,5 @@
 import { Service, Card } from "../../src/cds-hooks";
-import { processPatientNames } from "./index";
+import { processPatientNames, buildPatient } from "./index";
 
 /**
  * patient-view-kitchen-sink
@@ -50,6 +50,8 @@ export default new Service(
     data.encounter.entry?.forEach((entry) => {
       encounters.push(entry);
     });
+    // @todo to fill in all of the details for patient, call this 
+    // const cards = buildPatient(data.patient);
     return {
       cards: [
         // Name(s)
@@ -58,7 +60,7 @@ export default new Service(
             patientNames.length <= 1 ? "" : "s"
           } on record.`,
           source: {
-            label: "Automate Medical, LLC",
+            label: "Automate Medical, Inc.",
             url: "https://www.automatemedical.com/",
           },
           summary: `Now seeing: ${patientNames[0].given} ${patientNames[0].family}.`,
@@ -67,7 +69,7 @@ export default new Service(
         // DOB
         new Card({
           source: {
-            label: "Automate Medical, LLC",
+            label: "Automate Medical, Inc.",
             url: "https://www.automatemedical.com/",
           },
           summary: `Date of birth: ${data.patient.birthDate}`,
@@ -81,7 +83,7 @@ export default new Service(
             encounters.length <= 1 ? "" : "s"
           } on record.`,
           source: {
-            label: "Automate Medical, LLC",
+            label: "Automate Medical, Inc.",
             url: "https://www.automatemedical.com/",
           },
           summary: `Last visit`,
