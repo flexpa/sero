@@ -22,8 +22,8 @@ export function processPatient(patient: fhir4.Patient): Array<Card> {
       cards.push(
         new Card({
           source: source,
-          summary: `${patient}`,
-          detail: `${patient}`,
+          summary: `${patient[key]}`,
+          detail: `${patient[key]}`,
           indicator: `info`,
         })
       );
