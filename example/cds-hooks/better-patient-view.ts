@@ -1,4 +1,5 @@
 import { Service, Card } from "../../src/cds-hooks";
+import { processPatientNames } from "./index";
 
 /**
  * patient-view-kitchen-sink
@@ -7,6 +8,11 @@ import { Service, Card } from "../../src/cds-hooks";
  *
  * The user has just opened a patient's record; typically called only once at
  * the beginning of a user's interaction with a specific patient's record.
+ *
+ * In this example, a user has opened a patients record without an encounter
+ * (the patient is not currently being looked at). Information about the
+ * patient, including their most recent encounter information, are queried
+ * from the service prefetch.
  *
  *  Field                      Prefetch?          Description
  *
@@ -22,31 +28,34 @@ import { Service, Card } from "../../src/cds-hooks";
 export default new Service(
   {
     id: "9",
-    title: "A better patient view service example",
+    title: "Patient view with last encounter and observations",
     hook: "patient-view",
     description:
-      "An example of a patient view hook with a summary with information received from the pre-fetch response",
+      "A patient-view hook with patient and encounter prefetch template values. presents patient info and last encounter information",
     prefetch: {
       patient: "Patient/{{context.patientId}}",
+      encounter: "Encounter?subject={{context.patientId}}&_sort=date",
     },
   },
   (
     request: CDSHooks.HookRequest<{
       patient: fhir4.Patient;
+      encounter: fhir4.Bundle;
     }>
   ) => {
     const data = request.prefetch;
-    // extract name(s)
-    const patientNames: Array<fhir4.HumanName> = [];
-    data.patient.name?.forEach((name) => {
-      patientNames.push(name);
+    const patientNames = processPatientNames(data.patient);
+    // @todo no explicit any here, as fhir4.BundleEntry does not outline start and end period for an encounter
+    const encounters: Array<any> = [];
+    data.encounter.entry?.forEach((entry) => {
+      encounters.push(entry);
     });
     return {
       cards: [
         // Name(s)
         new Card({
           detail: `This patient has ${patientNames.length} name${
-            patientNames.length === 0 ? "s" : ""
+            patientNames.length <= 1 ? "" : "s"
           } on record.`,
           source: {
             label: "Automate Medical, LLC",
@@ -62,6 +71,20 @@ export default new Service(
             url: "https://www.automatemedical.com/",
           },
           summary: `Date of birth: ${data.patient.birthDate}`,
+          indicator: "info",
+        }),
+        // Information on the last encounter
+        new Card({
+          detail: `Last visit was on ${
+            encounters.pop().resource.period.start
+          }. There are ${encounters.length} encounter${
+            encounters.length <= 1 ? "" : "s"
+          } on record.`,
+          source: {
+            label: "Automate Medical, LLC",
+            url: "https://www.automatemedical.com/",
+          },
+          summary: `Last visit`,
           indicator: "info",
         }),
       ],

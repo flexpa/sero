@@ -7,10 +7,6 @@ import { Config } from "..";
 import routes from "./routes";
 import Service from "./service";
 
-export default (config: Config, http: FastifyInstance): void => {
-  routes(http, config.cdsHooks);
-}
-
 export function getService(services: Service[], id: string): Service | undefined {
   return services.find((service) => service.id == id)
 }
@@ -20,3 +16,7 @@ export type Hooks = "patient-view" | "order-sign" | "order-select" | "order-revi
 export { default as Service } from "./service";
 export { default as Card } from "./card";
 export { default as Suggestion } from "./suggestion";
+
+export default (config: Config, http: FastifyInstance): void => {
+  routes(http, config.cdsHooks);
+}

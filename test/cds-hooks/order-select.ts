@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Service, Card } from "../../dist/cds-hooks";
+import { Service, Card } from "../../src/cds-hooks";
 
 /**
  * order-select

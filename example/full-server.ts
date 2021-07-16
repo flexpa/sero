@@ -26,9 +26,11 @@ const config: Config = {
     cors: true,
   },
   http: {
-    logger: true,
-  },
-};
+    logger: {
+      prettyPrint: true
+    },
+  }
+}
 
 export const http = Http(config);
 
