@@ -28,7 +28,7 @@ import { processPatientNames } from "./index";
 export default new Service(
   {
     id: "9",
-    title: "Patient view with last encounter and observations",
+    title: "Patient view with last encounter",
     hook: "patient-view",
     description:
       "A patient-view hook with patient and encounter prefetch template values. presents patient info and last encounter information",
