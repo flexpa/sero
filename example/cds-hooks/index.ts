@@ -4,8 +4,15 @@ import { Card } from "../../src/cds-hooks";
  * Card detail interface has a generic type definition
  */
 export interface CardDetail<T> {
-  summary: T;
-  detail: T;
+  summary: string;
+  detail: string;
+}
+
+/**
+ * Define an index signature to help with the patient properties
+ */
+export interface PatientProperties {
+  [key: string]: keyof fhir4.Patient;
 }
 
 /**
@@ -18,10 +25,10 @@ export interface CardDetail<T> {
  * @todo scaffold to get specific detail for each patient property that is
  * included in the response, and no explicit any
  */
-export function buildPatient(patient: fhir4.Patient): Array<Card> {
+export function buildPatient(patient: any): Array<Card> {
   const cards: Array<Card> = [];
   const keys = Object.keys(patient);
-  const source = {
+  const source: CDSHooks.Source = {
     label: "Automate Medical, LLC",
     url: "https://www.automatemedical.com/",
   };
@@ -29,12 +36,11 @@ export function buildPatient(patient: fhir4.Patient): Array<Card> {
   keys.forEach((key) => {
     // const summaryDetail = summaryAndDetail(key);
     if (key in patient) {
-      const [summary, detail] = summaryAndDetail(key, patient);
       cards.push(
         new Card({
           source: source,
-          summary: summary,
-          detail: detail,
+          summary: `${patient[key]}`,
+          detail: `${patient[key]}`,
           indicator: `info`,
         })
       );
@@ -57,60 +63,4 @@ export function processPatientNames(
     patientNames.push(name);
   });
   return patientNames;
-}
-
-export function summaryAndDetail(arg: string, patient: fhir4.Patient): any[] {
-  const summaryDetail: Partial<CardDetail<any>> = {};
-  switch (arg) {
-  case "resourceType":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "id":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "`meta`":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "`text`":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "`identifier`":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "active":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "name":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "telecom":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "gender":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "birthDate":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "address":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  case "generalPractitioner":
-    summaryDetail.summary = patient[arg];
-    summaryDetail.detail = patient[arg];
-    return [summaryDetail.summary, summaryDetail.detail];
-  default:
-    break;
-  }
 }

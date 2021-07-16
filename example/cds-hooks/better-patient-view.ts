@@ -1,4 +1,4 @@
-import { Service, Card } from "../../src/cds-hooks";
+import { Service } from "../../src/cds-hooks";
 import { processPatientNames, buildPatient } from "./index";
 
 /**
@@ -44,52 +44,16 @@ export default new Service(
     }>
   ) => {
     const data = request.prefetch;
-    const patientNames = processPatientNames(data.patient);
+    // const patientNames = processPatientNames(data.patient);
     // @todo no explicit any here, as fhir4.BundleEntry does not outline start and end period for an encounter
     const encounters: Array<any> = [];
     data.encounter.entry?.forEach((entry) => {
       encounters.push(entry);
     });
-    // @todo to fill in all of the details for patient, call this 
-    // const cards = buildPatient(data.patient);
+    // @todo to fill in all of the details for patient, call this
+    const cards = buildPatient(data.patient);
     return {
-      cards: [
-        // Name(s)
-        new Card({
-          detail: `This patient has ${patientNames.length} name${
-            patientNames.length <= 1 ? "" : "s"
-          } on record.`,
-          source: {
-            label: "Automate Medical, Inc.",
-            url: "https://www.automatemedical.com/",
-          },
-          summary: `Now seeing: ${patientNames[0].given} ${patientNames[0].family}.`,
-          indicator: "info",
-        }),
-        // DOB
-        new Card({
-          source: {
-            label: "Automate Medical, Inc.",
-            url: "https://www.automatemedical.com/",
-          },
-          summary: `Date of birth: ${data.patient.birthDate}`,
-          indicator: "info",
-        }),
-        // Information on the last encounter
-        new Card({
-          detail: `Last visit was on ${
-            encounters.pop().resource.period.start
-          }. There are ${encounters.length} encounter${
-            encounters.length <= 1 ? "" : "s"
-          } on record.`,
-          source: {
-            label: "Automate Medical, Inc.",
-            url: "https://www.automatemedical.com/",
-          },
-          summary: `Last visit`,
-          indicator: "info",
-        }),
-      ],
+      cards: cards,
     };
   }
 );
