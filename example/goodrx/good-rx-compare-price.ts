@@ -9,17 +9,16 @@ const options = {
   description: "GoodRx's Compare Price API is used to provide drug cost estimates during the prescription order workflow",
 };
 
-const handler =  async (request: CDSHooks.HookRequest<any>) => {                            
+const handler =  async (request: CDSHooks.HookRequest<any>) => {
   /**
    * draftOrders is a required context submission for the order-select hook
    *
    * Every decision support request includes a context attribute that we
-   * validate the presence of in Sero - so when this function exercutes, a
+   * validate the presence of in Sero - so when this function executes, a
    * developer can have confidence that a draftOrders key will exist on
    * request.context and it will be shaped like a FHIR Bundle.
    */
   const { draftOrders }: { draftOrders: fhir4.Bundle } = request.context;
-
   /**
    * The order-select hook *requires* that a Bundle of resources be provided
    * at draftOrders, but now that a MedicationRequest actually exists here. We
@@ -48,7 +47,7 @@ const handler =  async (request: CDSHooks.HookRequest<any>) => {
   /**
    * Create and return a Card that contains pricing information about the drug
    * from the GoodRx response. This example looks like:
-   * 
+   *
    * ```
    * {
    *   source: { label: "GoodRx" },
@@ -60,7 +59,7 @@ const handler =  async (request: CDSHooks.HookRequest<any>) => {
    *   * Coupon: https://www.goodrx.com/coupon/apex?drug_id=4703&pharmacy_id=115179&quantity=60"
    * }
    * ```
-   * 
+   *
    * This would render a Card in the EHR with a link to the coupon actually
    * needed for the Patient to redeem the price. This example currently
    * has no Suggestion response.
