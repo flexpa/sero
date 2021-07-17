@@ -9,6 +9,11 @@ const config: Config = {
       goodRxComparePriceService
     ],
     cors: true
+  },
+  http: {
+    logger: {
+      prettyPrint: true
+    }
   }
 }
 

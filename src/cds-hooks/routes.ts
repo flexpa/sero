@@ -57,6 +57,7 @@ function invoke(options: Config["cdsHooks"]) {
               cards: []
             })
           } else {
+            console.log(error)
             throw error;
           }
         }

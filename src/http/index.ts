@@ -6,7 +6,6 @@ import fastify, { FastifyInstance } from 'fastify'
 import Config from '../config';
 
 export default (config: Config): FastifyInstance => {
-
   const http = fastify(config.http);
 
   return http;
