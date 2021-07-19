@@ -1,0 +1,14 @@
+{
+  "name": "goodrx-cds-price-comparison",
+  "version": "1.0.0",
+  "description": "GoodRx Prices as a Decision Support API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sero.run/sero": "^0.0.7"
+  }
+}
