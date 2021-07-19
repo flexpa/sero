@@ -1,21 +1,6 @@
 import { Card } from "../../src/cds-hooks";
 
 /**
- * Card detail interface has a generic type definition
- */
-export interface CardDetail<T> {
-  summary: string;
-  detail: string;
-}
-
-/**
- * Define an index signature to help with the patient properties
- */
-export interface PatientProperties {
-  [key: string]: keyof fhir4.Patient;
-}
-
-/**
  * first, get all of the properties that are present in the response
  * then, construct cards out of that information with some default details
  * (summary is property key/title, and detail is the property value)
@@ -49,6 +34,8 @@ export function buildPatient(patient: any): Array<Card> {
   return cards;
 }
 
+// in general the functions below avoid the "possibly undefined error"
+
 /**
  *
  * @param patient - a fhir patient
@@ -63,4 +50,67 @@ export function processPatientNames(
     patientNames.push(name);
   });
   return patientNames;
+}
+
+/**
+ *
+ * @param patient - a fhir patient
+ * @returns an array of fhir addresses
+ * Return an array of addresses from the fhir patient bundle
+ */
+export function processAddresses(patient: fhir4.Patient): Array<fhir4.Address> {
+  const addresses: Array<fhir4.Address> = [];
+  patient.address?.forEach((address) => {
+    addresses.push(address);
+  });
+  return addresses;
+}
+
+/**
+ *
+ * @param patient - a fhir patient
+ * @returns an array of fhir contacts
+ * Return an array of contacts from the fhir patient bundle
+ */
+export function processContacts(
+  patient: fhir4.Patient
+): Array<fhir4.PatientContact> {
+  const contacts: Array<fhir4.PatientContact> = [];
+  patient.contact?.forEach((address) => {
+    contacts.push(address);
+  });
+  return contacts;
+}
+
+/**
+ *
+ * @param patient - a fhir patient
+ * @returns an array of fhir contact points
+ * Return an array of contact points (email and other things) from the fhir patient bundle
+ */
+export function processTelecom(
+  patient: fhir4.Patient
+): Array<fhir4.ContactPoint> {
+  const telecom: Array<fhir4.ContactPoint> = [];
+  patient.telecom?.forEach((address) => {
+    telecom.push(address);
+  });
+  return telecom;
+}
+
+/**
+ * Card detail interface has a generic type definition
+ * @todo - help with scaffolding cards with generic types
+ */
+export interface CardDetail<T> {
+  summary: T;
+  detail: T;
+}
+
+/**
+ * Define an index signature to help with the patient properties
+ * @todo - patient has different properties, this will help with generalizing card creation
+ */
+export interface PatientProperties {
+  [key: string]: keyof fhir4.Patient;
 }

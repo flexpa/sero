@@ -1,5 +1,10 @@
 import { Service, Card } from "../../src/cds-hooks";
-import { processPatientNames } from "./util";
+import {
+  processAddresses,
+  processContacts,
+  processPatientNames,
+  processTelecom,
+} from "./util";
 
 /**
  * patient-view-kitchen-sink
@@ -45,6 +50,9 @@ export default new Service(
   ) => {
     const data = request.prefetch;
     const patientNames = processPatientNames(data.patient);
+    const addresses = processAddresses(data.patient);
+    const contacts = processContacts(data.patient);
+    const telecom = processTelecom(data.patient);
     // @todo no explicit any here, as fhir4.BundleEntry does not outline start and end period for an encounter
     const encounters: Array<any> = [];
     data.encounter.entry?.forEach((entry) => {
@@ -75,13 +83,44 @@ export default new Service(
           summary: `Date of birth: ${data.patient.birthDate}`,
           indicator: "info",
         }),
-        // DOB
+        // Active
         new Card({
+          detail: `${data.patient.active === true ? "Yes" : "No"}`,
           source: {
             label: "Automate Medical, Inc.",
             url: "https://www.automatemedical.com/",
           },
-          summary: `Active: ${data.patient.active === true ? "yes" : "no"}`,
+          summary: `Active`,
+          indicator: "info",
+        }),
+        // Address
+        new Card({
+          detail: `${addresses[0].line}, ${addresses[0].city}, ${addresses[0].state} ${addresses[0].postalCode}`,
+          source: {
+            label: "Automate Medical, Inc.",
+            url: "https://www.automatemedical.com/",
+          },
+          summary: `Current Address`,
+          indicator: "info",
+        }),
+        // Gender
+        new Card({
+          detail: `${data.patient.gender}`,
+          source: {
+            label: "Automate Medical, Inc.",
+            url: "https://www.automatemedical.com/",
+          },
+          summary: `Gender`,
+          indicator: "info",
+        }),
+        // Telecom (only pulls value of first element in array)
+        new Card({
+          detail: `${telecom[0].value}`,
+          source: {
+            label: "Automate Medical, Inc.",
+            url: "https://www.automatemedical.com/",
+          },
+          summary: `Contact`,
           indicator: "info",
         }),
         // Information on the last encounter
