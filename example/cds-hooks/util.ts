@@ -29,7 +29,7 @@ export function buildPatient(patient: any): Array<Card> {
   const cards: Array<Card> = [];
   const keys = Object.keys(patient);
   const source: CDSHooks.Source = {
-    label: "Automate Medical, LLC",
+    label: "Automate Medical, Inc.",
     url: "https://www.automatemedical.com/",
   };
   console.log(keys);
