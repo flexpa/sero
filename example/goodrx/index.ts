@@ -1,5 +1,5 @@
-import { start } from "../../src/http";
-import { Config, Http, CDSHooks } from "../../src"
+import { start } from "@sero.run/sero/dist/http"; // @todo skip dist here??
+import { Config, Http, CDSHooks } from "@sero.run/sero"
 
 import goodRxComparePriceService from "./good-rx-compare-price";
 
