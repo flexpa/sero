@@ -97,20 +97,3 @@ export function processTelecom(
   });
   return telecom;
 }
-
-/**
- * Card detail interface has a generic type definition
- * @todo - help with scaffolding cards with generic types
- */
-export interface CardDetail<T> {
-  summary: T;
-  detail: T;
-}
-
-/**
- * Define an index signature to help with the patient properties
- * @todo - patient has different properties, this will help with generalizing card creation
- */
-export interface PatientProperties {
-  [key: string]: keyof fhir4.Patient;
-}
