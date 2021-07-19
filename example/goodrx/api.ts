@@ -1,6 +1,5 @@
 import fetch from "cross-fetch";
 import { createHmac } from "crypto"
-const hmac = createHmac('sha256', 'a secret');
 
 export default async function goodRxRequest(path: string, options: Record<string, any>) {
   if (!process.env.GOOD_RX_API_KEY) throw new Error("process.env.GOOD_RX_API_KEY must be set")
