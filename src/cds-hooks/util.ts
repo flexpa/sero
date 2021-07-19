@@ -185,12 +185,19 @@ function validateContext(request: CDSHooks.HookRequest<Record<string, any>>, hoo
     case "order-select":
       return {
         type: 'object',
-        required: ['userId', 'patientId', 'selections', 'draftOrders'],
+        required: ['userId', 'patientId', 'draftOrders'],
+        anyOf: [{
+          required: ['userId', 'patientId', 'draftOrders', 'selections']
+        }, {
+          // support for Logica Sandbox not implementing this correctly
+          required: ['userId', 'patientId', 'draftOrders', 'selection']
+        }],
         properties: {
           userId: { type: 'string' },
           patientId: { type: 'string' },
           encounterId: { type: 'string' },
           selections: { type: 'array' },
+          selection: { type: 'string' },
           draftOrders: { type: 'object' }
         }
       };

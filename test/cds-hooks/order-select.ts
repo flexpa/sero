@@ -39,8 +39,7 @@ import { Service, Card } from "../../src/cds-hooks";
  *  patientId      Required    Yes      string    The FHIR Patient.id of the current patient in context
  *  encounterId    Optional    Yes      string    The FHIR Encounter.id of the current encounter in context
  *  selections     Required    No       array     The FHIR id of the newly selected order(s). The selections field references FHIR resources in the draftOrders Bundle. For example, MedicationRequest/103.
- * *  draftOrders    Required    No       object    object  DSTU2 - FHIR Bundle of MedicationOrder, DiagnosticOrder, DeviceUseRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status STU3 - FHIR Bundle of MedicationRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status R4 - FHIR Bundle of DeviceRequest, MedicationRequest, NutritionOrder, ServiceRequest, VisionPrescription with draft status
-
+ *  draftOrders    Required    No       object    object  DSTU2 - FHIR Bundle of MedicationOrder, DiagnosticOrder, DeviceUseRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status STU3 - FHIR Bundle of MedicationRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status R4 - FHIR Bundle of DeviceRequest, MedicationRequest, NutritionOrder, ServiceRequest, VisionPrescription with draft status
  *  specificationVersion    1.0
  *  hookVersion             1.0
  *  hookMaturity            1 - Submitted

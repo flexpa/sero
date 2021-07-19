@@ -17,6 +17,4 @@ export { default as Service } from "./service";
 export { default as Card } from "./card";
 export { default as Suggestion } from "./suggestion";
 
-export default (config: Config, http: FastifyInstance): void => {
-  routes(http, config.cdsHooks);
-}
+export class NoDecisionResponse extends Error { }
