@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { getService } from ".";
+import { getService, NoDecisionResponse } from ".";
 import Config from "../config";
 import { validateHookRequest } from "./util";
 import CDSHooks from "../types/cds-hooks"
@@ -34,10 +34,10 @@ function invoke(options: Config["cdsHooks"]) {
     // 1. Is there actually a service??
     if (!service) {
       reply.code(404).send();
-
     }
     // 2. Is there a schema validation error already?
     else if (request.validationError) {
+      reply.log.info("SchemaValidationError")
       reply.code(400).send(request.validationError);
     } else {
       const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
@@ -45,11 +45,24 @@ function invoke(options: Config["cdsHooks"]) {
 
       // 3. Is there a dynamic validation error on this HookRequest?
       if (validationError) {
+        reply.log.info("HookeRequetValidationError")
         reply.code(400).send(validationError)
       // 4. Otherwise execute the service
       } else {
-        const response = await service.handler(hookRequest);
-        reply.send(response);
+        try {
+          const response = await service.handler(hookRequest);
+          reply.send(response);
+        } catch (error) {
+          if (error instanceof NoDecisionResponse) {
+            reply.log.info("NoDecisionResponse")
+            reply.send({
+              cards: []
+            })
+          } else {
+            console.log(error)
+            throw error;
+          }
+        }
       }
     }
   }

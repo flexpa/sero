@@ -20,3 +20,5 @@ export type Hooks = "patient-view" | "order-sign" | "order-select" | "order-revi
 export { default as Service } from "./service";
 export { default as Card } from "./card";
 export { default as Suggestion } from "./suggestion";
+
+export class NoDecisionResponse extends Error { }
