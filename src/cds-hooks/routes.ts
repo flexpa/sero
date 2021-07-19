@@ -28,7 +28,6 @@ function addCorsHeaders(reply: FastifyReply): void {
  */
 function invoke(options: Config["cdsHooks"]) {
   return async (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
-    console.log(request.body)
 
     if (options?.cors) addCorsHeaders(reply);
     const service = getService(options?.services || [], request.params.id);

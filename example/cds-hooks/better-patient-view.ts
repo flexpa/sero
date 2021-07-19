@@ -1,9 +1,9 @@
 import { Service, Card } from "../../src/cds-hooks";
 import {
   processAddresses,
-  processContacts,
   processPatientNames,
   processTelecom,
+  buildPatient
 } from "./util";
 
 /**
@@ -51,15 +51,14 @@ export default new Service(
     const data = request.prefetch;
     const patientNames = processPatientNames(data.patient);
     const addresses = processAddresses(data.patient);
-    const contacts = processContacts(data.patient);
     const telecom = processTelecom(data.patient);
+    // const contacts = processContacts(data.patient);
     // @todo no explicit any here, as fhir4.BundleEntry does not outline start and end period for an encounter
     const encounters: Array<any> = [];
+    const cards = buildPatient(data.patient);
     data.encounter.entry?.forEach((entry) => {
       encounters.push(entry);
     });
-    // @todo to fill in all of the details for patient, call this
-    // const cards = buildPatient(data.patient);
     return {
       cards: [
         // Name(s)
