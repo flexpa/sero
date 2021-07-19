@@ -7,6 +7,10 @@ import { Config } from "..";
 import routes from "./routes";
 import Service from "./service";
 
+export default (config: Config, http: FastifyInstance): void => {
+  routes(http, config.cdsHooks);
+}
+
 export function getService(services: Service[], id: string): Service | undefined {
   return services.find((service) => service.id == id)
 }
