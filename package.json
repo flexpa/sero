@@ -11,7 +11,8 @@
     "start": "ts-node example/index.ts -p tsconfig.json",
     "test": "jest --detectOpenHandles",
     "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/client/index.ts src/rest/index.ts --readme ./README.md",
-    "lint": "eslint ."
+    "lint": "eslint . --fix",
+    "examples": "npm run build && npm run start"
   },
   "keywords": [
     "fhir",
