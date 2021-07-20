@@ -14,9 +14,19 @@ interface restConfig {
 	};
 }
 
+interface httpConfig extends FastifyServerOptions {
+  hostname: string;
+}
+
+interface smartConfig {
+  backendServices: boolean // should default true
+  clients: SMART.App[]
+}
+
 export default interface SeroConfiguration {
 	store?: Storage,
 	rest?: restConfig;
-	http?: FastifyServerOptions;
-	cdsHooks?: cdsHooksConfig;
+  http?: httpConfig;
+  cdsHooks?: cdsHooksConfig;
+  smartLaunch?: smartConfig;
 }

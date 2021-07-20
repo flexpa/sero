@@ -24,12 +24,14 @@
   "exports": {
     "./cds-hooks": "./dist/cds-hooks/index.js",
     "./http": "./dist/http/index.js",
-    "./rest": "./dist/rest/index.js"
+    "./rest": "./dist/rest/index.js",
+    "./smart": "./dist/smart/index.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0",
     "cross-fetch": "^3.1.4",
-    "fastify": "^3.18.0"
+    "fastify": "^3.18.0",
+    "jose": "^3.14.0"
   },
   "devDependencies": {
     "@types/fhir": "^0.0.34",
