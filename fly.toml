@@ -1,6 +1,6 @@
 # fly.toml file generated for broken-glitter-9242 on 2021-07-20T17:51:56-05:00
 
-app = "broken-glitter-9242"
+app = "sero"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
