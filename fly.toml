@@ -1,7 +1,6 @@
-# fly.toml file generated for sero
-# used to run public infrastructure for conformance testing, not suitable for any other use
+# fly.toml file generated for broken-glitter-9242 on 2021-07-20T17:51:56-05:00
 
-app = "sero"
+app = "broken-glitter-9242"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
