@@ -4,7 +4,7 @@
     "target": "ES2015",
     "module": "umd",
     "declaration": true,
-    "declarationDir": "./dist/types",
+    // "declarationDir": "./dist/types",
     "outDir": "./dist",
     "strict": true,
     "typeRoots": [

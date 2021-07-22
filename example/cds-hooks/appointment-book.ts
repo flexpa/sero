@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Service, Card } from "../../dist/cds-hooks";
-import { HookRequest } from "../../dist/types";
+import { HookRequest } from "../../dist/types/cds-hooks/service";
 
 /**
  * appointment-book

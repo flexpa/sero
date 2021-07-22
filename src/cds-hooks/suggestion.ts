@@ -35,3 +35,11 @@ export default class Suggestion implements Suggestion {
     this.actions = options.actions;
   }
 }
+
+export interface AcceptedSuggestion {
+  /**
+   * The card.suggestion.uuid from the CDS Hooks response. Uniquely identifies
+   * the suggestion that was accepted.
+   */
+  id: string
+}
