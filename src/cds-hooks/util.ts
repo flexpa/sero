@@ -11,7 +11,7 @@ import { Hooks } from "./index"
  * @param reply
  * @returns Error | undefined
  */
-export function validateHookRequest(hookRequest: CDSHooks.HookRequest<Record<string, unknown>>, service: Service): Error | undefined {
+export function validateHookRequest(hookRequest: CDSHooksSpec.HookRequest<Record<string, unknown>>, service: Service): Error | undefined {
   // @ts-expect-error hookRequest.hook needs to be co-erced into the type...
   const context = validateContext(hookRequest, hookRequest.hook);
   const prefetch = validatePrefetch(hookRequest, service);
@@ -63,7 +63,7 @@ function schemaErrorFormatter(errors: ErrorObject[], dataVar: string) {
  * @param service 
  * @returns 
  */
-function validatePrefetch(request: CDSHooks.HookRequest<Record<string, any>>, service: Service): ValidateFunction {
+function validatePrefetch(request: CDSHooksSpec.HookRequest<Record<string, any>>, service: Service): ValidateFunction {
   const ajv = new Ajv({
     removeAdditional: false,
     useDefaults: true,
@@ -117,7 +117,7 @@ function validatePrefetch(request: CDSHooks.HookRequest<Record<string, any>>, se
   return compiled
 }
 
-function validateContext(request: CDSHooks.HookRequest<Record<string, any>>, hook: Hooks): ValidateFunction {
+function validateContext(request: CDSHooksSpec.HookRequest<Record<string, any>>, hook: Hooks): ValidateFunction {
   const ajv = new Ajv({
     removeAdditional: true,
     useDefaults: true,

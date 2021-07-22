@@ -4,7 +4,6 @@
   "description": "Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.",
   "homepage": "https://sero.run",
   "bugs": "https://github.com/automate-medical/sero/issues",
-  "main": "dist/index.js",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
     "build": "eslint . && tsc -p tsconfig.json",
@@ -22,6 +21,7 @@
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
   "exports": {
+    ".": "./dist/index.js",
     "./cds-hooks": "./dist/cds-hooks/index.js",
     "./http": "./dist/http/index.js",
     "./rest": "./dist/rest/index.js"

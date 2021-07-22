@@ -31,7 +31,7 @@ import Suggestion from "./suggestion";
  * })
  * ```
  */
-export default class Card implements CDSHooks.Card {
+export default class Card implements CDSHooksSpec.Card {
   /**
    * Unique identifier of the card. MAY be used for auditing and logging cards
    * and SHALL be included in any subsequent calls to the CDS service's feedback
@@ -62,7 +62,7 @@ export default class Card implements CDSHooks.Card {
    * card. The source should be the primary source of guidance for the decision
    * support the card represents.
    */
-  source: CDSHooks.Source;
+  source: CDSHooksSpec.Source;
   /**
    * Allows a service to suggest a set of changes in the context of the current
    * activity (e.g. changing the dose of the medication currently being
@@ -86,14 +86,14 @@ export default class Card implements CDSHooks.Card {
    * these reasons to the clinician when they dismiss a card. A CDS client MAY
    * augment the override reasons presented to the user with its own reasons.
    */
-  overrideReasons?: CDSHooks.OverrideReason[];
+  overrideReasons?: CDSHooksSpec.OverrideReason[];
   /**
    * Allows a service to suggest a link to an app that the user might want to
    * run for additional information or to help guide a decision.
    */
-  links?: CDSHooks.Link[];
+  links?: CDSHooksSpec.Link[];
 
-  constructor(options: Partial<CDSHooks.Card> & { source: CDSHooks.Source; summary: string; indicator: 'info' | 'warning' | 'critical' } ) {
+  constructor(options: Partial<CDSHooksSpec.Card> & { source: CDSHooksSpec.Source; summary: string; indicator: 'info' | 'warning' | 'critical' } ) {
     this.uuid = options.uuid || randomUUID();
     this.detail = options.detail;
     this.suggestions = options.suggestions as Suggestion[];

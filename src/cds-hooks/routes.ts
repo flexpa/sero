@@ -2,7 +2,6 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { getService, NoDecisionResponse } from ".";
 import Config from "../config";
 import { validateHookRequest } from "./util";
-import CDSHooks from "../types/cds-hooks"
 
 /**
  * @deprecated This should be invoked some other way
@@ -41,7 +40,7 @@ function invoke(options: Config["cdsHooks"]) {
       reply.log.info("SchemaValidationError")
       reply.code(400).send(request.validationError);
     } else {
-      const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
+      const hookRequest = request.body as CDSHooksSpec.HookRequest<Record<string, string>>;
       const validationError = validateHookRequest(hookRequest, service);
 
       // 3. Is there a dynamic validation error on this HookRequest?
@@ -81,7 +80,7 @@ function feedback(options: Config["cdsHooks"]) {
   return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
     if (options?.cors) addCorsHeaders(reply);
 
-    const feedback = request.body as CDSHooks.Feedback;
+    const feedback = request.body as CDSHooksSpec.Feedback;
 
     request.log.info('Feedback received', feedback);
 

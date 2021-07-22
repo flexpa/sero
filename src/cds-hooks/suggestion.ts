@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 
-export default class Suggestion implements CDSHooks.Suggestion {
+export default class Suggestion implements Suggestion {
   /**
    * Unique identifier of the card. MAY be used for auditing and logging cards
    * and SHALL be included in any subsequent calls to the CDS service's feedback
@@ -25,9 +25,9 @@ export default class Suggestion implements CDSHooks.Suggestion {
    * all actions are logically AND'd together, such that a user selecting a
    * suggestion selects all of the actions within it.
    */
-  actions?: CDSHooks.SystemAction[];
+  actions?: CDSHooksSpec.SystemAction[];
 
-  constructor(options: Partial<CDSHooks.Suggestion> & { label: string }) {
+  constructor(options: Partial<Suggestion> & { label: string }) {
     this.uuid = options.uuid || randomUUID();
     this.label = options.label;
     this.isRecommended = options.isRecommended;

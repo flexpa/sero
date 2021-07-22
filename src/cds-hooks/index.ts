@@ -2,6 +2,7 @@
  * @module cds-hooks
  */
 
+import "./spec";
 import { FastifyInstance } from "fastify";
 import { Config } from "..";
 import routes from "./routes";
@@ -22,3 +23,4 @@ export { default as Card } from "./card";
 export { default as Suggestion } from "./suggestion";
 
 export class NoDecisionResponse extends Error { }
+

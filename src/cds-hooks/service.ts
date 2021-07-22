@@ -9,7 +9,7 @@ import { Hooks } from ".";
  * `any`?
  */
 type ServiceHandler = {
-  (request: CDSHooks.HookRequest<any>): Promise<CDSHooks.HookResponse> | CDSHooks.HookResponse;
+  (request: CDSHooksSpec.HookRequest<any>): Promise<CDSHooksSpec.HookResponse> | CDSHooksSpec.HookResponse;
 };
 
 /**
@@ -57,7 +57,7 @@ type ServiceHandler = {
  * )
  * ```
  */
-export default class Service implements CDSHooks.Service {
+export default class Service implements Service {
   /**
    * The id portion of the URL to this service which is available at
    * `{baseUrl}/cds-services/{id}`
@@ -81,7 +81,7 @@ export default class Service implements CDSHooks.Service {
    * The key is a string that describes the type of data being requested and the
    * value is a string representing the FHIR query.
    */
-  public prefetch?: CDSHooks.PrefetchTemplate;
+  public prefetch?: CDSHooksSpec.PrefetchTemplate;
   /**
    * A function to execute on HookRequest invocation events
    */
@@ -95,7 +95,7 @@ export default class Service implements CDSHooks.Service {
    * @param fn -
    */
   constructor(
-    options: Partial<CDSHooks.Service> & { hook: Hooks; description: string },
+    options: Partial<Service> & { hook: Hooks; description: string },
     handler: ServiceHandler
   ) {
     this.hook = options.hook;
