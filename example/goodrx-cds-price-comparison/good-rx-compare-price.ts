@@ -1,4 +1,4 @@
-import { Service, Card, NoDecisionResponse, Hooks } from "@sero.run/sero/dist/cds-hooks";
+import { Service, Card, NoDecisionResponse, Hooks } from "@sero.run/sero/cds-hooks";
 import { comparePrice } from "./api";
 
 const options = {
