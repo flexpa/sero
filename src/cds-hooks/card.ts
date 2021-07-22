@@ -93,7 +93,7 @@ export default class Card implements CDSHooks.Card {
    */
   links?: CDSHooks.Link[];
 
-  constructor(options: Partial<CDSHooks.Card> & { source: CDSHooks.Source; summary: string; indicator: 'info' } ) {
+  constructor(options: Partial<CDSHooks.Card> & { source: CDSHooks.Source; summary: string; indicator: 'info' | 'warning' | 'critical' } ) {
     this.uuid = options.uuid || randomUUID();
     this.detail = options.detail;
     this.suggestions = options.suggestions as Suggestion[];

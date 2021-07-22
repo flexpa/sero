@@ -11,7 +11,8 @@
     "start": "ts-node example/index.ts -p tsconfig.json",
     "test": "jest --detectOpenHandles",
     "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/client/index.ts src/rest/index.ts --readme ./README.md",
-    "lint": "eslint ."
+    "lint": "eslint . --fix",
+    "examples": "npm run build && npm run start"
   },
   "keywords": [
     "fhir",
@@ -20,6 +21,11 @@
   ],
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
+  "exports": {
+    "./cds-hooks": "./dist/cds-hooks/index.js",
+    "./http": "./dist/http/index.js",
+    "./rest": "./dist/rest/index.js"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0",
     "cross-fetch": "^3.1.4",
@@ -40,5 +46,8 @@
     "ts-node": "^10.0.0",
     "typedoc": "^0.21.2",
     "typescript": "^4.3.4"
+  },
+  "engines": {
+    "node": ">=14.17"
   }
 }
