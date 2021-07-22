@@ -1,5 +1,4 @@
 import { randomUUID } from "crypto";
-import { SystemAction } from ".";
 import Suggestion, { AcceptedSuggestion } from "./suggestion";
 
 /**
@@ -199,7 +198,6 @@ interface Source {
    */
   topic?: Coding
 }
-
 
 export interface Feedback {
   /**

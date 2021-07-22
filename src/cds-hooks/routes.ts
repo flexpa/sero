@@ -1,9 +1,9 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { getService, NoDecisionResponse, Service } from ".";
+import Service from "./service";
 import Config from "../config";
 import { Feedback } from "./card";
 import { HookRequest } from "./service";
-import { validateHookRequest } from "./util";
+import { validateHookRequest, getService, NoDecisionResponse } from "./util";
 
 /**
  * @deprecated This should be invoked some other way

@@ -2,7 +2,25 @@
  * @module sero/sero
  */
 
-export * as Rest from "./rest";
-export * as CDSHooks from "./cds-hooks";
-export { default as Config } from "./config";
-export * as Http from "./http";
+export {
+  mount as Rest
+} from "./rest";
+
+export {
+  mount as CDSHooks,
+  HookRequest,
+  HookResponse,
+  Card,
+  Service,
+  Suggestion,
+  NoDecisionResponse,
+} from "./cds-hooks";
+
+export {
+  default as Config
+} from "./config";
+
+export {
+  default as Http,
+  startHttp
+} from "./http";

@@ -11,7 +11,7 @@ export default (config: Config): FastifyInstance => {
   return http;
 }
 
-export function start(http: FastifyInstance): void {
+export function startHttp(http: FastifyInstance): void {
   http.listen(8080, '0.0.0.0', (err, address) => {
     if (err) {
       console.error(err)

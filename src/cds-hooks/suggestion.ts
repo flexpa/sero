@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { SystemAction } from ".";
+import { SystemAction } from "./util";
 
 export default class Suggestion implements Suggestion {
   /**

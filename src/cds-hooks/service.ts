@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
-import { Hooks, Card, SystemAction, FhirAuthorization } from ".";
+import { Hooks, SystemAction, FhirAuthorization } from "./util";
+import Card from "./card";
 
 /**
  * ServiceHandler is a function signature for the function invoked on the

@@ -20,13 +20,7 @@
   ],
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
-  "exports": {
-    ".": "./dist/index.js",
-    "./cds-hooks": "./dist/cds-hooks/index.js",
-    "./http": "./dist/http/index.js",
-    "./rest": "./dist/rest/index.js"
-  },
-  "typings": "./dist/index.d.ts",
+  "main": "./dist/index.ts",
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0",
     "cross-fetch": "^3.1.4",
