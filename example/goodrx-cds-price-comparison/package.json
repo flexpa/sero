@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sero.run/sero": "^0.0.7"
+    "@sero.run/sero": "^0.0.9"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.5"
   }
 }
