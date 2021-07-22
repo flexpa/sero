@@ -9,6 +9,7 @@ import orderSelectExample from "./cds-hooks/order-select";
 import orderSignExample from "./cds-hooks/order-sign";
 import patientViewExample from "./cds-hooks/patient-view";
 import betterPatientView from "./cds-hooks/better-patient-view";
+import getCurrentTime from "./current-time/get-current-time";
 
 const config: Config = {
   cdsHooks: {
@@ -22,6 +23,7 @@ const config: Config = {
       orderSignExample,
       patientViewExample,
       betterPatientView,
+      getCurrentTime
     ],
     cors: true,
   },
