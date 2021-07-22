@@ -1,6 +1,8 @@
 import { Service } from "./index";
-import Ajv, { ValidateFunction, ErrorObject } from "ajv";
+import Ajv from "ajv";
+import { ValidateFunction, ErrorObject } from "ajv";
 import { Hooks } from "./index"
+import { HookRequest } from "./service";
 
 /**
  * Validates that the hook request dynmically (depending on the hook and service at runtime):
@@ -11,7 +13,7 @@ import { Hooks } from "./index"
  * @param reply
  * @returns Error | undefined
  */
-export function validateHookRequest(hookRequest: CDSHooksSpec.HookRequest<Record<string, unknown>>, service: Service): Error | undefined {
+export function validateHookRequest(hookRequest: HookRequest<Record<string, unknown>>, service: Service): Error | undefined {
   // @ts-expect-error hookRequest.hook needs to be co-erced into the type...
   const context = validateContext(hookRequest, hookRequest.hook);
   const prefetch = validatePrefetch(hookRequest, service);
@@ -63,7 +65,7 @@ function schemaErrorFormatter(errors: ErrorObject[], dataVar: string) {
  * @param service 
  * @returns 
  */
-function validatePrefetch(request: CDSHooksSpec.HookRequest<Record<string, any>>, service: Service): ValidateFunction {
+function validatePrefetch(request: HookRequest<Record<string, any>>, service: Service): ValidateFunction {
   const ajv = new Ajv({
     removeAdditional: false,
     useDefaults: true,
@@ -117,7 +119,7 @@ function validatePrefetch(request: CDSHooksSpec.HookRequest<Record<string, any>>
   return compiled
 }
 
-function validateContext(request: CDSHooksSpec.HookRequest<Record<string, any>>, hook: Hooks): ValidateFunction {
+function validateContext(request: HookRequest<Record<string, any>>, hook: Hooks): ValidateFunction {
   const ajv = new Ajv({
     removeAdditional: true,
     useDefaults: true,

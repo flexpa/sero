@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Service, Card } from "../../dist/cds-hooks";
+import { HookRequest } from "../../dist/types";
 
 /**
  * appointment-book
@@ -39,7 +40,7 @@ export default new Service(
       patient: "Patient/{{context.patientId}}"
     }
   },
-  (request: CDSHooks.HookRequest<{ patient: fhir4.Patient }>) => {
+  (request: HookRequest<{ patient: fhir4.Patient }>) => {
     const { patient } = request.prefetch;
 
     return {

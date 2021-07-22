@@ -4,11 +4,11 @@
     "target": "ES2015",
     "module": "umd",
     "declaration": true,
+    "declarationDir": "./dist/types",
     "outDir": "./dist",
     "strict": true,
     "typeRoots": [
-      "node_modules/@types",
-      "src/types"
+      "node_modules/@types"
     ],                           
     "types": [
       "node",

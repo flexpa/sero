@@ -1,6 +1,8 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { getService, NoDecisionResponse } from ".";
+import { getService, NoDecisionResponse, Service } from ".";
 import Config from "../config";
+import { Feedback } from "./card";
+import { HookRequest } from "./service";
 import { validateHookRequest } from "./util";
 
 /**
@@ -40,7 +42,7 @@ function invoke(options: Config["cdsHooks"]) {
       reply.log.info("SchemaValidationError")
       reply.code(400).send(request.validationError);
     } else {
-      const hookRequest = request.body as CDSHooksSpec.HookRequest<Record<string, string>>;
+      const hookRequest = request.body as HookRequest<Record<string, string>>;
       const validationError = validateHookRequest(hookRequest, service);
 
       // 3. Is there a dynamic validation error on this HookRequest?
@@ -80,7 +82,7 @@ function feedback(options: Config["cdsHooks"]) {
   return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
     if (options?.cors) addCorsHeaders(reply);
 
-    const feedback = request.body as CDSHooksSpec.Feedback;
+    const feedback = request.body as Feedback;
 
     request.log.info('Feedback received', feedback);
 
@@ -150,9 +152,10 @@ export default (http: FastifyInstance, options: Config["cdsHooks"]): void => {
     handler: (request, reply) => {
       if (options?.cors) addCorsHeaders(reply);
 
-      reply.send({
+      const response: DiscoveryResponse = {
         services: options?.services || []
-      })
+      }
+      reply.send(response)
     }
   })
 
@@ -190,4 +193,15 @@ export default (http: FastifyInstance, options: Config["cdsHooks"]): void => {
       }
     })
   }
+}
+
+/**
+ * The response to the discovery endpoint SHALL be an object containing a list
+ * of CDS Services.
+ */
+export interface DiscoveryResponse {
+  /**
+   * An array of CDS Services.
+   */
+  services: Service[]
 }

@@ -6,7 +6,7 @@
   "bugs": "https://github.com/automate-medical/sero/issues",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
-    "build": "eslint . && tsc -p tsconfig.json",
+    "build": "eslint . && tsc -p tsconfig.json && rollup -c",
     "start": "ts-node example/index.ts -p tsconfig.json",
     "test": "jest --detectOpenHandles",
     "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/client/index.ts src/rest/index.ts --readme ./README.md",
@@ -26,12 +26,15 @@
     "./http": "./dist/http/index.js",
     "./rest": "./dist/rest/index.js"
   },
+  "typings": "./dist/index.d.ts",
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0",
     "cross-fetch": "^3.1.4",
     "fastify": "^3.18.0"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.18.4",
+    "@rollup/plugin-node-resolve": "^13.0.2",
     "@types/fhir": "^0.0.34",
     "@types/jest": "^26.0.23",
     "@types/node": "14.17.5",
@@ -42,6 +45,9 @@
     "jest": "^27.0.6",
     "nodemon": "^2.0.7",
     "pino-pretty": "^5.1.1",
+    "rollup": "^2.53.3",
+    "rollup-plugin-dts": "^3.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
     "typedoc": "^0.21.2",

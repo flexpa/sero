@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import { SystemAction } from ".";
 
 export default class Suggestion implements Suggestion {
   /**
@@ -25,7 +26,7 @@ export default class Suggestion implements Suggestion {
    * all actions are logically AND'd together, such that a user selecting a
    * suggestion selects all of the actions within it.
    */
-  actions?: CDSHooksSpec.SystemAction[];
+  actions?: SystemAction[];
 
   constructor(options: Partial<Suggestion> & { label: string }) {
     this.uuid = options.uuid || randomUUID();
