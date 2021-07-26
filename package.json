@@ -7,12 +7,16 @@
   "main": "dist/index.js",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
-    "build": "eslint . && tsc -p tsconfig.json",
+    "build": "tsc",
     "start": "ts-node example/index.ts -p tsconfig.json",
     "test": "jest --detectOpenHandles",
     "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/client/index.ts src/rest/index.ts --readme ./README.md",
-    "lint": "eslint . --fix",
-    "examples": "npm run build && npm run start"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "examples": "npm run build && npm run start",
+    "build:types": "tsc -p ./tsconfig/types.json",
+    "build:cjs": "tsc -p ./tsconfig/cjs.json",
+    "build:esm": "tsc -p ./tsconfig/esm.json"
   },
   "keywords": [
     "fhir",
@@ -22,9 +26,20 @@
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
   "exports": {
-    "./cds-hooks": "./dist/cds-hooks/index.js",
-    "./http": "./dist/http/index.js",
-    "./rest": "./dist/rest/index.js"
+    "./*": {
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/types/*"
+      ]
+    }
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0",
