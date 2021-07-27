@@ -25,6 +25,10 @@
   "license": "Apache 2.0",
   "type": "module",
   "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
     "./package.json": "./package.json",
     "./cds-hooks/service": {
       "import": "./dist/esm/cds-hooks/service.js",
