@@ -2,7 +2,8 @@
   "files": [
     "../src/cds-hooks/index.ts",
     "../src/rest/index.ts",
-    "../src/http/index.ts"
+    "../src/http/index.ts",
+    "../src/index.ts"
   ],
   "compilerOptions": {
     "lib": ["ES6"],
