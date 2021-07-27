@@ -2,16 +2,21 @@
   "name": "goodrx-cds-price-comparison",
   "version": "1.0.0",
   "description": "GoodRx Prices as a Decision Support API",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p tsconfig.json"
   },
   "author": "",
+  "type": "module",
   "license": "ISC",
   "dependencies": {
-    "@sero.run/sero": "^0.0.9"
+    "@sero.run/sero": "^0.0.14",
+    "pino-pretty": "^5.1.2"
   },
   "devDependencies": {
+    "@types/fhir": "^0.0.34",
+    "@types/node": "^16.4.5",
     "typescript": "^4.3.5"
   }
 }

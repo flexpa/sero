@@ -1,5 +1,6 @@
-import { Service, Card, NoDecisionResponse, Hooks } from "@sero.run/sero/cds-hooks";
-import { comparePrice } from "./api";
+import { Service, Card, HookRequest, NoDecisionResponse } from "@sero.run/sero";
+import { Hooks } from "@sero.run/sero/cds-hooks/util"
+import { comparePrice } from "./api.js";
 
 const options = {
   id: "good-rx-comparison", // Used to define the HTTP routes for the Service
@@ -8,7 +9,7 @@ const options = {
   description: "GoodRx's Compare Price API is used to provide drug cost estimates during the prescription order workflow",
 };
 
-const handler =  async (request: CDSHooks.HookRequest<any>) => {
+const handler =  async (request: HookRequest<any>) => {
   /**
    * draftOrders is a required context submission for the order-select hook
    *
@@ -75,7 +76,7 @@ const handler =  async (request: CDSHooks.HookRequest<any>) => {
           * Brand: ${response.brand.join(", ")}
           * Generic: ${response.generic.join(", ")}
           * Cheapest pharmacy: ${response.price_detail.pharmacy[0]} (${response.price_detail.savings[0]} savings)
-          * Coupon: [GoodRx](${response.price_detail.url[0]})
+          * Coupon: ${response.price_detail.url[0]}
         `,
       })
     ]
