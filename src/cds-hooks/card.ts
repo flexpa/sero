@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import Suggestion from "./suggestion";
+import Suggestion, { AcceptedSuggestion } from "./suggestion";
 
 /**
  * A **Card** contains decision support from a CDS Service.
@@ -31,7 +31,7 @@ import Suggestion from "./suggestion";
  * })
  * ```
  */
-export default class Card implements CDSHooks.Card {
+export default class Card {
   /**
    * Unique identifier of the card. MAY be used for auditing and logging cards
    * and SHALL be included in any subsequent calls to the CDS service's feedback
@@ -62,7 +62,7 @@ export default class Card implements CDSHooks.Card {
    * card. The source should be the primary source of guidance for the decision
    * support the card represents.
    */
-  source: CDSHooks.Source;
+  source: Source;
   /**
    * Allows a service to suggest a set of changes in the context of the current
    * activity (e.g. changing the dose of the medication currently being
@@ -86,17 +86,17 @@ export default class Card implements CDSHooks.Card {
    * these reasons to the clinician when they dismiss a card. A CDS client MAY
    * augment the override reasons presented to the user with its own reasons.
    */
-  overrideReasons?: CDSHooks.OverrideReason[];
+  overrideReasons?: OverrideReason[];
   /**
    * Allows a service to suggest a link to an app that the user might want to
    * run for additional information or to help guide a decision.
    */
-  links?: CDSHooks.Link[];
+  links?: Link[];
 
-  constructor(options: Partial<CDSHooks.Card> & { source: CDSHooks.Source; summary: string; indicator: 'info' | 'warning' | 'critical' } ) {
+  constructor(options: Partial<Card> & { source: Source; summary: string; indicator: 'info' | 'warning' | 'critical' } ) {
     this.uuid = options.uuid || randomUUID();
     this.detail = options.detail;
-    this.suggestions = options.suggestions as Suggestion[];
+    this.suggestions = options.suggestions;
     this.selectionBehavior = options.selectionBehavior;
     this.overrideReasons = options.overrideReasons;
     this.links = options.links;
@@ -104,4 +104,126 @@ export default class Card implements CDSHooks.Card {
     this.summary = options.summary;
     this.indicator = options.indicator;
   }
+}
+
+interface Coding {
+  system?: string
+  version?: string
+  code?: string
+  display?: string
+  userSelected?: string
+}
+
+interface OverrideReason {
+  /**
+   * The Coding object representing the override reason selected by the end
+   * user. Required if user selected an override reason from the list of
+   * reasons provided in the Card (instead of only leaving a userComment).
+   */
+  reason?: Coding
+
+  /**
+   * The CDS Client may enable the clinician to further explain why the card
+   * was rejected with free text. That user comment may be communicated to the
+   * CDS Service as a userComment.
+   */
+  userComment?: string
+}
+
+interface Link {
+  /**
+   * Human-readable label to display for this link (e.g. the CDS Client might
+   * render this as the underlined text of a clickable link).
+   */
+  label: string
+
+  /**
+   * URL to load (via GET, in a browser context) when a user clicks on this
+   * link. Note that this MAY be a "deep link" with context embedded in path
+   * segments, query parameters, or a hash.
+   */
+  url: string
+
+  /**
+   * The type of the given URL. There are two possible values for this field. A
+   * type of absolute indicates that the URL is absolute and should be treated
+   * as-is. A type of smart indicates that the URL is a SMART app launch URL
+   * and the CDS Client should ensure the SMART app launch URL is populated
+   * with the appropriate SMART launch parameters.
+   */
+  type: 'absolute' | 'smart'
+
+  /**
+   * An optional field that allows the CDS Service to share information from
+   * the CDS card with a subsequently launched SMART app. The appContext field
+   * should only be valued if the link type is smart and is not valid for
+   * absolute links. The appContext field and value will be sent to the SMART
+   * app as part of the OAuth 2.0 access token response, alongside the other
+   * SMART launch parameters when the SMART app is launched. Note that
+   * appContext could be escaped JSON, base64 encoded XML, or even a simple
+   * string, so long as the SMART app can recognize it.
+   */
+  appContext?: string
+}
+
+interface Source {
+  /**
+   * A short, human-readable label to display for the source of the information
+   * displayed on this card. If a url is also specified, this MAY be the text
+   * for the hyperlink.
+   */
+  label: string
+
+  /**
+   * An optional absolute URL to load (via GET, in a browser context) when a
+   * user clicks on this link to learn more about the organization or data set
+   * that provided the information on this card. Note that this URL should not
+   * be used to supply a context-specific "drill-down" view of the information
+   * on this card. For that, use link.url instead.
+   */
+  url?: string
+
+  /**
+   * An absolute URL to an icon for the source of this card. The icon returned
+   * by this URL SHOULD be a 100x100 pixel PNG image without any transparent
+   * regions.
+   */
+  icon?: string
+
+  /**
+   * A topic describes the content of the card by providing a high-level
+   * categorization that can be useful for filtering, searching or ordered
+   * display of related cards in the CDS client's UI. This specification does
+   * not prescribe a standard set of topics.
+   */
+  topic?: Coding
+}
+
+export interface Feedback {
+  /**
+   * The card.uuid from the CDS Hooks response. Uniquely identifies the card.
+   */
+  card: string
+
+  /**
+   * A value of accepted or overridden.
+   */
+  outcome: 'accepted' | 'overridden'
+
+  /**
+   * An array of json objects identifying one or more of the user's
+   * AcceptedSuggestions. Required for accepted outcomes.
+   */
+  acceptedSuggestions?: AcceptedSuggestion[]
+
+  /**
+   * A json object capturing the override reason as a Coding as well as any
+   * comments entered by the user.
+   */
+  overrideReason?: OverrideReason
+
+  /**
+   * ISO timestamp in UTC when action was taken on card.
+   */
+  outcomeTimestamp: string
 }

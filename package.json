@@ -4,16 +4,13 @@
   "description": "Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.",
   "homepage": "https://sero.run",
   "bugs": "https://github.com/automate-medical/sero/issues",
-  "main": "dist/index.js",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
-    "build": "tsc",
-    "start": "ts-node example/index.ts -p tsconfig.json",
     "test": "jest --detectOpenHandles",
-    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/http/index.ts src/client/index.ts src/rest/index.ts --readme ./README.md",
+    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/rest/index.ts --readme ./README.md",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "examples": "npm run build && npm run start",
+    "build": "run-s build:*",
     "build:types": "tsc -p ./tsconfig/types.json",
     "build:cjs": "tsc -p ./tsconfig/cjs.json",
     "build:esm": "tsc -p ./tsconfig/esm.json"
@@ -21,14 +18,33 @@
   "keywords": [
     "fhir",
     "hl7",
-    "cds-hooks"
-  ],
+    "cds-hooks",
+    "smart-on-fhir"
+  ], 
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
+  "type": "module",
   "exports": {
-    "./*": {
-      "import": "./dist/esm/*.js",
-      "require": "./dist/cjs/*.js"
+    "./package.json": "./package.json",
+    "./cds-hooks/service": {
+      "import": "./dist/esm/cds-hooks/service.js",
+      "require": "./dist/cjs/cds-hooks/service.js"
+    },
+    "./cds-hooks/card": {
+      "import": "./dist/esm/cds-hooks/card.js",
+      "require": "./dist/cjs/cds-hooks/card.js"
+    },
+    "./cds-hooks/suggestion": {
+      "import": "./dist/esm/cds-hooks/suggestion.js",
+      "require": "./dist/cjs/cds-hooks/suggestion.js"
+    },
+    "./cds-hooks/util": {
+      "import": "./dist/esm/cds-hooks/util.js",
+      "require": "./dist/cjs/cds-hooks/util.js"
+    },
+    "./rest/index": {
+      "import": "./dist/esm/rest/index.js",
+      "require": "./dist/cjs/rest/index.js"
     }
   },
   "files": [
@@ -56,13 +72,23 @@
     "eslint-plugin-tsdoc": "^0.2.14",
     "jest": "^27.0.6",
     "nodemon": "^2.0.7",
+    "npm-run-all": "^4.1.5",
     "pino-pretty": "^5.1.1",
     "ts-jest": "^27.0.3",
-    "ts-node": "^10.0.0",
     "typedoc": "^0.21.2",
     "typescript": "^4.3.4"
   },
   "engines": {
     "node": ">=14.17"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "rootDir": "src",
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig/test.json"
+      }
+    }
   }
 }

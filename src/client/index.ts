@@ -38,7 +38,7 @@ export default function(baseUrl: string, init: RequestInit): {
   /**
    * Read the current state of the resource
    */
-  async function read(type: string, id: string, summary?: Summary) {
+  async function read(type: string, id: string, _summary?: Summary) {
     return fetch(`${baseUrl}/${type}/${id}`, {
       method: "GET",
       ...init

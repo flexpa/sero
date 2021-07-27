@@ -1,7 +1,7 @@
 /**
  * Capabiltiies helpers and state
  */
-import { Config } from "..";
+import Config from "../config";
 import Resources from "../resources"
 
 export type RestResourceCapability = Partial<fhir4.CapabilityStatementRestResource>
@@ -73,6 +73,7 @@ export function CapabilityStatement(config: Config): fhir4.CapabilityStatement {
   return {
     resourceType: "CapabilityStatement",
     status: "draft",
+    experimental: true,
     publisher: "Automate Medical Inc.",
     kind: "instance",
     name,
@@ -99,12 +100,11 @@ export function CapabilityStatement(config: Config): fhir4.CapabilityStatement {
       operation: restOperations,
       resource: restResources
     }],
-    experimental: true,
     copyright: "Copyright Automate Medical Inc. Licensed under the terms of the [Apache Software License 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
   }
 }
 
-export function TerminologyCapabilities(config: Config): fhir4.TerminologyCapabilities {
+export function TerminologyCapabilities(_config: Config): fhir4.TerminologyCapabilities {
   return {
     resourceType: "TerminologyCapabilities",
     date: (new Date()).toString(),

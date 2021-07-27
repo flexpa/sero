@@ -1,4 +1,9 @@
 {
+  "files": [
+    "../src/cds-hooks/index.ts",
+    "../src/rest/index.ts",
+    "../src/http/index.ts"
+  ],
   "compilerOptions": {
     "lib": ["ES6"],
     "strict": true,
@@ -7,8 +12,16 @@
     "noUnusedParameters": true,
     "sourceMap": false,
     "removeComments": true,
-		"skipLibCheck": true
-  },
-	"include": ["src/**/*"],
-  "exclude": ["src/**/*.test.ts"]
+		"skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "types": [
+      "fhir",
+      "node",
+      "jest"
+    ],
+    "typeRoots": [
+      "../node_modules/@types"
+    ]
+  }
 }

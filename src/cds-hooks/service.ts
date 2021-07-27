@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
-import { Hooks } from ".";
+import { Hooks, SystemAction, FhirAuthorization } from "./util";
+import Card from "./card";
 
 /**
  * ServiceHandler is a function signature for the function invoked on the
@@ -9,7 +10,7 @@ import { Hooks } from ".";
  * `any`?
  */
 type ServiceHandler = {
-  (request: CDSHooks.HookRequest<any>): Promise<CDSHooks.HookResponse> | CDSHooks.HookResponse;
+  (request: HookRequest<any>): Promise<HookResponse> | HookResponse;
 };
 
 /**
@@ -57,7 +58,7 @@ type ServiceHandler = {
  * )
  * ```
  */
-export default class Service implements CDSHooks.Service {
+export default class Service implements Service {
   /**
    * The id portion of the URL to this service which is available at
    * `{baseUrl}/cds-services/{id}`
@@ -81,7 +82,7 @@ export default class Service implements CDSHooks.Service {
    * The key is a string that describes the type of data being requested and the
    * value is a string representing the FHIR query.
    */
-  public prefetch?: CDSHooks.PrefetchTemplate;
+  public prefetch?: PrefetchTemplate;
   /**
    * A function to execute on HookRequest invocation events
    */
@@ -95,7 +96,7 @@ export default class Service implements CDSHooks.Service {
    * @param fn -
    */
   constructor(
-    options: Partial<CDSHooks.Service> & { hook: Hooks; description: string },
+    options: Partial<Service> & { hook: Hooks; description: string },
     handler: ServiceHandler
   ) {
     this.hook = options.hook;
@@ -106,3 +107,72 @@ export default class Service implements CDSHooks.Service {
     this.handler = handler;
   }
 }
+
+export interface HookResponse {
+  /**
+   * An array of Cards. Cards can provide a combination of information (for
+   * reading), suggested actions (to be applied if a user selects them), and
+   * links (to launch an app if the user selects them). The CDS Client decides
+   * how to display cards, but this specification recommends displaying
+   * suggestions using buttons, and links using underlined text.
+   */
+  cards?: Card[]
+
+  /**
+   * An array of actions that the CDS Service proposes to auto-apply. Each
+   * action follows the schema of a card-based suggestion.action. The CDS
+   * Client decides whether to auto-apply actions.
+   */
+  systemActions?: SystemAction[]
+}
+
+/**
+ * A prefetch template is a FHIR read or search request that describes relevant
+ * data needed by the CDS Service. See:
+ * https://cds-hooks.org/specification/current/#prefetch-template
+ */
+interface PrefetchTemplate {
+  [key: string]: string
+}
+
+interface HookRequestWithFhir<T> extends HookRequestBasic<T> {
+  /**
+   * The base URL of the CDS Client's FHIR server. If fhirAuthorization is
+   * provided, this field is REQUIRED. The scheme should be https
+   */
+  fhirServer: string
+
+  /**
+   * A structure holding an OAuth 2.0 bearer access token granting the CDS
+   * Service access to FHIR resources, along with supplemental information
+   * relating to the token.
+   */
+  fhirAuthorization: FhirAuthorization
+}
+
+interface HookRequestBasic<T> {
+  /**
+   * The hook that triggered this CDS Service call. See:
+   * https://cds-hooks.org/specification/current/#hooks
+   */
+  hook: string
+
+  /**
+   * A universally unique identifier (UUID) for this particular hook call.
+   */
+  hookInstance: string
+
+  /**
+   * Hook-specific contextual data that the CDS service will need. For example,
+   * with the patient-view hook this will include the FHIR identifier of the
+   * Patient being viewed. For details, see the Hooks specification page.
+   */
+  context: any
+
+  /**
+   * The FHIR data that was prefetched by the CDS Client
+   */
+  prefetch: T
+}
+
+export type HookRequest<T> = HookRequestBasic<T> | HookRequestWithFhir<T>
