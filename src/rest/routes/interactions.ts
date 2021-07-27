@@ -3,7 +3,7 @@ import Config from "../../config";
 import Resources from "../../resources";
 import Store, { created } from "../store";
 
-import { defaultRestReourceCapability, RestResourceCapability } from "../capabilities";
+import { defaultRestReourceCapability } from "../capabilities";
 import { randomUUID } from "crypto";
 
 export function read(resource: Resources) {

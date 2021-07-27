@@ -15,7 +15,6 @@ interface restConfig {
 }
 
 export default interface SeroConfiguration {
-	store?: Storage,
 	rest?: restConfig;
 	http?: FastifyServerOptions;
 	cdsHooks?: cdsHooksConfig;

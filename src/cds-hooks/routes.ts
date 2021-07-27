@@ -1,8 +1,13 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { getService, NoDecisionResponse } from ".";
+import Service from "./service";
 import Config from "../config";
-import { validateHookRequest } from "./util";
-import CDSHooks from "../types/cds-hooks"
+import { Feedback } from "./card";
+import { HookRequest } from "./service";
+import { validateHookRequest, getService, NoDecisionResponse } from "./util";
+
+export default function mount(config: Config, http: FastifyInstance): void {
+  routes(http, config.cdsHooks);
+}
 
 /**
  * @deprecated This should be invoked some other way
@@ -41,7 +46,7 @@ function invoke(options: Config["cdsHooks"]) {
       reply.log.info("SchemaValidationError")
       reply.code(400).send(request.validationError);
     } else {
-      const hookRequest = request.body as CDSHooks.HookRequest<Record<string, string>>;
+      const hookRequest = request.body as HookRequest<Record<string, string>>;
       const validationError = validateHookRequest(hookRequest, service);
 
       // 3. Is there a dynamic validation error on this HookRequest?
@@ -81,7 +86,7 @@ function feedback(options: Config["cdsHooks"]) {
   return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
     if (options?.cors) addCorsHeaders(reply);
 
-    const feedback = request.body as CDSHooks.Feedback;
+    const feedback = request.body as Feedback;
 
     request.log.info('Feedback received', feedback);
 
@@ -144,16 +149,17 @@ const feedbackSchema = {
  * @param http - A fastify instance
  * @param options - The services and
  */
-export default (http: FastifyInstance, options: Config["cdsHooks"]): void => {
+function routes(http: FastifyInstance, options: Config["cdsHooks"]): void {
   http.route({
     method: 'GET',
     url: '/cds-services',
-    handler: (request, reply) => {
+    handler: (_request, reply) => {
       if (options?.cors) addCorsHeaders(reply);
 
-      reply.send({
+      const response: DiscoveryResponse = {
         services: options?.services || []
-      })
+      }
+      reply.send(response)
     }
   })
 
@@ -176,7 +182,7 @@ export default (http: FastifyInstance, options: Config["cdsHooks"]): void => {
     http.route({
       method: 'OPTIONS',
       url: '/cds-services',
-      handler: (request, reply) => {
+      handler: (_request, reply) => {
         addCorsHeaders(reply);
         reply.send();
       }
@@ -185,10 +191,21 @@ export default (http: FastifyInstance, options: Config["cdsHooks"]): void => {
     http.route({
       method: 'OPTIONS',
       url: '/cds-services/:id',
-      handler: (request, reply) => {
+      handler: (_request, reply) => {
         addCorsHeaders(reply);
         reply.send();
       }
     })
   }
+}
+
+/**
+ * The response to the discovery endpoint SHALL be an object containing a list
+ * of CDS Services.
+ */
+export interface DiscoveryResponse {
+  /**
+   * An array of CDS Services.
+   */
+  services: Service[]
 }
