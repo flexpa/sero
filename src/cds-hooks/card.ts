@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import Suggestion, { AcceptedSuggestion } from "./suggestion";
+import Suggestion, { AcceptedSuggestion } from "./suggestion.js";
 
 /**
  * A **Card** contains decision support from a CDS Service.

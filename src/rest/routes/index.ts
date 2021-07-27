@@ -1,2 +1,2 @@
-export { capabilityStatement } from "./capabilityStatement";
-export { interactions } from "./interactions";
+export { capabilityStatement } from "./capabilityStatement.js";
+export { interactions } from "./interactions.js";

@@ -1,9 +1,9 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import Service from "./service";
+import Service from "./service.js";
 import Config from "../config";
-import { Feedback } from "./card";
-import { HookRequest } from "./service";
-import { validateHookRequest, getService, NoDecisionResponse } from "./util";
+import { Feedback } from "./card.js";
+import { HookRequest } from "./service.js";
+import { validateHookRequest, getService, NoDecisionResponse } from "./util.js";
 
 export default function mount(config: Config, http: FastifyInstance): void {
   routes(http, config.cdsHooks);

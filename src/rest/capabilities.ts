@@ -2,7 +2,7 @@
  * Capabiltiies helpers and state
  */
 import Config from "../config";
-import Resources from "../resources"
+import Resources from "../resources.js"
 
 export type RestResourceCapability = Partial<fhir4.CapabilityStatementRestResource>
 

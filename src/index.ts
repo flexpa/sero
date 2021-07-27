@@ -4,7 +4,7 @@
 
 export {
   mount as Rest
-} from "./rest";
+} from "./rest/index.js";
 
 export {
   mount as CDSHooks,
@@ -14,7 +14,7 @@ export {
   Service,
   Suggestion,
   NoDecisionResponse,
-} from "./cds-hooks";
+} from "./cds-hooks/index.js";
 
 export {
   default as Config
@@ -23,4 +23,4 @@ export {
 export {
   default as Http,
   start
-} from "./http";
+} from "./http/index.js";

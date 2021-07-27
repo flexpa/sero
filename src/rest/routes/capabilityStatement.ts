@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import Config from "../../config"
-import { CapabilityStatement, TerminologyCapabilities } from "../capabilities";
+import { CapabilityStatement, TerminologyCapabilities } from "../capabilities.js";
 
 function capabilities(config: Config) {
   return (request: FastifyRequest<{ Querystring: { mode: string }}>, reply: FastifyReply) => {

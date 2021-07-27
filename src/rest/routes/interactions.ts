@@ -1,9 +1,9 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify"
 import Config from "../../config";
-import Resources from "../../resources";
-import Store, { created } from "../store";
+import Resources from "../../resources.js";
+import Store, { created } from "../store.js";
 
-import { defaultRestReourceCapability } from "../capabilities";
+import { defaultRestReourceCapability } from "../capabilities.js";
 import { randomUUID } from "crypto";
 
 export function read(resource: Resources) {
