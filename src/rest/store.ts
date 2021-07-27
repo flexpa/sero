@@ -1,5 +1,5 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit'
-import Resources from "../resources"
+import Redux from '@reduxjs/toolkit'
+import Resources from "../resources.js"
 
 const initialResources: Record<string, { byId: fhir4.Resource[], allIds: string[]}> = {}
 Object.keys(Resources).forEach((resource) => {
@@ -9,7 +9,7 @@ Object.keys(Resources).forEach((resource) => {
   }
 })
 
-const resourcesSlice = createSlice({
+const resourcesSlice = Redux.createSlice({
   name: 'resources',
   initialState: initialResources,
   reducers: {
@@ -23,7 +23,7 @@ const resourcesSlice = createSlice({
 
 export const { created } = resourcesSlice.actions
 
-export default configureStore({
+export default Redux.configureStore({
   reducer: {
     resources: resourcesSlice.reducer
   }
