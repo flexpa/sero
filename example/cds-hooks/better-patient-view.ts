@@ -1,4 +1,5 @@
-import { Service, Card } from "../../src/cds-hooks";
+import { Service, Card, HookRequest } from "../../src/cds-hooks";
+import { Hooks } from "../../src/cds-hooks/util";
 import {
   processAddresses,
   processPatientNames,
@@ -34,7 +35,7 @@ export default new Service(
   {
     id: "9",
     title: "Patient view with last encounter",
-    hook: "patient-view",
+    hook: "patient-view" as Hooks,
     description:
       "A patient-view hook with patient and encounter prefetch template values. presents patient info and last encounter information",
     prefetch: {
@@ -43,7 +44,7 @@ export default new Service(
     },
   },
   (
-    request: CDSHooks.HookRequest<{
+    request: HookRequest<{
       patient: fhir4.Patient;
       encounter: fhir4.Bundle;
     }>
