@@ -1,4 +1,5 @@
-import { Service, Card, Hooks } from "../../src/cds-hooks";
+import { Service, Card } from "../../src/cds-hooks";
+import { Hooks } from "../../src/cds-hooks/util";
 
 const options = {
   id: "get-current-time",
