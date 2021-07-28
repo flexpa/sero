@@ -13,7 +13,7 @@
     "build": "run-s build:*",
     "build:types": "tsc -p ./tsconfig/types.json",
     "build:cjs": "tsc -p ./tsconfig/cjs.json",
-    "build:esm": "tsc -p ./tsconfig/esm.json"
+    "build:esm": "tsc -p ./tsconfig/esm.json && echo {\"type\": \"module\"} > dist/esm/package.json"
   },
   "keywords": [
     "fhir",
@@ -23,7 +23,6 @@
   ],
   "author": "Automate Medical Inc.",
   "license": "Apache 2.0",
-  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
