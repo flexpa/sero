@@ -153,7 +153,7 @@ interface PrefetchTemplate {
  * See: https://www.hl7.org/fhir/extensibility.html
  */
 interface Extension {
-  [key: string]: string;
+  [key: string]: any;
 }
 
 interface HookRequestWithFhir<T> extends HookRequestBasic<T> {
