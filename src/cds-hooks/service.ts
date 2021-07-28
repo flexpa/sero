@@ -90,9 +90,9 @@ export default class Service implements Service {
   /**
    * An object containing key/value pairs of FHIR extensions. The key is the name
    * of the extension and the value is the extended data made available to the CDS
-   * service. Extensions are loosely defined, as Incorporating all valid
+   * service. Extensions are loosely defined, as incorporating all valid
    * requirements would make this specification very cumbersome and difficult to
-   * implement. Thus, all additional information a service needs will be implemented
+   * implement. Thus, all the additional information a service needs will be implemented
    * as an extension. 
    */
   public extension?: Extension;
