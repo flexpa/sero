@@ -95,7 +95,7 @@ export default class Service implements Service {
    * implement. Thus, all additional information a service needs will be implemented
    * as an extension. 
    */
-  public extensions?: Extensions;
+  public extension?: Extension;
 
   /**
    * Pass any options along with a function that will execute on HookRequest
@@ -111,7 +111,7 @@ export default class Service implements Service {
     this.hook = options.hook;
     this.description = options.description;
     this.prefetch = options.prefetch;
-    this.extensions = options.extensions;
+    this.extension = options.extension;
     this.title = options.title;
     this.id = options.id || randomUUID();
     this.handler = handler;
@@ -152,7 +152,7 @@ interface PrefetchTemplate {
  * See: https://cds-hooks.org/specification/current/#extensions
  * See: https://www.hl7.org/fhir/extensibility.html
  */
-interface Extensions {
+interface Extension {
   [key: string]: string;
 }
 
