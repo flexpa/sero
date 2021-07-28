@@ -1,6 +1,8 @@
 {
   "extends": "./base.json",
   "compilerOptions": {
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "target": "ES2015",
+    "module": "ES2015"
   }
 }
