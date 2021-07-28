@@ -23,6 +23,9 @@
     ],
     "typeRoots": [
       "../node_modules/@types"
-    ]
+    ],
+    "paths": {
+      "@reduxjs/toolkit/dist/redux-toolkit.umd.js": ["../node_modules/@reduxjs/toolkit"]
+    }
   }
 }

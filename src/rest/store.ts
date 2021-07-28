@@ -1,4 +1,4 @@
-import Redux from '@reduxjs/toolkit'
+import { createSlice, configureStore } from '@reduxjs/toolkit/dist/redux-toolkit.umd.js'
 import Resources from "../resources.js"
 
 const initialResources: Record<string, { byId: fhir4.Resource[], allIds: string[]}> = {}
@@ -9,7 +9,7 @@ Object.keys(Resources).forEach((resource) => {
   }
 })
 
-const resourcesSlice = Redux.createSlice({
+const resourcesSlice = createSlice({
   name: 'resources',
   initialState: initialResources,
   reducers: {
@@ -23,7 +23,7 @@ const resourcesSlice = Redux.createSlice({
 
 export const { created } = resourcesSlice.actions
 
-export default Redux.configureStore({
+export default configureStore({
   reducer: {
     resources: resourcesSlice.reducer
   }
