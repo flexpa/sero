@@ -87,6 +87,15 @@ export default class Service implements Service {
    * A function to execute on HookRequest invocation events
    */
   public handler: ServiceHandler;
+  /**
+   * An object containing key/value pairs of FHIR extensions. The key is the name
+   * of the extension and the value is the extended data made available to the CDS
+   * service. Extensions are loosely defined, as incorporating all valid
+   * requirements would make this specification very cumbersome and difficult to
+   * implement. Thus, all the additional information a service needs will be implemented
+   * as an extension. 
+   */
+  public extension?: Extension;
 
   /**
    * Pass any options along with a function that will execute on HookRequest
@@ -102,6 +111,7 @@ export default class Service implements Service {
     this.hook = options.hook;
     this.description = options.description;
     this.prefetch = options.prefetch;
+    this.extension = options.extension;
     this.title = options.title;
     this.id = options.id || randomUUID();
     this.handler = handler;
@@ -116,14 +126,14 @@ export interface HookResponse {
    * how to display cards, but this specification recommends displaying
    * suggestions using buttons, and links using underlined text.
    */
-  cards?: Card[]
+  cards?: Card[];
 
   /**
    * An array of actions that the CDS Service proposes to auto-apply. Each
    * action follows the schema of a card-based suggestion.action. The CDS
    * Client decides whether to auto-apply actions.
    */
-  systemActions?: SystemAction[]
+  systemActions?: SystemAction[];
 }
 
 /**
@@ -132,7 +142,18 @@ export interface HookResponse {
  * https://cds-hooks.org/specification/current/#prefetch-template
  */
 interface PrefetchTemplate {
-  [key: string]: string
+  [key: string]: string;
+}
+
+/**
+ * An extension is an additional information exchange specification based on
+ * common requirements across healthcare. FHIR expects that additional requirements
+ * are implemented as extensions.
+ * See: https://cds-hooks.org/specification/current/#extensions
+ * See: https://www.hl7.org/fhir/extensibility.html
+ */
+interface Extension {
+  [key: string]: any;
 }
 
 interface HookRequestWithFhir<T> extends HookRequestBasic<T> {
@@ -140,14 +161,14 @@ interface HookRequestWithFhir<T> extends HookRequestBasic<T> {
    * The base URL of the CDS Client's FHIR server. If fhirAuthorization is
    * provided, this field is REQUIRED. The scheme should be https
    */
-  fhirServer: string
+  fhirServer: string;
 
   /**
    * A structure holding an OAuth 2.0 bearer access token granting the CDS
    * Service access to FHIR resources, along with supplemental information
    * relating to the token.
    */
-  fhirAuthorization: FhirAuthorization
+  fhirAuthorization: FhirAuthorization;
 }
 
 interface HookRequestBasic<T> {
@@ -155,24 +176,24 @@ interface HookRequestBasic<T> {
    * The hook that triggered this CDS Service call. See:
    * https://cds-hooks.org/specification/current/#hooks
    */
-  hook: string
+  hook: string;
 
   /**
    * A universally unique identifier (UUID) for this particular hook call.
    */
-  hookInstance: string
+  hookInstance: string;
 
   /**
    * Hook-specific contextual data that the CDS service will need. For example,
    * with the patient-view hook this will include the FHIR identifier of the
    * Patient being viewed. For details, see the Hooks specification page.
    */
-  context: any
+  context: any;
 
   /**
    * The FHIR data that was prefetched by the CDS Client
    */
-  prefetch: T
+  prefetch: T;
 }
 
-export type HookRequest<T> = HookRequestBasic<T> | HookRequestWithFhir<T>
+export type HookRequest<T> = HookRequestBasic<T> | HookRequestWithFhir<T>;
