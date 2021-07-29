@@ -51,7 +51,7 @@ function invoke(options: Config["cdsHooks"]) {
 
       // 3. Is there a dynamic validation error on this HookRequest?
       if (validationError) {
-        reply.log.info("HookeRequetValidationError")
+        reply.log.info("HookRequestValidationError")
         reply.code(400).send(validationError)
       // 4. Otherwise execute the service
       } else {
