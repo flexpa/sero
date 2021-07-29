@@ -2,15 +2,13 @@
 
 ## Overview
 
-Transparency on drug pricing changes the [decisions](https://pubmed.ncbi.nlm.nih.gov/11025790/) [doctors](https://pubmed.ncbi.nlm.nih.gov/29255097/) [make](https://pubmed.ncbi.nlm.nih.gov/29321043/). Good data on what prescriptions cost _while they are prescribing them_ is both something (1) doctors say they want and (2) doctors who have the data have been shown to have reduced per-patient perscription costs than those who do not. Meanwhile, open standards have emerged ([CDS Hooks](https://cds-hooks.hl7.org/)) as a way of getting decision support to doctors directly inside of the EHR (i.e. patient specific recommendations on drug pricing).
+Transparency on drug pricing changes the [decisions](https://pubmed.ncbi.nlm.nih.gov/11025790/) [doctors](https://pubmed.ncbi.nlm.nih.gov/29255097/) [make](https://pubmed.ncbi.nlm.nih.gov/29321043/). Good data on what drugs cost _while they are prescribing them_ is both something (1) doctors say they want and (2) doctors who have the data have been shown to have reduced per-patient drug costs than those who do not. Meanwhile, open standards have emerged ([CDS Hooks](https://cds-hooks.hl7.org/)) as a way of getting decision support to doctors directly inside of the EHR (i.e. patient specific recommendations on drug pricing).
 
-In this example. we introduce the use of third party consumer pricing data ([GoodRx](https://www.goodrx.com/)) over a decision support API provided by the Sero toolkit to deliver drug price to doctors while they are making the prescription. Sero can be used to make decision support APIs and SMART on FHIR apps.
-
-https://www.loom.com/share/05034bda49e240daa2ee353505a0d3cc
+In this example, we introduce the use of third party consumer pricing data ([GoodRx](https://www.goodrx.com/)) over a decision support API provided by the [Sero toolkit](https://docs.sero.run) to deliver drug price to doctors while they are writing the prescription. Sero can be used to make decision support APIs and SMART on FHIR apps.
 
 ## Walkthrough
 
-CDS Hooks is an open decision support API that `@sero.run/sero` implements support for. As part of HL7, and closely related to FHIR, CDS Hooks is the only open standard for 3rd party developers ____. [Spec, Internal, Reference conformance]
+Sero implements an open decision support API called [CDS Hooks](https://cds-hooks.hl7.org/). As part of [HL7](https://www.hl7.org/), and closely related to [FHIR](https://docs.sero.run/book/how-to-build-in-health/fhir), CDS Hooks is the only open standard for 3rd party developers to deliver decision support to doctors directly inside of the EHRs they are already working with. You can learn more about decision support API's in our [How to build in health the easy way](https://docs.sero.run/book/how-to-build-in-health/clinical-decision-support-hooks) ebook. 
 
 This code walkthrough will focus primarily on [good-rx-compare-price.ts](./src/good-rx-compare-price.ts), the actual decision support service. We'll make use of helper functions we've written to work with the GoodRx API, but the vast majority of the example is contained in [good-rx-compare-price.ts]().
 
