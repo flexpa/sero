@@ -1,6 +1,13 @@
 import { Http, CDSHooks, start } from "@sero.run/sero";
 
-const config = {};
+import compareTimeService from "./current-time/current-time.js";
+
+const config = {
+  cdsHooks: {
+    services: [compareTimeService],
+    cors: true,
+  },
+};
 
 const http = Http(config);
 CDSHooks(config, http);
