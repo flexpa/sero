@@ -24,7 +24,7 @@ import { comparePrice } from "./api.js";
 
 ### Options
 
-Every decision support service provided by a server in the CDS Hooks model identifies itself as part of a response to `/cds-services`. We definen options object that we will use in the construction of `Service`. Importantly, we declare that the `Service` expects to respond to the `order-select` hook request.
+Every decision support service provided by a server in the CDS Hooks model identifies itself as part of a response to `/cds-services`. We define an options object that we will use in the construction of `Service`. Importantly, we declare that the `Service` expects to respond to the `order-select` hook request.
 
 ```typescript
 const options = {
