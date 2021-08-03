@@ -26,7 +26,7 @@
  * @todo update client to use FhirResource string type union when it is available in @types/fhir
  */
 
-import fetch from "cross-fetch";
+import fetch, { Headers } from "cross-fetch";
 
 type Summary = "true" | "false" | "text" | "count" | "data";
 
@@ -36,7 +36,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   update: { (type: string, id: string, resource: fhir4.FhirResource): Promise<Response> };
   patch: { (type: string, id: string, resource: fhir4.FhirResource ): Promise<Response> };
   destroy: { (type: string, id: string): Promise<Response> };
-  searchType: { (type: string): AsyncGenerator<fhir4.Bundle, void, any> };
+  searchType: { (type: string): AsyncGenerator<fhir4.Bundle, undefined> };
   create: { (type: string): Promise<Response> };
   historyType: any;
   historyInstance: any;
@@ -44,13 +44,23 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   batch: { (bundle: fhir4.Bundle): Promise<Response> }
   transaction: { (bundle: fhir4.Bundle): Promise<Response> }
 } {
+
+  const headers = new Headers({
+    "User-Agent": "sero.run"
+  });
+
+  let options = {
+    headers,
+    ...init
+  }
+
   /**
    * Read the current state of the resource
    */
   async function read(type: string, id: string, _summary?: Summary) {
     return fetch(`${baseUrl}/${type}/${id}`, {
       method: "GET",
-      ...init
+      ...options
     });
   }
 
@@ -60,7 +70,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   async function vread(type: string, id: string, vid: string) {
     return fetch(`${baseUrl}/${type}/${id}/_history/${vid}`, {
       method: "GET",
-      ...init
+      ...options
     });
   }
 
@@ -71,7 +81,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
     return fetch(`${baseUrl}/${type}/${id}`, {
       method: "PUT",
       body: JSON.stringify(resource),
-      ...init
+      ...options
     });
   }
 
@@ -82,7 +92,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
     return fetch(`${baseUrl}/${type}/${id}`, {
       method: "PATCH",
       body: JSON.stringify(resource),
-      ...init
+      ...options
     });
   }
 
@@ -92,7 +102,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   async function destroy(type: string, id: string) {
     return fetch(`${baseUrl}/${type}/${id}`, {
       method: "DELETE",
-      ...init
+      ...options
     });
   }
 
@@ -102,7 +112,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
    * @todo has a max call stack bug for large page counts
    */
   async function* searchType(type: string) {  
-    return yield * paginated(`${baseUrl}/${type}`, init);
+    return yield * paginated(`${baseUrl}/${type}`, options);
   }
 
   /**
@@ -111,7 +121,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   async function create(type: string) {
     return fetch(`${baseUrl}/${type}`, {
       method: "POST",
-      ...init
+      ...options
     });
   }
 
@@ -135,7 +145,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   async function capabilities() {
     return fetch(`${baseUrl}/metadata`, {
       method: "GET",
-      ...init
+      ...options
     });
   }
 
@@ -146,7 +156,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
     return fetch(`${baseUrl}/`, {
       method: "POST",
       body: JSON.stringify(bundle),
-      ...init
+      ...options
     });
   }
 
@@ -157,7 +167,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
     return fetch(`${baseUrl}/`, {
       method: "POST",
       body: JSON.stringify(bundle),
-      ...init
+      ...options
     });
   }
 
@@ -177,7 +187,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   }
 }
 
-async function* paginated(endpoint: string, init: RequestInit = {}): AsyncGenerator<fhir4.Bundle, void, any> {
+async function* paginated(endpoint: string, init: RequestInit = {}): AsyncGenerator<fhir4.Bundle, undefined> {
   const response = await fetch(endpoint, init);
 
   if (!response.ok) throw new Error(await response.text());
@@ -191,4 +201,6 @@ async function* paginated(endpoint: string, init: RequestInit = {}): AsyncGenera
   if (nextLink?.url) {
     yield * paginated(nextLink.url);
   }
+
+  return;
 }
