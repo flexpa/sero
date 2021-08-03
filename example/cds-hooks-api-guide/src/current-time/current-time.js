@@ -2,7 +2,7 @@ import { Service, Card } from "@sero.run/sero";
 
 const options = {
   id: "get-current-time",
-  title: "A CDS service that responds with the current time",
+  title: "Get the current time",
   hook: "patient-view",
   description:
     "This example shows how easy it is to make a CDS hooks service with Sero. This service responds with the current time after being invoked by the patient-view hook",
