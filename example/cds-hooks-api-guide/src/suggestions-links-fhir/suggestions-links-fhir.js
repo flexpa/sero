@@ -1,11 +1,5 @@
 import { Service, Card } from "@sero.run/sero";
-import {
-  processAddresses,
-  processPatientNames,
-  processTelecom,
-  processEncounters,
-  newAppointment,
-} from "./util.js";
+import { processPatientNames } from "./util.js";
 
 export default new Service(
   {
