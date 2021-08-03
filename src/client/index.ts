@@ -6,28 +6,37 @@
  *
  * @example Grab a capabilities statement:
  * ```typescript
- *  const { capabilities } = Client("https://r4.smarthealthit.org", {});
+ *  const { capabilities } = Client("https://r4.smarthealthit.org");
  *  await capabilities().json() as fhir4.CapabilityStatement;
  * ```
  *
  * @example Easily read a Patient resource:
  * ```typescript
- *  const { read } = Client("https://r4.smarthealthit.org", {})
+ *  const { read } = Client("https://r4.smarthealthit.org")
  *  await read("Patient", "87a339d0-8cae-418e-89c7-8651e6aab3c6").json() as fhir4.Patient;
  * ```
+ * 
+ * @example Iterables returned for the searchType operation:
+ * ```typescript
+ *  const { searchType } = Client("https://r4.smarthealthit.org")
+ *  const search = searchType("Patient");
+ *  search.next(); 
+ * ```
+ * 
+ * @todo update client to use FhirResource string type union when it is available in @types/fhir
  */
 
 import fetch from "cross-fetch";
 
 type Summary = "true" | "false" | "text" | "count" | "data";
 
-export default function(baseUrl: string, init: RequestInit): {
+export default function(baseUrl: string, init: RequestInit = {}): {
   read: { (type: string, id: string, summary?: Summary): Promise<Response> };
   vread: { (type: string, id: string, vid: string): Promise<Response> };
   update: { (type: string, id: string, resource: fhir4.FhirResource): Promise<Response> };
   patch: { (type: string, id: string, resource: fhir4.FhirResource ): Promise<Response> };
   destroy: { (type: string, id: string): Promise<Response> };
-  searchType: { (type: string): Promise<Response> };
+  searchType: { (type: string): AsyncGenerator<fhir4.Bundle, void, any> };
   create: { (type: string): Promise<Response> };
   historyType: any;
   historyInstance: any;
@@ -89,13 +98,11 @@ export default function(baseUrl: string, init: RequestInit): {
 
   /**
    * Search the resource type based on some filter criteria OR Search across all resource types based on some filter criteria
-   * @todo not complete
+   * @todo add parameters
+   * @todo has a max call stack bug for large page counts
    */
-  async function searchType(type: string) {
-    return fetch(`${baseUrl}/${type}`, {
-      method: "GET",
-      ...init
-    });
+  async function* searchType(type: string) {  
+    return yield * paginated(`${baseUrl}/${type}`, init);
   }
 
   /**
@@ -167,5 +174,21 @@ export default function(baseUrl: string, init: RequestInit): {
     capabilities,
     batch,
     transaction
+  }
+}
+
+async function* paginated(endpoint: string, init: RequestInit = {}): AsyncGenerator<fhir4.Bundle, void, any> {
+  const response = await fetch(endpoint, init);
+
+  if (!response.ok) throw new Error(await response.text());
+
+  const page = await response.json() as fhir4.Bundle;
+
+  yield page; 
+
+  const nextLink = page.link?.find((link) => link.relation === 'next');
+
+  if (nextLink?.url) {
+    yield * paginated(nextLink.url);
   }
 }

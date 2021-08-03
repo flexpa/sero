@@ -1,5 +1,5 @@
 /**
- * @module @sero.run/sero/cds-hooks
+ * @module cds-hooks
  */
 
 export { default as mount } from "./routes.js";
