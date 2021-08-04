@@ -18,7 +18,7 @@ const options = {
 
 const handler = async (request) => {
   const data = request.prefetch;
-  const systolic = JSON.stringify(request.prefetch.systolicBloodPressure);
+  const systolic = JSON.stringify(data.systolicBloodPressure);
   return {
     cards: [
       // HSCRP data
