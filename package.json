@@ -1,8 +1,8 @@
 {
   "name": "@sero.run/sero",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.",
-  "homepage": "https://sero.run",
+  "homepage": "https://docs.sero.run",
   "bugs": "https://github.com/automate-medical/sero/issues",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
@@ -48,6 +48,10 @@
     "./rest/index": {
       "import": "./dist/esm/rest/index.js",
       "require": "./dist/cjs/rest/index.js"
+    },
+    "./client/index": {
+      "import": "./dist/esm/client/index.js",
+      "require": "./dist/cjs/client/index.js"
     }
   },
   "files": [
