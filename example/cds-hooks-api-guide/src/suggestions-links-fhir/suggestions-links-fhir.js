@@ -45,7 +45,7 @@ const handler = async (request) => {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
         },
-        summary: `Systolic BP: ${riskScore}`,
+        summary: `Reynolds risk score: ${riskScore}`,
         indicator: "info",
         links: [
           {
@@ -62,7 +62,7 @@ const handler = async (request) => {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
         },
-        summary: `Systolic BP: ${age}`,
+        summary: `Age: ${age}`,
         indicator: "info",
         links: [
           {
