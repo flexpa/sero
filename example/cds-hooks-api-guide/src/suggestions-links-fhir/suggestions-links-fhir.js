@@ -30,13 +30,7 @@ const handler = async (request) => {
   const hscrp = getHscrp(data.hscrp);
   const cholesterol = getCholesterol(data.cholesterolMassOverVolume);
   const hdlc = getHdlc(data.hdl);
-  const riskScore = reynoldsRiskScore(
-    age,
-    systolic,
-    hscrp,
-    cholesterol,
-    hdlc
-  );
+  const riskScore = reynoldsRiskScore(age, systolic, hscrp, cholesterol, hdlc);
   return {
     cards: [
       new Card({
@@ -46,7 +40,17 @@ const handler = async (request) => {
           url: "https://www.automatemedical.com/",
         },
         summary: `Reynolds risk score: ${riskScore}`,
-        indicator: "info",
+        indicator: "warning",
+        suggestions: [
+          {
+            type: "create",
+            description: "Create a prescription for Acetaminophen 250 MG",
+            resource: {
+              resourceType: "MedicationRequest",
+              id: "medrx001",
+            },
+          },
+        ],
         links: [
           {
             label: "Reynolds Risk Score",
