@@ -57,7 +57,7 @@ export function processTelecom(patient) {
 /**
  *
  * @param encounter
- * @returns an array of FHIR encounter bundles (@todo, no explicit any)
+ * @returns an array of FHIR encounter bundles
  */
 export function processEncounters(encounter) {
   const encounters = [];

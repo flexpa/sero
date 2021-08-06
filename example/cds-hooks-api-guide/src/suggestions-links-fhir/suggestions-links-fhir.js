@@ -1,4 +1,10 @@
 import { Service, Card } from "@sero.run/sero";
+import {
+  reynoldsRiskScore,
+  getAge,
+  getBloodPressure,
+  getHscrp,
+} from "./util.js";
 
 const options = {
   id: "suggestions-links",
@@ -11,28 +17,64 @@ const options = {
     hscrp: "Observation?code=http://loinc.org|30522-7",
     cholesterolMassOverVolume: "Observation?code=http://loinc.org|2093-3",
     hdl: "Observation?code=http://loinc.org|2085-9",
-    systolicBloodPressure: "Observation?code=http://loinc.org|8480-6",
+    bloodPressure: "Observation?code=http://loinc.org|55284-4",
   },
 };
 
 const handler = async (request) => {
   const data = request.prefetch;
-  const systolic = JSON.stringify(data.systolicBloodPressure);
+  const age = getAge(data.patient);
+  const systolic = getBloodPressure(data.bloodPressure);
+  const hscrp = getHscrp(data.hscrp);
+  const reynoldsRiskScore = reynoldsRiskScore(age, systolic, hscrp);
   return {
     cards: [
-      // HSCRP data
+      // Age
+      new Card({
+        detail: `Age`,
+        source: {
+          label: "Automate Medical, Inc.",
+          url: "https://www.automatemedical.com/",
+        },
+        summary: `Systolic BP: ${age}`,
+        indicator: "info",
+        links: [
+          {
+            label: "Reynolds Risk Score",
+            url: "https://divine-meadow-3697.fly.dev/launch.html",
+            type: "smart",
+          },
+        ],
+      }),
+      // Systolic blood pressure data
+      new Card({
+        detail: `Systolic blood pressure`,
+        source: {
+          label: "Automate Medical, Inc.",
+          url: "https://www.automatemedical.com/",
+        },
+        summary: `Systolic BP: ${systolic}`,
+        indicator: "info",
+        links: [
+          {
+            label: "Reynolds Risk Score",
+            url: "https://divine-meadow-3697.fly.dev/launch.html",
+            type: "smart",
+          },
+        ],
+      }),
       new Card({
         detail: `This is where the systolic information would go...`,
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
         },
-        summary: `HSCRP.`,
+        summary: `Systolic BP: ${hscrp}`,
         indicator: "info",
         links: [
           {
             label: "Reynolds Risk Score",
-            url: "http://examples.smarthealthit.org/cardiac-risk-app/launch.html",
+            url: "https://divine-meadow-3697.fly.dev/launch.html",
             type: "smart",
           },
         ],
