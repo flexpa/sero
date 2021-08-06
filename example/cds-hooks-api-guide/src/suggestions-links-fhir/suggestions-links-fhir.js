@@ -3,9 +3,8 @@ import {
   reynoldsRiskScore,
   getAge,
   getBloodPressure,
-  getHscrp,
-  getCholesterol,
-  getHdlc,
+  getValue,
+  getHscrp
 } from "./util.js";
 
 const options = {
@@ -16,10 +15,10 @@ const options = {
     "Service triggered on the patient-view hook that calculates Reynolds risk score, and makes a MedicationPrescribe suggestion based on the result. Also provides a link to a SMART app to help work with the result",
   prefetch: {
     patient: "Patient/{{context.patientId}}",
-    hscrp: "Observation?code=http://loinc.org|30522-7",
-    cholesterolMassOverVolume: "Observation?code=http://loinc.org|2093-3",
-    hdl: "Observation?code=http://loinc.org|2085-9",
-    bloodPressure: "Observation?code=http://loinc.org|55284-4",
+    hscrp: "Observation?code=http://loinc.org|30522-7&_sort=date",
+    cholesterolMassOverVolume: "Observation?code=http://loinc.org|2093-3&&_sort=date",
+    hdl: "Observation?code=http://loinc.org|2085-9&_sort=date",
+    bloodPressure: "Observation?code=http://loinc.org|55284-4&_sort=date",
   },
 };
 
@@ -28,8 +27,8 @@ const handler = async (request) => {
   const age = getAge(data.patient);
   const systolic = getBloodPressure(data.bloodPressure);
   const hscrp = getHscrp(data.hscrp);
-  const cholesterol = getCholesterol(data.cholesterolMassOverVolume);
-  const hdlc = getHdlc(data.hdl);
+  const cholesterol = getValue(data.cholesterolMassOverVolume);
+  const hdlc = getValue(data.hdl);
   const riskScore = reynoldsRiskScore(age, systolic, hscrp, cholesterol, hdlc);
   return {
     cards: [

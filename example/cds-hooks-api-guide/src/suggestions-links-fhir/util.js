@@ -19,7 +19,7 @@ export function reynoldsRiskScore(
   let B =
     0.0799 * age +
     3.317 * Math.log(systolicBloodPressure) +
-    0.180 * Math.log(hscrp) +
+    0.18 * Math.log(hscrp) +
     1.382 * Math.log(cholesterol) -
     1.172 * Math.log(hdlc);
   if (hemoglobinA1c != 0) B += 1.134;
@@ -41,10 +41,21 @@ export function getAge(patient) {
 /**
  *
  * @param value -
- * @returns the numerical value of the measurement
+ * @returns the numerical value of the measurement. There are two components
+ * to the blood pressure and we want the systolic blood pressure, or the
+ * first item ([0])
  */
 export function getBloodPressure(value) {
   return value.entry[0].resource.component[0].valueQuantity.value;
+}
+
+/**
+ *
+ * @param value - value we are trying to determine (hscrp, cholesterol, or Hdlc)
+ * @returns
+ */
+export function getValue(value) {
+  return value.entry[0].resource.valueQuantity.value;
 }
 
 /**
