@@ -19,13 +19,13 @@ export function reynoldsRiskScore(
   let B =
     0.0799 * age +
     3.317 * Math.log(systolicBloodPressure) +
-    0.18 * Math.log(hscrp) +
+    0.180 * Math.log(hscrp) +
     1.382 * Math.log(cholesterol) -
     1.172 * Math.log(hdlc);
   if (hemoglobinA1c != 0) B += 1.134;
   if (smoking == true) B += 0.818;
   if (familyHistory == true) B += 0.438;
-  return B;
+  return (1 - Math.pow(0.98634, Math.exp(B - 22.325))) * 100;
 }
 
 /**
@@ -53,5 +53,18 @@ export function getBloodPressure(value) {
  * @returns the numerical value of the measurement
  */
 export function getHscrp(value) {
+  return value.entry[0].resource.valueQuantity.value;
+}
+
+export function getCholesterol(value) {
+  return value.entry[0].resource.valueQuantity.value;
+}
+
+/**
+ *
+ * @param value -
+ * @ returns the numerical value of the measurement
+ */
+export function getHdlc(value) {
   return value.entry[0].resource.valueQuantity.value;
 }
