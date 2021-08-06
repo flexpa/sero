@@ -1,0 +1,24 @@
+{
+  "name": "humana-specialist-search",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/humana.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/humana.js",
+    "build": "tsc -p tsconfig.json"
+  },
+  "author": "",
+  "type": "module",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/fhir": "^0.0.34",
+    "@types/node": "^16.4.10",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "@sero.run/sero": "^0.0.16",
+    "chalk": "^4.1.2",
+    "pretty-print-json": "^1.0.3"
+  }
+}

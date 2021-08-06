@@ -27,16 +27,18 @@
  */
 
 import fetch, { Headers } from "cross-fetch";
+import { URLSearchParams } from "url";
 
 type Summary = "true" | "false" | "text" | "count" | "data";
 
+
 export default function(baseUrl: string, init: RequestInit = {}): {
-  read: { (type: string, id: string, summary?: Summary): Promise<Response> };
+  read: { (query: string | { type: string; id: string; }, summary?: Summary): Promise<fhir4.FhirResource> };
   vread: { (type: string, id: string, vid: string): Promise<Response> };
   update: { (type: string, id: string, resource: fhir4.FhirResource): Promise<Response> };
   patch: { (type: string, id: string, resource: fhir4.FhirResource ): Promise<Response> };
   destroy: { (type: string, id: string): Promise<Response> };
-  searchType: { (type: string): AsyncGenerator<fhir4.Bundle, undefined> };
+  searchType: { (type: string, query?: Record<string, any>): AsyncGenerator<fhir4.Bundle, undefined> };
   create: { (type: string): Promise<Response> };
   historyType: any;
   historyInstance: any;
@@ -44,7 +46,6 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   batch: { (bundle: fhir4.Bundle): Promise<Response> }
   transaction: { (bundle: fhir4.Bundle): Promise<Response> }
 } {
-
   const headers = new Headers({
     "User-Agent": "sero.run"
   });
@@ -57,12 +58,25 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   /**
    * Read the current state of the resource
    */
-  async function read(type: string, id: string, _summary?: Summary) {
-    return fetch(`${baseUrl}/${type}/${id}`, {
+  async function read(query: string | { type: string; id: string; }, _summary?: Summary) {
+    let uri: string;
+
+    if (typeof query === "string") {
+      uri = `${baseUrl}/${query}`
+    } else {
+      uri = `${baseUrl}/${query.type}/${query.id}`;
+    }
+
+    const response = await fetch(uri, {
       method: "GET",
       ...options
     });
+
+    if (!response.ok) throw new Error(await response.text());
+
+    return await response.json() as fhir4.FhirResource;
   }
+
 
   /**
    * Read the state of a specific version of the resource
@@ -108,11 +122,13 @@ export default function(baseUrl: string, init: RequestInit = {}): {
 
   /**
    * Search the resource type based on some filter criteria OR Search across all resource types based on some filter criteria
-   * @todo add parameters
+   * @note query here doesn't do any active type checking, although it may be able to
    * @todo has a max call stack bug for large page counts
    */
-  async function* searchType(type: string) {  
-    return yield * paginated(`${baseUrl}/${type}`, options);
+   async function* searchType(type: string, query?: Record<string, any>) {
+    const params = new URLSearchParams(query);
+    const uri = `${baseUrl}/${type}${params ? "?".concat(params.toString()) : null}`;
+    return yield * paginated(uri, options);
   }
 
   /**
