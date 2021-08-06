@@ -4,7 +4,6 @@ import {
   getAge,
   getBloodPressure,
   getHscrp,
-  reynoldsRiskScore,
 } from "./util.js";
 
 const options = {
