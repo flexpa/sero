@@ -58,15 +58,6 @@ export function getValue(value) {
   return value.entry[0].resource.valueQuantity.value;
 }
 
-/**
- *
- * @param value -
- * @returns the numerical value of the measurement
- */
-export function getHscrp(value) {
-  return value.entry[0].resource.valueQuantity.value;
-}
-
 export function getCholesterol(value) {
   return value.entry[0].resource.valueQuantity.value;
 }

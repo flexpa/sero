@@ -4,7 +4,6 @@ import {
   getAge,
   getBloodPressure,
   getValue,
-  getHscrp
 } from "./util.js";
 
 const options = {
@@ -26,7 +25,7 @@ const handler = async (request) => {
   const data = request.prefetch;
   const age = getAge(data.patient);
   const systolic = getBloodPressure(data.bloodPressure);
-  const hscrp = getHscrp(data.hscrp);
+  const hscrp = getValue(data.hscrp);
   const cholesterol = getValue(data.cholesterolMassOverVolume);
   const hdlc = getValue(data.hdl);
   const riskScore = reynoldsRiskScore(age, systolic, hscrp, cholesterol, hdlc);
