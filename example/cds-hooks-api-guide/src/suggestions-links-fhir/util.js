@@ -7,31 +7,57 @@
  * @returns reynolds risk score - 10-year cardiovascular disease risk
  */
 export function reynoldsRiskScore(
+  patient,
   age,
   systolicBloodPressure,
   hscrp,
   cholesterol,
   hdlc,
-  hemoglobinA1c = 0,
-  smoking = false,
-  familyHistory = false
+  smoking = false
 ) {
-  let B =
-    0.0799 * age +
-    3.317 * Math.log(systolicBloodPressure) +
-    0.18 * Math.log(hscrp) +
-    1.382 * Math.log(cholesterol) -
-    1.172 * Math.log(hdlc);
-  if (hemoglobinA1c != 0) B += 1.134;
-  if (smoking == true) B += 0.818;
-  if (familyHistory == true) B += 0.438;
-  return (1 - Math.pow(0.98634, Math.exp(B - 22.325))) * 100;
+  let params, result;
+  // parameter coefficients based on gender
+  if (patient.gender == "female") {
+    params = {
+      age: 0.0799,
+      systolic: 3.137,
+      hscrp: 0.18,
+      cholesterol: 1.382,
+      hdlc: -1.172,
+      smoker: 0.818,
+    };
+  } else {
+    params = {
+      age: 4.385,
+      systolic: 2.607,
+      hscrp: 0.102,
+      cholesterol: 0.963,
+      hdlc: -0.772,
+      smoker: 0.405,
+    };
+  }
+  // assign b variables
+  let b1 = params.age * (patient.gender == "female" ? age : Math.log(age)),
+    b2 = params.systolic * Math.log(systolicBloodPressure),
+    b3 = params.hscrp * Math.log(hscrp),
+    b4 = params.cholesterol * Math.log(cholesterol),
+    b5 = params.hdlc * Math.log(hdlc),
+    b6 = params.smoker * (smoking == false ? 0 : 1);
+  let B = b1 + b2 + b3 + b4 + b5 + b6;
+  // calculate the score based on
+  if (patient.gender === "female") {
+    result = (1 - Math.pow(0.98634, Math.exp(B - 22.325))) * 100;
+  } else {
+    result = (1 - Math.pow(0.899, Math.exp(B - 33.097))) * 100;
+  }
+  return Math.round(
+    result < 10 ? result.toPrecision(1) : result.toPrecision(2)
+  );
 }
-
 /**
  *
- * @param patient - fhir Patient
- * @returns number, the patients age
+ * @param patient - a fhir4 patient
+ * @returns the age of the patient
  */
 export function getAge(patient) {
   const ageDate = new Date(Date.now() - new Date(patient.birthDate).getTime());
@@ -51,22 +77,44 @@ export function getBloodPressure(value) {
 
 /**
  *
- * @param value - value we are trying to determine (hscrp, cholesterol, or Hdlc)
- * @returns
+ * @param value - measurement value
+ * @returns - the observation value
  */
-export function getValue(value) {
-  return value.entry[0].resource.valueQuantity.value;
-}
-
-export function getCholesterol(value) {
-  return value.entry[0].resource.valueQuantity.value;
+export function getHscrp(value) {
+  if (value.entry[0].resource.valueQuantity.unit === "mg/L") {
+    return value.entry[0].resource.valueQuantity.value;
+  } else if (value.entry[0].resource.valueQuantity.unit === "mmol/L") {
+    return value.entry[0].resource.valueQuantity.value / 0.1;
+  }
+  throw `Unanticipated units for Hscrp: ${value.entry[0].resource.valueQuantity.unit}`;
 }
 
 /**
  *
- * @param value -
- * @ returns the numerical value of the measurement
+ * @param value - measurement value
+ * @returns - the observation value
  */
-export function getHdlc(value) {
-  return value.entry[0].resource.valueQuantity.value;
+export function getCholesterolAndHdl(value) {
+  if (value.entry[0].resource.valueQuantity.unit === "mg/dL") {
+    return value.entry[0].resource.valueQuantity.value;
+  } else if (value.entry[0].resource.valueQuantity.unit === "mmol/L") {
+    return value.entry[0].resource.valueQuantity.value / 0.026;
+  }
+  throw `Unanticipated cholesterol units: ${value.entry[0].resource.valueQuantity.unit}`;
+}
+
+/**
+ *
+ * @param value
+ * @returns the smoking status of the observation (true or false)
+ */
+export function getSmokingStatus(value) {
+  if (
+    value.entry[0].resource.valueCodeableConcept.coding[0].display ==
+    "Never smoker"
+  ) {
+    return false;
+  } else {
+    return true;
+  }
 }

@@ -3,7 +3,9 @@ import {
   reynoldsRiskScore,
   getAge,
   getBloodPressure,
-  getValue,
+  getHscrp,
+  getCholesterolAndHdl,
+  getSmokingStatus,
 } from "./util.js";
 
 const options = {
@@ -19,6 +21,7 @@ const options = {
       "Observation?code=http://loinc.org|2093-3&&_sort=date",
     hdl: "Observation?code=http://loinc.org|2085-9&_sort=date",
     bloodPressure: "Observation?code=http://loinc.org|55284-4&_sort=date",
+    smokingStatus: "Observation?code=http://loinc.org|72166-2&_sort=date",
   },
 };
 
@@ -26,14 +29,25 @@ const handler = async (request) => {
   const data = request.prefetch;
   const age = getAge(data.patient);
   const systolic = getBloodPressure(data.bloodPressure);
-  const hscrp = getValue(data.hscrp);
-  const cholesterol = getValue(data.cholesterolMassOverVolume);
-  const hdlc = getValue(data.hdl);
-  const riskScore = reynoldsRiskScore(age, systolic, hscrp, cholesterol, hdlc);
-  return {
-    cards: [
+  const hscrp = getHscrp(data.hscrp);
+  const cholesterol = getCholesterolAndHdl(data.cholesterolMassOverVolume);
+  const hdlc = getCholesterolAndHdl(data.hdl);
+  const smokingStatus = getSmokingStatus(data.smokingStatus);
+  const riskScore = reynoldsRiskScore(
+    data.patient,
+    age,
+    systolic,
+    hscrp,
+    cholesterol,
+    hdlc,
+    smokingStatus
+  );
+  // defining the cards
+  let cards = [];
+  if (riskScore >= 30) {
+    cards.push(
       new Card({
-        detail: `Reynolds risk score`,
+        detail: `More information on this score:`,
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
@@ -85,96 +99,35 @@ const handler = async (request) => {
         ],
         links: [
           {
-            label: "Reynolds Risk Score",
+            label: "Launch cardiac health SMART app",
             url: "https://divine-meadow-3697.fly.dev/launch.html",
             type: "smart",
           },
         ],
-      }),
-      // Age
+      })
+    );
+  } else {
+    cards.push(
       new Card({
-        detail: `Age`,
+        detail: `More information on this score:`,
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
         },
-        summary: `Age: ${age}`,
+        summary: `Reynolds risk score: ${riskScore}`,
         indicator: "info",
         links: [
           {
-            label: "Reynolds Risk Score",
+            label: "Launch cardiac health SMART app",
             url: "https://divine-meadow-3697.fly.dev/launch.html",
             type: "smart",
           },
         ],
-      }),
-      // Systolic blood pressure data
-      new Card({
-        detail: `Systolic blood pressure`,
-        source: {
-          label: "Automate Medical, Inc.",
-          url: "https://www.automatemedical.com/",
-        },
-        summary: `Systolic BP: ${systolic}`,
-        indicator: "info",
-        links: [
-          {
-            label: "Reynolds Risk Score",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
-            type: "smart",
-          },
-        ],
-      }),
-      new Card({
-        detail: `Hscrp`,
-        source: {
-          label: "Automate Medical, Inc.",
-          url: "https://www.automatemedical.com/",
-        },
-        summary: `Hscrp: ${hscrp}`,
-        indicator: "info",
-        links: [
-          {
-            label: "Reynolds Risk Score",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
-            type: "smart",
-          },
-        ],
-      }),
-      new Card({
-        detail: `Cholesterol`,
-        source: {
-          label: "Automate Medical, Inc.",
-          url: "https://www.automatemedical.com/",
-        },
-        summary: `Cholesterol: ${cholesterol}`,
-        indicator: "info",
-        links: [
-          {
-            label: "Reynolds Risk Score",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
-            type: "smart",
-          },
-        ],
-      }),
-
-      new Card({
-        detail: `Hdlc`,
-        source: {
-          label: "Automate Medical, Inc.",
-          url: "https://www.automatemedical.com/",
-        },
-        summary: `Hdlc: ${hdlc}`,
-        indicator: "info",
-        links: [
-          {
-            label: "Reynolds Risk Score",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
-            type: "smart",
-          },
-        ],
-      }),
-    ],
+      })
+    );
+  }
+  return {
+    cards: cards,
   };
 };
 
