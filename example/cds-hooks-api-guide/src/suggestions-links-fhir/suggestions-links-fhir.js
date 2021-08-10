@@ -45,6 +45,7 @@ const handler = async (request) => {
   // defining the cards
   let cards = [];
   if (riskScore >= 30) {
+    // push the link card
     cards.push(
       new Card({
         detail: `More information on this score:`,
@@ -54,8 +55,28 @@ const handler = async (request) => {
         },
         summary: `Reynolds risk score: ${riskScore}`,
         indicator: "warning",
+        links: [
+          {
+            label: "Launch cardiac health SMART app",
+            url: "https://divine-meadow-3697.fly.dev/launch.html",
+            type: "smart",
+          },
+        ],
+      })
+    );
+    // push the suggestion card
+    cards.push(
+      new Card({
+        detail: `This patient has a high risk of cardiovascular disease. Consider prescribing a blood thinner.`,
+        source: {
+          label: "Automate Medical, Inc.",
+          url: "https://www.automatemedical.com/",
+        },
+        indicator: "warning",
+        summary: "Medication alert",
         suggestions: [
           {
+            label: "Create a prescription for Acetaminophen 250 MG",
             type: "create",
             description: "Create a prescription for Acetaminophen 250 MG",
             fullUrl: "urn:uuid:3ba900b2-a795-40a0-8aae-1cfbb02e3ac1",
@@ -97,16 +118,10 @@ const handler = async (request) => {
             },
           },
         ],
-        links: [
-          {
-            label: "Launch cardiac health SMART app",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
-            type: "smart",
-          },
-        ],
       })
     );
   } else {
+    // push just the link card if the patients score is on the lower side
     cards.push(
       new Card({
         detail: `More information on this score:`,
