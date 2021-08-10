@@ -1,5 +1,7 @@
 /**
  *
+ * @param patient - patient FHIR object
+ * @param age - the patients age
  * @param hscrp - hscrp value
  * @param cholesterol - cholesterol value
  * @param hdlc - hdlc value
@@ -66,7 +68,7 @@ export function getAge(patient) {
 
 /**
  *
- * @param value -
+ * @param value - a fhir4 bundle for blood pressure
  * @returns the numerical value of the measurement. There are two components
  * to the blood pressure and we want the systolic blood pressure, or the
  * first item ([0])
@@ -77,7 +79,7 @@ export function getBloodPressure(value) {
 
 /**
  *
- * @param value - measurement value
+ * @param value - a fhir4 bundle for hscrp
  * @returns - the observation value
  */
 export function getHscrp(value) {
@@ -91,7 +93,7 @@ export function getHscrp(value) {
 
 /**
  *
- * @param value - measurement value
+ * @param value - a fhir4 bundle for cholesterol or hdl, as they use the same calculation
  * @returns - the observation value
  */
 export function getCholesterolAndHdl(value) {
@@ -105,7 +107,7 @@ export function getCholesterolAndHdl(value) {
 
 /**
  *
- * @param value
+ * @param value - a fhir4 bundle for the smoking status of the patient
  * @returns the smoking status of the observation (true or false)
  */
 export function getSmokingStatus(value) {
