@@ -67,7 +67,7 @@ const handler = async (request) => {
     // push the suggestion card
     cards.push(
       new Card({
-        detail: `This patient has a high risk of cardiovascular disease. Consider prescribing a blood thinner.`,
+        detail: `This patient has an high-risk of cardiovascular disease over the next 10 years. Consider prescribing a anticoagulant like Xarelto.`,
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
@@ -76,9 +76,10 @@ const handler = async (request) => {
         summary: "Medication alert",
         suggestions: [
           {
-            label: "Create a prescription for Acetaminophen 250 MG",
+            label: "Create a prescription for Rivaroxaban (Xarelto) 10 MG",
             type: "create",
-            description: "Create a prescription for Acetaminophen 250 MG",
+            description:
+              "Create a prescription for Rivaroxaban (Xarelto) 10 MG",
             fullUrl: "urn:uuid:3ba900b2-a795-40a0-8aae-1cfbb02e3ac1",
             resource: {
               resourceType: "MedicationRequest",
@@ -90,10 +91,10 @@ const handler = async (request) => {
                   {
                     system: "http://www.nlm.nih.gov/research/umls/rxnorm",
                     code: "429503",
-                    display: "Hydrochlorothiazide 12.5 MG",
+                    display: "Rivaroxaban 10 MG",
                   },
                 ],
-                text: "Hydrochlorothiazide 12.5 MG",
+                text: "Rivaroxaban 10 MG",
               },
               subject: {
                 reference: "urn:uuid:763b6101-133a-44bb-ac60-3c097d6c0ba1",
@@ -116,6 +117,13 @@ const handler = async (request) => {
               method: "POST",
               url: "MedicationRequest",
             },
+          },
+        ],
+        links: [
+          {
+            label: "More information on blood thinners",
+            url: "https://medlineplus.gov/bloodthinners.html",
+            type: "absolute",
           },
         ],
       })
