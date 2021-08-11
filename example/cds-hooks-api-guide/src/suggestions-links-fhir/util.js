@@ -75,7 +75,7 @@ export function getAge(patient) {
 /**
  *
  * @param {*} patient  -a fhir patient
- * @returns {string} the patients gender (male | female)
+ * @returns {string} - the patients gender (male | female)
  */
 export function getGender(patient) {
   return patient.gender;
