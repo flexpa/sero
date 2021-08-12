@@ -1,6 +1,9 @@
+/* eslint-disable tsdoc/syntax */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 /**
  *
- * @param patient - a fhir patient
+ * @param {*} patient - a fhir patient
  * @returns an array of fhir human names
  * Return an array of patient names from the fhir patient bundle
  */
