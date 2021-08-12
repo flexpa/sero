@@ -58,7 +58,7 @@ const handler = async (request) => {
           url: "https://pubmed.ncbi.nlm.nih.gov/17299196/",
         },
         summary: `Reynolds risk score: ${riskScore[0]}`,
-        indicator: `${riskScore[1]}`,
+        indicator: riskScore[1],
         links: [
           {
             label: "Launch cardiac health SMART app",
@@ -78,7 +78,7 @@ const handler = async (request) => {
           url: "https://pubmed.ncbi.nlm.nih.gov/17299196/",
         },
         summary: `Reynolds risk score: ${riskScore[0]}`,
-        indicator: `${riskScore[1]}`,
+        indicator: riskScore[1],
         links: [
           {
             label: "Launch cardiac health SMART app",
@@ -96,7 +96,7 @@ const handler = async (request) => {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
         },
-        indicator: `${riskScore[1]}`,
+        indicator: riskScore[1],
         summary: "Medication alert",
         suggestions: [
           {
@@ -166,7 +166,7 @@ const handler = async (request) => {
           url: "https://pubmed.ncbi.nlm.nih.gov/17299196/",
         },
         summary: `Reynolds risk score: ${riskScore[0]}`,
-        indicator: `${riskScore[1]}`,
+        indicator: riskScore[1],
         links: [
           {
             label: "Launch cardiac health SMART app",
@@ -184,7 +184,7 @@ const handler = async (request) => {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
         },
-        indicator: `${riskScore[1]}`,
+        indicator: riskScore[1],
         summary: "Medication alert",
         suggestions: [
           {
