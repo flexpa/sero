@@ -21,7 +21,7 @@ export function reynoldsRiskScore(
   hdlc,
   smoking = false
 ) {
-  // parameter coefficients
+  // parameter coefficients based on gender
   const params =
     gender == "female"
       ? {
@@ -48,12 +48,12 @@ export function reynoldsRiskScore(
     b5 = params.hdlc * Math.log(hdlc),
     b6 = params.smoker * (smoking == false ? 0 : 1);
   const B = b1 + b2 + b3 + b4 + b5 + b6;
-  // calculate the score based on
+  // calculate the score based on gender
   let result =
     gender == "female"
       ? (1 - Math.pow(0.98634, Math.exp(B - 22.325))) * 100
       : (1 - Math.pow(0.899, Math.exp(B - 33.097))) * 100;
-  // precision rounding (whole numbers )
+  // precision rounding
   Math.round(
     result < 10
       ? (result = result.toPrecision(1))
