@@ -7,7 +7,7 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
     "test": "jest --detectOpenHandles",
-    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/rest/index.ts --readme ./README.md",
+    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/rest/index.ts --readme ./README.md --tsconfig tsconfig/base.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "run-s build:*",
