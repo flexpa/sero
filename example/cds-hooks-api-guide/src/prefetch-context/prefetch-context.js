@@ -31,7 +31,7 @@ const handler = async (request) => {
       // Name(s)
       new Card({
         detail: `This patient has ${patientNames.length} name${
-          patientNames.length <= 1 ? "" : "s"
+          patientNames.length ? "s" : ""
         } on record.`,
         source: {
           label: "Automate Medical, Inc.",
@@ -51,7 +51,7 @@ const handler = async (request) => {
       }),
       // Active
       new Card({
-        detail: `${data.patient.active === true ? "Yes" : "No"}`,
+        detail: data.patient.active ? "Yes" : "No",
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
@@ -94,7 +94,7 @@ const handler = async (request) => {
         detail: `Last visit was on ${
           encounters.pop().resource.period.start
         }. There are ${encounters.length} encounter${
-          encounters.length <= 1 ? "" : "s"
+          encounters.length ? "s" : ""
         } on record.`,
         source: {
           label: "Automate Medical, Inc.",
@@ -106,10 +106,8 @@ const handler = async (request) => {
       // Seeing the last encounter information
       new Card({
         detail: `Make a new appointment? ${
-          newApp[0] === true ? "Yes" : "No"
-        }, last appointment was ${newApp[1]} day${
-          newApp[1] > 1 ? "s" : ""
-        } ago.`,
+          newApp[0] ? "Yes" : "No"
+        }, last appointment was ${newApp[1]} day${newApp[1] ? "s" : ""} ago.`,
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
