@@ -1,6 +1,9 @@
+/* eslint-disable tsdoc/syntax */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 /**
  *
- * @param patient - a fhir patient
+ * @param {*} patient - a fhir4 patient
  * @returns an array of fhir human names
  * Return an array of patient names from the fhir patient bundle
  */
@@ -14,7 +17,7 @@ export function processPatientNames(patient) {
 
 /**
  *
- * @param patient - a fhir patient
+ * @param {*} patient - a fhir4 patient
  * @returns an array of fhir addresses
  * Return an array of addresses from the fhir patient bundle
  */
@@ -28,7 +31,7 @@ export function processAddresses(patient) {
 
 /**
  *
- * @param patient - a fhir patient
+ * @param {*} patient - a fhir4 patient
  * @returns an array of fhir contacts
  * Return an array of contacts from the fhir patient bundle
  */
@@ -42,7 +45,7 @@ export function processContacts(patient) {
 
 /**
  *
- * @param patient - a fhir patient
+ * @param {*} patient - a fhir4 patient
  * @returns an array of fhir contact points
  * Return an array of contact points (email and other things) from the fhir patient bundle
  */
@@ -56,8 +59,8 @@ export function processTelecom(patient) {
 
 /**
  *
- * @param encounter
- * @returns an array of FHIR encounter bundles (@todo, no explicit any)
+ * @param {*} encounter - a fhir4 encounter bundle
+ * @returns an array of FHIR encounter bundles
  */
 export function processEncounters(encounter) {
   const encounters = [];
@@ -69,8 +72,8 @@ export function processEncounters(encounter) {
 
 /**
  *
- * @param encounter
- * @param daysWithoutAppointment
+ * @param {*} encounter
+ * @param {number} daysWithoutAppointment
  * @returns boolean value. If the time difference is beyond the entered threshold,
  * true is returned, o/w false
  */
@@ -88,7 +91,7 @@ export function newAppointment(encounter, daysWithoutAppointment) {
 
 /**
  *
- * @param patient
+ * @param {*} patient
  * @returns an array of identifiers for the patient
  */
 export function getUuid(patient) {

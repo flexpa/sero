@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sero.run/sero": "^0.0.14"
+    "@sero.run/sero": "^0.0.16"
   },
   "type": "module"
 }
