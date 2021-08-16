@@ -62,7 +62,7 @@ const handler = async (request) => {
         links: [
           {
             label: "Launch cardiac health SMART app",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
+            url: "https://ancient-meadow-4880.fly.dev/launch.html",
             type: "smart",
           },
         ],
@@ -82,7 +82,7 @@ const handler = async (request) => {
         links: [
           {
             label: "Launch cardiac health SMART app",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
+            url: "https://ancient-meadow-4880.fly.dev/launch.html",
             type: "smart",
           },
         ],
@@ -170,7 +170,7 @@ const handler = async (request) => {
         links: [
           {
             label: "Launch cardiac health SMART app",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
+            url: "https://ancient-meadow-4880.fly.dev/launch.html",
             type: "smart",
           },
         ],
