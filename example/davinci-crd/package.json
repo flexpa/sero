@@ -1,0 +1,16 @@
+{
+  "name": "davinci-crd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sero.run/sero": "^0.0.16"
+  },
+  "type": "module"
+}
