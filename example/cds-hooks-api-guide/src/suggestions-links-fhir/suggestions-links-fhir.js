@@ -75,51 +75,53 @@ const handler = async (request) => {
   /**
    * Next, handle adding suggestions
    */
-  cards.push(
-    new Card({
-      detail: `This patient has a ${riskThresholdString} risk of cardiovascular disease over the next 10 years. ${
-        riskScore[1] === "warning"
-          ? "Consider prescribing an anti-inflammatory like aspirin."
-          : "Consider prescribing an anti-inflammatory like aspirin, or even a blood thinner like Xarelto."
-      } `,
-      source: {
-        label: "Automate Medical, Inc.",
-        url: "https://www.automatemedical.com/",
-        topic: {
-          display: "Medication alert",
-          version: "0.0.1",
+  if (riskScore[1] === "warning" || riskScore[1] === "critical") {
+    cards.push(
+      new Card({
+        detail: `This patient has a ${riskThresholdString} risk of cardiovascular disease over the next 10 years. ${
+          riskScore[1] === "warning"
+            ? "Consider prescribing an anti-inflammatory like aspirin."
+            : "Consider prescribing an anti-inflammatory like aspirin, or even a blood thinner like Xarelto."
+        } `,
+        source: {
+          label: "Automate Medical, Inc.",
+          url: "https://www.automatemedical.com/",
+          topic: {
+            display: "Medication alert",
+            version: "0.0.1",
+          },
         },
-      },
-      indicator: riskScore[1],
-      summary: "Medication alert",
-      suggestions:
-        riskScore[1] === "warning"
-          ? [suggestionData.aspirin]
-          : [suggestionData.aspirin, suggestionData.bloodThinner],
-      links:
-        riskScore[1] === "warning"
-          ? [
-              {
-                label: "More information on aspirin",
-                url: "https://medlineplus.gov/druginfo/meds/a682878.html",
-                type: "absolute",
-              },
-            ]
-          : [
-              {
-                label: "More information on aspirin",
-                url: "https://medlineplus.gov/druginfo/meds/a682878.html",
-                type: "absolute",
-              },
-              {
-                label: "More information on blood thinners",
-                url: "https://medlineplus.gov/bloodthinners.html",
-                type: "absolute",
-              },
-            ],
-      selectionBehavior: "any",
-    })
-  );
+        indicator: riskScore[1],
+        summary: "Medication alert",
+        suggestions:
+          riskScore[1] === "warning"
+            ? [suggestionData.aspirin]
+            : [suggestionData.aspirin, suggestionData.bloodThinner],
+        selectionBehavior: "any",
+        links:
+          riskScore[1] === "warning"
+            ? [
+                {
+                  label: "More information on aspirin",
+                  url: "https://medlineplus.gov/druginfo/meds/a682878.html",
+                  type: "absolute",
+                },
+              ]
+            : [
+                {
+                  label: "More information on aspirin",
+                  url: "https://medlineplus.gov/druginfo/meds/a682878.html",
+                  type: "absolute",
+                },
+                {
+                  label: "More information on blood thinners",
+                  url: "https://medlineplus.gov/bloodthinners.html",
+                  type: "absolute",
+                },
+              ],
+      })
+    );
+  }
   // return the set of cards
   return {
     cards: cards,
