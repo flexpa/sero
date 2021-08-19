@@ -86,6 +86,7 @@ const handler = async (request) => {
             type: "smart",
           },
         ],
+        selectionBehavior: "any",
       })
     );
     // push the suggestion card
@@ -95,6 +96,11 @@ const handler = async (request) => {
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
+          icon: "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fafa1c0c-eabd-49ad-a5fd-870300ab4970/automate_medical.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210819%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210819T194534Z&X-Amz-Expires=86400&X-Amz-Signature=854f1e150e8782ae89f53a0301241638a009227474c7ea9d916a8b3c53237d90&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22automate_medical.PNG.png%22",
+          topic: {
+            display: "Medication alert",
+            version: "0.0.1",
+          },
         },
         indicator: riskScore[1],
         summary: "Medication alert",
@@ -145,6 +151,8 @@ const handler = async (request) => {
               method: "POST",
               url: "MedicationRequest",
             },
+            // is this suggestion recommended?
+            isRecommended: true,
           },
         ],
         links: [
@@ -154,6 +162,7 @@ const handler = async (request) => {
             type: "absolute",
           },
         ],
+        selectionBehavior: "any",
       })
     );
   } else {
@@ -183,6 +192,11 @@ const handler = async (request) => {
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
+          icon: "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fafa1c0c-eabd-49ad-a5fd-870300ab4970/automate_medical.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210819%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210819T194534Z&X-Amz-Expires=86400&X-Amz-Signature=854f1e150e8782ae89f53a0301241638a009227474c7ea9d916a8b3c53237d90&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22automate_medical.PNG.png%22",
+          topic: {
+            display: "Medication alert",
+            version: "0.0.1",
+          },
         },
         indicator: riskScore[1],
         summary: "Medication alert",
@@ -233,6 +247,8 @@ const handler = async (request) => {
               method: "POST",
               url: "MedicationRequest",
             },
+            // is this suggestion recommended?
+            isRecommended: true,
           },
         ],
         links: [
@@ -242,6 +258,7 @@ const handler = async (request) => {
             type: "absolute",
           },
         ],
+        selectionBehavior: "any",
       })
     );
   }
