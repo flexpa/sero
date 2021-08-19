@@ -98,6 +98,16 @@ const handler = async (request) => {
             ? [suggestionData.aspirin]
             : [suggestionData.aspirin, suggestionData.bloodThinner],
         selectionBehavior: "any",
+        overrideReasons: [
+          {
+            reason: "Not relevant",
+            userComment: "",
+          },
+          {
+            reason: "Distracting",
+            userComment: "",
+          },
+        ],
         links:
           riskScore[1] === "warning"
             ? [
