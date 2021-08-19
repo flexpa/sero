@@ -1,8 +1,10 @@
 import { Http, CDSHooks, start } from "@sero.run/sero";
 
+import davicniCrd from "./davinci-crd-service/davicni-crd.js";
+
 const config = {
   cdsHooks: {
-    services: [],
+    services: [davicniCrd],
     cors: true,
   },
 };
