@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 import { Service, Card } from "@sero.run/sero";
 import {
   reynoldsRiskScore,
@@ -9,6 +11,7 @@ import {
   getSmokingStatus,
   riskThreshold,
 } from "./util.js";
+import { suggestionData } from "./data.js";
 
 const options = {
   id: "suggestions-links",
@@ -28,6 +31,7 @@ const options = {
 };
 
 const handler = async (request) => {
+  const context = request.context;
   const data = request.prefetch;
   const age = getAge(data.patient);
   const gender = getGender(data.patient);
@@ -46,205 +50,89 @@ const handler = async (request) => {
     smokingStatus
   );
   const riskThresholdString = riskThreshold(riskScore[0]);
-  // defining the cards
-  let cards = [];
-  if (riskScore[1] == "info") {
-    // push just the link card if the patients score is on the lower side
-    cards.push(
-      new Card({
-        detail: `More information on this score:`,
-        source: {
-          label: "Reynold's Risk Score",
-          url: "https://pubmed.ncbi.nlm.nih.gov/17299196/",
+  /**
+   * Defining the cards.
+   * This assumes that the reynolds risk score card will be sent every time
+   */
+  let cards = [
+    new Card({
+      detail: `More information on this score:`,
+      source: {
+        label: "Reynold's Risk Score",
+        url: "https://pubmed.ncbi.nlm.nih.gov/17299196/",
+      },
+      summary: `Reynolds risk score: ${riskScore[0]}`,
+      indicator: riskScore[1],
+      links: [
+        {
+          label: "Launch cardiac health SMART app",
+          url: "https://smart-cardiac-risk.fly.dev/launch.html",
+          type: "smart",
         },
-        summary: `Reynolds risk score: ${riskScore[0]}`,
-        indicator: riskScore[1],
-        links: [
-          {
-            label: "Launch cardiac health SMART app",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
-            type: "smart",
-          },
-        ],
-      })
-    );
-  } else if (riskScore[1] == "warning") {
-    // push the link card
+      ],
+    }),
+  ];
+  /**
+   * Next, handle adding suggestions
+   */
+  if (riskScore[1] === "warning" || riskScore[1] === "critical") {
     cards.push(
       new Card({
-        detail: `More information on this score:`,
-        source: {
-          label: "Reynold's Risk Score",
-          url: "https://pubmed.ncbi.nlm.nih.gov/17299196/",
-        },
-        summary: `Reynolds risk score: ${riskScore[0]}`,
-        indicator: riskScore[1],
-        links: [
-          {
-            label: "Launch cardiac health SMART app",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
-            type: "smart",
-          },
-        ],
-      })
-    );
-    // push the suggestion card
-    cards.push(
-      new Card({
-        detail: `This patient has a ${riskThresholdString} risk of cardiovascular disease over the next 10 years. Consider prescribing an anti-inflammatory like aspirin.`,
+        detail: `This patient has a ${riskThresholdString} risk of cardiovascular disease over the next 10 years. ${
+          riskScore[1] === "warning"
+            ? "Consider prescribing an anti-inflammatory like aspirin."
+            : "Consider prescribing an anti-inflammatory like aspirin, or even a blood thinner like Xarelto."
+        } `,
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
+          topic: {
+            display: "Medication alert",
+            version: "0.0.1",
+          },
         },
         indicator: riskScore[1],
         summary: "Medication alert",
-        suggestions: [
+        suggestions:
+          riskScore[1] === "warning"
+            ? [suggestionData.aspirin]
+            : [suggestionData.aspirin, suggestionData.bloodThinner],
+        selectionBehavior: "any",
+        overrideReasons: [
           {
-            label: "Create a prescription for Aspirin 80 MG oral Tablet",
-            actions: [
-              {
-                type: "create",
-                description:
-                  "Create a prescription for Aspirin 80 MG Oral Tablet",
-                resource: {
-                  resourceType: "MedicationRequest",
-                  id: "16401a10-e311-4287-9986-3988f81b3d7e",
-                  status: "active",
-                  intent: "order",
-                  medicationCodeableConcept: {
-                    coding: [
-                      {
-                        system: "http://www.nlm.nih.gov/research/umls/rxnorm",
-                        code: "429503",
-                        display: "Aspirin 80 MG",
-                      },
-                    ],
-                    text: "Aspirin 80 MG",
-                  },
-                  subject: {
-                    reference: "urn:uuid:b626136e-aff8-4711-8279-536f07f197b5",
-                  },
-                  encounter: {
-                    reference: "urn:uuid:1d05e39c-e269-438c-a9b2-1a485953a2c8",
-                  },
-                  authoredOn: "1960-10-23T22:19:43-04:00",
-                  requester: {
-                    reference: "urn:uuid:0000016d-3a85-4cca-0000-00000000c5b2",
-                    display: "Dr. Susan A Clark",
-                  },
-                  reasonReference: [
-                    {
-                      reference:
-                        "urn:uuid:f810df60-74b0-4745-8fb5-cfe7e4c84a1e",
-                    },
-                  ],
+            reason: "Not relevant",
+            userComment: "",
+          },
+          {
+            reason: "Distracting",
+            userComment: "",
+          },
+        ],
+        links:
+          riskScore[1] === "warning"
+            ? [
+                {
+                  label: "More information on aspirin",
+                  url: "https://medlineplus.gov/druginfo/meds/a682878.html",
+                  type: "absolute",
                 },
-              },
-            ],
-            request: {
-              method: "POST",
-              url: "MedicationRequest",
-            },
-          },
-        ],
-        links: [
-          {
-            label: "More information on aspirin",
-            url: "https://medlineplus.gov/druginfo/meds/a682878.html",
-            type: "absolute",
-          },
-        ],
-      })
-    );
-  } else {
-    // push the link card
-    cards.push(
-      new Card({
-        detail: `More information on this score:`,
-        source: {
-          label: "Reynold's Risk Score",
-          url: "https://pubmed.ncbi.nlm.nih.gov/17299196/",
-        },
-        summary: `Reynolds risk score: ${riskScore[0]}`,
-        indicator: riskScore[1],
-        links: [
-          {
-            label: "Launch cardiac health SMART app",
-            url: "https://divine-meadow-3697.fly.dev/launch.html",
-            type: "smart",
-          },
-        ],
-      })
-    );
-    // push the suggestion card
-    cards.push(
-      new Card({
-        detail: `This patient has a ${riskThresholdString} risk of cardiovascular disease over the next 10 years. Consider prescribing a anticoagulant like Xarelto.`,
-        source: {
-          label: "Automate Medical, Inc.",
-          url: "https://www.automatemedical.com/",
-        },
-        indicator: riskScore[1],
-        summary: "Medication alert",
-        suggestions: [
-          {
-            label: "Create a prescription for Rivaroxaban (Xarelto) 10 MG",
-            actions: [
-              {
-                type: "create",
-                description:
-                  "Create a prescription for Rivaroxaban (Xarelto) 10 MG",
-                resource: {
-                  resourceType: "MedicationRequest",
-                  id: "3ba900b2-a795-40a0-8aae-1cfbb02e3ac1",
-                  status: "active",
-                  intent: "order",
-                  medicationCodeableConcept: {
-                    coding: [
-                      {
-                        system: "http://www.nlm.nih.gov/research/umls/rxnorm",
-                        code: "429503",
-                        display: "Rivaroxaban 10 MG",
-                      },
-                    ],
-                    text: "Rivaroxaban 10 MG",
-                  },
-                  subject: {
-                    reference: "urn:uuid:b626136e-aff8-4711-8279-536f07f197b5",
-                  },
-                  encounter: {
-                    reference: "urn:uuid:1d05e39c-e269-438c-a9b2-1a485953a2c8",
-                  },
-                  authoredOn: "1960-10-23T22:19:43-04:00",
-                  requester: {
-                    reference: "urn:uuid:0000016d-3a85-4cca-0000-00000000c5b2",
-                    display: "Dr. Susan A Clark",
-                  },
-                  reasonReference: [
-                    {
-                      reference:
-                        "urn:uuid:f810df60-74b0-4745-8fb5-cfe7e4c84a1e",
-                    },
-                  ],
+              ]
+            : [
+                {
+                  label: "More information on aspirin",
+                  url: "https://medlineplus.gov/druginfo/meds/a682878.html",
+                  type: "absolute",
                 },
-              },
-            ],
-            request: {
-              method: "POST",
-              url: "MedicationRequest",
-            },
-          },
-        ],
-        links: [
-          {
-            label: "More information on blood thinners",
-            url: "https://medlineplus.gov/bloodthinners.html",
-            type: "absolute",
-          },
-        ],
+                {
+                  label: "More information on blood thinners",
+                  url: "https://medlineplus.gov/bloodthinners.html",
+                  type: "absolute",
+                },
+              ],
       })
     );
   }
+  // return the set of cards
   return {
     cards: cards,
   };
