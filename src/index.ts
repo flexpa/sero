@@ -7,6 +7,15 @@ export {
 } from "./rest/index.js";
 
 export {
+  default as SmartAuth,
+  SmartAuthCredentials,
+  SmartAuthProvider,
+  SmartAuthNamespace,
+  SmartAuthRedirectQuerystringSchema,
+  SmartAuthRedirectQuerystring
+} from "./smart-auth/index.js";
+
+export {
   mount as CDSHooks,
   HookRequest,
   HookResponse,

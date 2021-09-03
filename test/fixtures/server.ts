@@ -1,4 +1,4 @@
-import { Config, Http, CDSHooks, Rest } from "../../src"
+import { Config, Http, CDSHooks, Rest, SmartAuth } from "../../src"
 
 import appointmentBookExample from "../cds-hooks/appointment-book";
 import encounterDischargeExample from "../cds-hooks/encounter-discharge";
@@ -19,7 +19,7 @@ const config: Config = {
       orderReviewExample,
       orderSelectExample,
       orderSignExample,
-      patientViewExample
+      patientViewExample,
     ],
     cors: true
   }
@@ -29,3 +29,4 @@ export const http = Http(config);
 
 CDSHooks(config, http);
 Rest(config, http);
+SmartAuth(config, http);

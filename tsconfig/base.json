@@ -3,6 +3,7 @@
     "../src/cds-hooks/index.ts",
     "../src/rest/index.ts",
     "../src/http/index.ts",
+    "../src/smart-auth/index.ts",
     "../src/index.ts"
   ],
   "compilerOptions": {

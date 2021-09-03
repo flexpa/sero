@@ -7,7 +7,7 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
     "test": "jest --detectOpenHandles",
-    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/rest/index.ts --readme ./README.md --tsconfig tsconfig/base.json",
+    "docs": "typedoc src/index.ts src/cds-hooks/index.ts src/rest/index.ts src/smart-auth/index.ts --readme ./README.md --tsconfig tsconfig/base.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "run-s build:*",
@@ -52,6 +52,10 @@
     "./client/index": {
       "import": "./dist/esm/client/index.js",
       "require": "./dist/cjs/client/index.js"
+    },
+    "./smart-auth/index": {
+      "import": "./dist/esm/smart-auth/index.js",
+      "require": "./dist/cjs/smart-auth/index.js"
     }
   },
   "files": [
@@ -67,12 +71,14 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.1",
     "cross-fetch": "^3.1.4",
-    "fastify": "^3.18.0"
+    "fastify": "^3.18.0",
+    "simple-oauth2": "^4.2.0"
   },
   "devDependencies": {
     "@types/fhir": "^0.0.34",
     "@types/jest": "^27.0.0",
     "@types/node": "14.17.5",
+    "@types/simple-oauth2": "^4.1.1",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "eslint": "^7.29.0",
