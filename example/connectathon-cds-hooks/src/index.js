@@ -1,9 +1,10 @@
 import { Http, CDSHooks, start } from "@sero.run/sero";
-import patientView from "./patient-view";
+import orderSelect from "./order-select/order-select.js";
+import patientView from "./patient-view/patient-view.js";
 
 const config = {
   cdsHooks: {
-    services: [patientView],
+    services: [patientView, orderSelect],
     cors: true,
   },
 };
