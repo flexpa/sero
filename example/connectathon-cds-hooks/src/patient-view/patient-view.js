@@ -1,9 +1,5 @@
 import { Service, Card } from "@sero.run/sero";
-import {
-  processAddresses,
-  processPatientNames,
-  processTelecom,
-} from "./util.js";
+import { processPatientNames } from "./util.js";
 
 const options = {
   id: "sero-patient-view",
@@ -27,10 +23,10 @@ const handler = async (request) => {
           patientNames.length > 1 ? "s" : ""
         } on record.`,
         source: {
-          label: "Automate Medical, Inc.",
+          label: "Sero patient view service",
           url: "https://www.automatemedical.com/",
         },
-        summary: `Now seeing: ${patientNames[0].given} ${patientNames[0].family}.`,
+        summary: `Now seeing: ${patientNames[0].given}.`,
         indicator: "info",
         links: [
           {
@@ -42,9 +38,11 @@ const handler = async (request) => {
       }),
       // Active
       new Card({
-        detail: data.patient.active ? "Yes" : "No",
+        detail: data.patient.active
+          ? "Patient is active"
+          : "Patient is inactive",
         source: {
-          label: "Automate Medical, Inc.",
+          label: "Sero patient view service",
           url: "https://www.automatemedical.com/",
         },
         summary: `Active`,
