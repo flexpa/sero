@@ -7,7 +7,7 @@ import { randomUUID } from "crypto";
 const options = {
   id: "good-rx-comparison", // Used to define the HTTP routes for the Service
   title: "GoodRx Compare Price Service for MedicationRequest", // A narrative title used to generate UI config for Services by places like the LogicaSandbox
-  hook: "order-select" as Hooks, // Identifies the "hook" context this service should be executed in (the hook determines what information will be sent)
+  hook: "order-sign" as Hooks, // Identifies the "hook" context this service should be executed in (the hook determines what information will be sent)
   description:
     "(Connectathon update) GoodRx's Compare Price API is used to provide drug cost estimates during the prescription order workflow",
 };
@@ -147,20 +147,16 @@ const handler = async (request: HookRequest<any>) => {
         ],
         overrideReasons: [
           {
-            reason: {
-              code: "patient-requested-brand",
-              system:
-                "http://terminology.cds-hooks.org/CodeSystem/OverrideReasons",
-              display: "Patient requested the brand name product",
-            },
+            code: "patient-requested-brand",
+            system:
+              "http://terminology.cds-hooks.org/CodeSystem/OverrideReasons",
+            display: "Patient requested the brand name product",
           },
           {
-            reason: {
-              code: "generic-drug-unavailable",
-              system:
-                "http://terminology.cds-hooks.org/CodeSystem/OverrideReasons",
-              display: "The generic medication was unavailable",
-            },
+            code: "generic-drug-unavailable",
+            system:
+              "http://terminology.cds-hooks.org/CodeSystem/OverrideReasons",
+            display: "The generic medication was unavailable",
           },
         ],
       }),
