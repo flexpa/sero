@@ -43,8 +43,6 @@ export const suggestionData = {
       method: "POST",
       url: "MedicationRequest",
     },
-    // is this suggestion recommended?
-    isRecommended: false,
   },
   aspirin: {
     label: "Create a prescription for Aspirin 80 MG oral Tablet",
@@ -90,7 +88,5 @@ export const suggestionData = {
       method: "POST",
       url: "MedicationRequest",
     },
-    // is this suggestion recommended?
-    isRecommended: true,
   },
 };
