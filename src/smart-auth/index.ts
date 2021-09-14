@@ -13,12 +13,12 @@
  
  export interface SmartAuthProvider {
    name: string;
-   scope: string[]; // @todo
+   scope: string[]; // @todo this could be typed to the FHIR spec
    credentials: SmartAuthCredentials;
    redirectPath?: string;
    redirectUri?: string;
    authorizePath?: string;
-   authorizeParams?: Object; // @todo
+   authorizeParams?: Object; // @todo 
  }
  
  export interface SmartAuthNamespace {
@@ -121,7 +121,7 @@
        generateAuthorizationUri
      })
    } catch (e) {
-     next(e)
+     next(e as Error)
      return
    }
  
