@@ -26,12 +26,12 @@ const handler = async (request) => {
           label: "Sero patient view service",
           url: "https://www.automatemedical.com/",
         },
-        summary: `Now seeing: ${patientNames[0].given}.`,
+        summary: `Now seeing: ${patientNames[0].given}`,
         indicator: "info",
         links: [
           {
-            label: "Launch CarePassport portal",
-            url: "https://carepassport.net/FHIR/launch.html",
+            label: "Launch cardiac health SMART app",
+            url: "https://smart-cardiac-risk.fly.dev/launch.html",
             type: "smart",
           },
         ],
