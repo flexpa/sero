@@ -86,7 +86,7 @@ export default class Card {
    * these reasons to the clinician when they dismiss a card. A CDS client MAY
    * augment the override reasons presented to the user with its own reasons.
    */
-  overrideReasons?: OverrideReason[];
+  overrideReasons?: Coding[];
   /**
    * Allows a service to suggest a link to an app that the user might want to
    * run for additional information or to help guide a decision.
