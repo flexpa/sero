@@ -22,6 +22,7 @@ const handler = async (request: HookRequest<any>) => {
    * request.context and it will be shaped like a FHIR Bundle.
    */
   const { draftOrders }: { draftOrders: fhir4.Bundle } = request.context;
+  const { patientId }: { patientId: string } = request.context;
   /**
    * The order-select hook *requires* that a Bundle of resources be provided
    * at draftOrders, but now that a MedicationRequest actually exists here. We
@@ -104,39 +105,37 @@ const handler = async (request: HookRequest<any>) => {
             actions: [
               {
                 type: "create",
-                description: `Create a perscription for ${response.generic.join(
+                description: `Create a prescription for ${response.generic.join(
                   ", "
                 )}`,
                 resource: {
                   resourceType: "MedicationRequest",
-                  id: "3ba900b2-a795-40a0-8aae-1cfbb02e3ac1",
-                  status: "active",
-                  intent: "order",
+                  status: "draft",
+                  intent: "proposal",
                   medicationCodeableConcept: {
                     coding: [
                       {
-                        system: "http://www.nlm.nih.gov/research/umls/rxnorm",
-                        code: "429503",
+                        system: "urn:oid:2.16.840.1.113883.6.88",
+                        code: "313782",
                         display: `${response.generic.join(", ")}`,
                       },
                     ],
                     text: `${response.generic.join(", ")}`,
                   },
                   subject: {
-                    reference: "urn:uuid:b626136e-aff8-4711-8279-536f07f197b5",
+                    reference: `Patient/${patientId}`,
                   },
-                  encounter: {
-                    reference: "urn:uuid:1d05e39c-e269-438c-a9b2-1a485953a2c8",
-                  },
-                  authoredOn: "2021-09-10T22:19:43-04:00",
-                  requester: {
-                    reference: "urn:uuid:0000016d-3a85-4cca-0000-00000000c5b2",
-                    display: "Dr. Susan A Clark",
-                  },
-                  reasonReference: [
+                  authoredOn: "2021-09-15T10:19:43-04:00",
+                  category: [
                     {
-                      reference:
-                        "urn:uuid:f810df60-74b0-4745-8fb5-cfe7e4c84a1e",
+                      coding: [
+                        {
+                          code: "inpatient", // can be "inpatient" or "outpatient"
+                          system:
+                            "http://terminology.hl7.org/CodeSystem/medicationrequest-category", //This uses medicationrequest-category to utilize an existing FHIR mapping for inpatient/outpatient
+                          display: "Inpatient",
+                        },
+                      ],
                     },
                   ],
                 },
