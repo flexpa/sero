@@ -41,9 +41,16 @@ interface ComparePriceOptions {
   manufacturer?: "brand" | "generic" | "match";
 }
 
+function findMedText(medicationRequest: fhir4.MedicationRequest): string | undefined {
+  const refPath = medicationRequest.medicationReference?.display?.split(" ")[0]
+  const codePath = medicationRequest.medicationCodeableConcept?.text?.split(" ")[0]
+
+  return refPath || codePath
+}
+
 export function comparePrice(medicationRequest: fhir4.MedicationRequest, query?: ComparePriceOptions) {
   return goodRxRequest("/compare-price", {
-    name: medicationRequest.medicationCodeableConcept?.text?.split(" ")[0],
+    name: findMedText(medicationRequest),
     ...query
   });
 }
