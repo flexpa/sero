@@ -35,13 +35,12 @@ jobs:
     steps:
       # deploy
       - name: Deploy to pages
-      - uses: actions/checkout@v2
-      - uses: peaceiris/actions-gh-pages@v3.7.3
+        uses: peaceiris/actions-gh-pages@v3.7.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./docs
-          destination_dir: ./public
+          destination_dir: ./docs
           allow_empty_commit: false
           keep_files: false
           full_commit_message: "Pushed most recent master deploy to github pages"
