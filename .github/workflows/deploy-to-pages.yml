@@ -6,7 +6,7 @@ name: Deploy to pages
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [master, issue/deploy-to-pages-issue]
+    branches: [master, issue/deploy-to-pages-issue, gh-pages]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -40,7 +40,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./docs
-          destination_dir: ./docs
+          destination_dir: ./public
           allow_empty_commit: false
           keep_files: false
           full_commit_message: "Pushed most recent master deploy to github pages"
