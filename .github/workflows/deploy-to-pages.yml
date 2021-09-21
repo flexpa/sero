@@ -39,7 +39,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./public
+          publish_dir: ./docs
           allow_empty_commit: false
           keep_files: false
           full_commit_message: "Pushed most recent master deploy to github pages"
