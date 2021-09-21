@@ -4,7 +4,8 @@ import { http as app } from "../../../test/fixtures/server"
  * Setting a mock UUID for all tests
  */
 jest.mock('crypto', () => ({
-  randomUUID: () => "6d054fdb-1475-47f3-90de-1d839d599504"
+  randomUUID: () => "6d054fdb-1475-47f3-90de-1d839d599504",
+  randomBytes: (_number: number) => "smart-auth-static-bytes-not-random-mock"
 }));
 
 test("create and read operations work", async () => {

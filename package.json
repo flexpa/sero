@@ -72,6 +72,7 @@
     "@reduxjs/toolkit": "^1.6.1",
     "cross-fetch": "^3.1.4",
     "fastify": "^3.18.0",
+    "fastify-plugin": "^3.0.0",
     "simple-oauth2": "^4.2.0"
   },
   "devDependencies": {
@@ -86,10 +87,10 @@
     "jest": "^27.0.5",
     "nodemon": "^2.0.7",
     "npm-run-all": "^4.1.5",
-    "pino-pretty": "^5.1.1",
+    "pino-pretty": "^7.0.0",
     "ts-jest": "^27.0.5",
     "ts-jest-resolver": "^1.1.0",
-    "typedoc": "^0.21.2",
+    "typedoc": "^0.22.4",
     "typescript": "^4.3.4"
   },
   "engines": {

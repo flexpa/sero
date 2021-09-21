@@ -15,6 +15,7 @@ export {
   SmartAuthRedirectQuerystring
 } from "./smart-auth/index.js";
 
+// @todo rename these?
 export {
   mount as CDSHooks,
   HookRequest,
