@@ -6,7 +6,7 @@ name: Deploy to pages
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [master, issue/deploy-to-pages-issue, gh-pages]
+    branches: [master, issue/deploy-to-pages-issue]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,6 +28,11 @@ jobs:
       - run: npm ci
       # run docs
       - run: npm run docs
+      - name: Push docs to gh-pages
+        uses: ad-m/github-push-action@gh-pages
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
   # deploy step deploys to pages
   deploy:
     needs: build
