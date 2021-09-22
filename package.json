@@ -1,6 +1,6 @@
 {
   "name": "@sero.run/sero",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Sero is a modular TypeScript toolchain for FHIR (and friends) sponsored by Automate Medical Inc.",
   "homepage": "https://docs.sero.run",
   "bugs": "https://github.com/automate-medical/sero/issues",
