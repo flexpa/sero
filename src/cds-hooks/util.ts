@@ -1,7 +1,7 @@
-import { Service } from "./index";
+import { CDSService } from "./index";
 import Ajv from "ajv";
 import { ValidateFunction, ErrorObject } from "ajv";
-import { HookRequest } from "./service";
+import { CDSHookRequest } from "./service";
 
 /**
  * Validates that the hook request dynmically (depending on the hook and service at runtime):
@@ -12,7 +12,7 @@ import { HookRequest } from "./service";
  * @param reply
  * @returns Error | undefined
  */
-export function validateHookRequest(hookRequest: HookRequest<Record<string, unknown>>, service: Service): Error | undefined {
+export function validateHookRequest(hookRequest: CDSHookRequest<Record<string, unknown>>, service: CDSService): Error | undefined {
   // @ts-expect-error hookRequest.hook needs to be co-erced into the type...
   const context = validateContext(hookRequest, hookRequest.hook);
   const prefetch = validatePrefetch(hookRequest, service);
@@ -64,7 +64,7 @@ function schemaErrorFormatter(errors: ErrorObject[], dataVar: string) {
  * @param service 
  * @returns 
  */
-function validatePrefetch(request: HookRequest<Record<string, any>>, service: Service): ValidateFunction {
+function validatePrefetch(request: CDSHookRequest<Record<string, any>>, service: CDSService): ValidateFunction {
   const ajv = new Ajv({
     removeAdditional: false,
     useDefaults: true,
@@ -74,7 +74,7 @@ function validatePrefetch(request: HookRequest<Record<string, any>>, service: Se
 
   const prefetch = request.prefetch; 
 
-  function prefetchFor(service: Service) {
+  function prefetchFor(service: CDSService) {
     // Service expects prefetch and no prefetch was sent
     if (service.prefetch && prefetch == undefined) {
       return {
@@ -118,7 +118,7 @@ function validatePrefetch(request: HookRequest<Record<string, any>>, service: Se
   return compiled
 }
 
-function validateContext(request: HookRequest<Record<string, any>>, hook: Hooks): ValidateFunction {
+function validateContext(request: CDSHookRequest<Record<string, any>>, hook: Hooks): ValidateFunction {
   const ajv = new Ajv({
     removeAdditional: true,
     useDefaults: true,
@@ -233,11 +233,11 @@ function validateContext(request: HookRequest<Record<string, any>>, hook: Hooks)
   return compiled
 }
 
-export function getService(services: Service[], id: string): Service | undefined {
+export function getService(services: CDSService[], id: string): CDSService | undefined {
   return services.find((service) => service.id == id)
 }
 
-export class NoDecisionResponse extends Error {}
+export class CDSNoDecisionResponse extends Error {}
 
 export interface FhirAuthorization {
   /**

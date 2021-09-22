@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Service, Card, HookRequest } from "../../src/cds-hooks";
+import { CDSService, CDSCard, CDSHookRequest } from "../../src/cds-hooks";
 
 /**
  * order-sign
@@ -30,7 +30,7 @@ import { Service, Card, HookRequest } from "../../src/cds-hooks";
  *  hookVersion             1.0
  *  hookMaturity            1 - Submitted
  */
-export default new Service(
+export default new CDSService(
   {
     id: "7",
     title: "order-sign Hook Service Example",
@@ -40,11 +40,11 @@ export default new Service(
       patient: "Patient/{{context.patientId}}"
     }
   },
-  (_request: HookRequest<{ patient: fhir4.Patient }>) => {
+  (_request: CDSHookRequest<{ patient: fhir4.Patient }>) => {
 
     return {
       cards: [
-        new Card({
+        new CDSCard({
           detail: "This is a card",
           source: {
             label: "CDS Services Inc",

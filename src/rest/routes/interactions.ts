@@ -1,10 +1,10 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify"
-import Config from "../../config";
+import { FastifyRequest, FastifyReply, FastifyPluginCallback } from "fastify"
 import Resources from "../../resources.js";
 import Store, { created } from "../store.js";
 
 import { defaultRestReourceCapability } from "../capabilities.js";
 import { randomUUID } from "crypto";
+import { RestPluginConfig } from "../index.js";
 
 export function read(resource: Resources) {
   return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
@@ -76,17 +76,17 @@ async function historyType() {
   throw new Error("Not Implemented");
 }
 
-function hasInteraction(interaction: 'read' | 'vread' | 'update' | 'patch' | 'delete' | 'history-instance' | 'history-type' | 'create' | 'search-type', resource: Resources, config: Config) {
-  const hasOverride = config.rest && Object.prototype.hasOwnProperty.call(config.rest.restResourceCapabilities, resource as string);
+function hasInteraction(interaction: 'read' | 'vread' | 'update' | 'patch' | 'delete' | 'history-instance' | 'history-type' | 'create' | 'search-type', resource: Resources, config: RestPluginConfig) {
+  const hasOverride = Object.prototype.hasOwnProperty.call(config.restResourceCapabilities, resource as string);
 
   if (hasOverride) {
-    return config.rest?.restResourceCapabilities[resource].interaction?.some((i) => i.code == interaction);
+    return config.restResourceCapabilities[resource].interaction?.some((i) => i.code == interaction);
   } else {
     return defaultRestReourceCapability.interaction?.some((i) => i.code == interaction);
   }
 }
 
-export function interactions(config: Config, http: FastifyInstance): void {
+export const interactions: FastifyPluginCallback<RestPluginConfig> = function (http, config: RestPluginConfig, next) {
   for (const resource in Resources) {
     // Read the current state of the resource
     if (hasInteraction('read', resource as Resources, config)) {
@@ -193,4 +193,6 @@ export function interactions(config: Config, http: FastifyInstance): void {
     },
     handler: batchOrTransaction
   })
+
+  next()
 }
