@@ -1,4 +1,6 @@
-import { Config, Http, CDSHooks, Rest } from "../../src"
+import {
+  Config, CDSHooks, Http, Rest,
+} from "../../src"
 
 import appointmentBookExample from "../cds-hooks/appointment-book";
 import encounterDischargeExample from "../cds-hooks/encounter-discharge";
@@ -19,7 +21,7 @@ const config: Config = {
       orderReviewExample,
       orderSelectExample,
       orderSignExample,
-      patientViewExample
+      patientViewExample,
     ],
     cors: true
   }
@@ -27,5 +29,6 @@ const config: Config = {
 
 export const http = Http(config);
 
+// Move these to the register flow/plugin style?
 CDSHooks(config, http);
 Rest(config, http);
