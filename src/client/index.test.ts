@@ -13,9 +13,9 @@ test('Calling Capabilities returns a 200', async () => {
 
 test('Calling Patient query returns some', async () => {
   // @todo this test should use a mock, not the live
-  const { searchType, read } = Client("https://r4.smarthealthit.org")
+  const { search, read } = Client("https://r4.smarthealthit.org")
 
-  const searchQuery = searchType("Patient");
+  const searchQuery = search("Patient");
   const searchResponse = await searchQuery.next()
 
   let resourceType = searchResponse.value?.resourceType
@@ -30,11 +30,11 @@ test('Calling Patient query returns some', async () => {
   expect(patientQuery.resourceType).toEqual("Patient")
 });
 
-test('searchType returns pagination', async () => {
+test('search returns pagination', async () => {
   // @todo this test should use a mock, not the live
-  const { searchType } = Client("https://r4.smarthealthit.org")
+  const { search } = Client("https://r4.smarthealthit.org")
 
-  const searchQuery = searchType("Patient");
+  const searchQuery = search("Patient");
   await searchQuery.next();
   await searchQuery.next();
   await searchQuery.next();

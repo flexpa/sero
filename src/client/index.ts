@@ -16,17 +16,17 @@
  *  await read("Patient", "87a339d0-8cae-418e-89c7-8651e6aab3c6").json() as fhir4.Patient;
  * ```
  * 
- * @example Iterables returned for the searchType operation:
+ * @example Iterables returned for the search operation:
  * ```typescript
- *  const { searchType } = Client("https://r4.smarthealthit.org")
- *  const search = searchType("Patient");
+ *  const { searche } = Client("https://r4.smarthealthit.org")
+ *  const search = search("Patient");
  *  search.next(); 
  * ```
  * 
  * @todo update client to use FhirResource string type union when it is available in @types/fhir
  */
 
-import fetch, { Headers } from "cross-fetch";
+import fetch from "cross-fetch";
 import { URLSearchParams } from "url";
 
 type Summary = "true" | "false" | "text" | "count" | "data";
@@ -38,20 +38,14 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   update: { (type: string, id: string, resource: fhir4.FhirResource): Promise<Response> };
   patch: { (type: string, id: string, resource: fhir4.FhirResource ): Promise<Response> };
   destroy: { (type: string, id: string): Promise<Response> };
-  searchType: { (type: string, query?: Record<string, any>): AsyncGenerator<fhir4.Bundle, undefined> };
+  search: { (type: string, query?: Record<string, any>): AsyncGenerator<fhir4.Bundle, undefined> };
   create: { (type: string): Promise<Response> };
-  historyType: any;
-  historyInstance: any;
+  history: any;
   capabilities: { (): Promise<Response> }
   batch: { (bundle: fhir4.Bundle): Promise<Response> }
   transaction: { (bundle: fhir4.Bundle): Promise<Response> }
 } {
-  const headers = new Headers({
-    "User-Agent": "sero.run"
-  });
-
   let options = {
-    headers,
     ...init
   }
 
@@ -123,9 +117,10 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   /**
    * Search the resource type based on some filter criteria OR Search across all resource types based on some filter criteria
    * @note query here doesn't do any active type checking, although it may be able to
+   * @todo doesn't implement search-system
    * @todo has a max call stack bug for large page counts
    */
-   async function* searchType(type: string, query?: Record<string, any>) {
+   async function* search(type: string, query?: Record<string, any>) {
     const params = new URLSearchParams(query);
     const uri = `${baseUrl}/${type}${params ? "?".concat(params.toString()) : null}`;
     return yield * paginated(uri, options);
@@ -142,16 +137,9 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   }
 
   /**
-   * Retrieve the change history for a particular resource instance
+   * Retrieve the change history for a particular resource instance or resource type
    */
-  async function historyInstance() {
-    throw new Error("Not Implemented");
-  }
-
-  /**
-   * Retrieve the change history for a particular resource type
-   */
-  async function historyType() {
+  async function history() {
     throw new Error("Not Implemented");
   }
 
@@ -193,10 +181,9 @@ export default function(baseUrl: string, init: RequestInit = {}): {
     update,
     patch,
     destroy,
-    searchType,
+    search,
     create,
-    historyInstance,
-    historyType,
+    history,
     capabilities,
     batch,
     transaction
