@@ -11,7 +11,7 @@
   "type": "module",
   "license": "ISC",
   "dependencies": {
-    "@sero.run/sero": "^0.0.18",
+    "@sero.run/sero": "^0.0.19",
     "pino-pretty": "^5.1.2"
   },
   "devDependencies": {
