@@ -1,5 +1,5 @@
 import { CDSHooks } from "@sero.run/sero";
-import Http from "fastify";
+import Fastify from "fastify";
 
 import compareTimeService from "./current-time/current-time.js";
 import prefetchContext from "./prefetch-context/prefetch-context.js";
@@ -10,5 +10,14 @@ const config = {
   cors: true,
 };
 
-const http = Http();
-http.register(CDSHooks, config);
+const fastify = Fastify({
+  logger: true,
+});
+
+fastify.register(CDSHooks, config);
+fastify.listen(8080, (err) => {
+  if (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+});
