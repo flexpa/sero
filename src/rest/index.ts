@@ -1,11 +1,23 @@
 /**
  * @module rest
  */
-import { FastifyInstance } from 'fastify'
-import Config from '../config';
-import * as routes from './routes/index.js';
+import { FastifyPluginCallback } from 'fastify'
+import { RestResourceCapability } from './capabilities.js';
+import { capabilityStatement, interactions }from './routes/index.js';
+import fastifyPlugin from "fastify-plugin";
 
-export function mount(config: Config, http: FastifyInstance): void {
-  routes.capabilityStatement(config, http);
-  routes.interactions(config, http);
+export interface RestPluginConfig {
+	capabilityStatement?: fhir4.CapabilityStatement;
+	restResourceCapabilities: {
+		[key: string]: RestResourceCapability;
+	};
 }
+
+const oauthPlugin: FastifyPluginCallback<RestPluginConfig> = function (http, options: RestPluginConfig, next) {
+  http.register(capabilityStatement, options);
+  http.register(interactions, options);
+
+  next();
+}
+
+export default fastifyPlugin(oauthPlugin, { name: "fhir-rest-api"})

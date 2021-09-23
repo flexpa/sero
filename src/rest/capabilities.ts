@@ -1,8 +1,8 @@
 /**
  * Capabiltiies helpers and state
  */
-import Config from "../config";
 import Resources from "../resources.js"
+import { RestPluginConfig } from "./index.js";
 
 export type RestResourceCapability = Partial<fhir4.CapabilityStatementRestResource>
 
@@ -41,16 +41,16 @@ const version = process.env.version;
 const name = "Sero Server Conformance Statement";
 const date = (new Date()).toString();
 
-export function CapabilityStatement(config: Config): fhir4.CapabilityStatement {
+export function CapabilityStatement(config: RestPluginConfig): fhir4.CapabilityStatement {
 
   const restResources: fhir4.CapabilityStatementRestResource[] = Object.values(Resources).map((resource) => {
-    const hasOverride = config.rest && Object.prototype.hasOwnProperty.call(config.rest.restResourceCapabilities, resource as string);
+    const hasOverride = config.restResourceCapabilities && Object.prototype.hasOwnProperty.call(config.restResourceCapabilities, resource as string);
 
-    if (hasOverride) {
+    if (hasOverride && config.restResourceCapabilities) {
       return {
         type: resource as string,
         profile: `http://hl7.org/fhir/StructureDefinition/${resource}`,
-        ...config.rest?.restResourceCapabilities[resource as string]
+        ...config?.restResourceCapabilities[resource as string]
       }
     } else {
       return {
@@ -104,7 +104,7 @@ export function CapabilityStatement(config: Config): fhir4.CapabilityStatement {
   }
 }
 
-export function TerminologyCapabilities(_config: Config): fhir4.TerminologyCapabilities {
+export function TerminologyCapabilities(_config: RestPluginConfig): fhir4.TerminologyCapabilities {
   return {
     resourceType: "TerminologyCapabilities",
     date: (new Date()).toString(),

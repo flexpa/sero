@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { SystemAction } from "./util";
 
-export default class Suggestion implements Suggestion {
+export default class CDSSuggestion implements CDSSuggestion {
   /**
    * Unique identifier of the card. MAY be used for auditing and logging cards
    * and SHALL be included in any subsequent calls to the CDS service's feedback
@@ -28,7 +28,7 @@ export default class Suggestion implements Suggestion {
    */
   actions?: SystemAction[];
 
-  constructor(options: Partial<Suggestion> & { label: string }) {
+  constructor(options: Partial<CDSSuggestion> & { label: string }) {
     this.uuid = options.uuid || randomUUID();
     this.label = options.label;
     this.isRecommended = options.isRecommended;
