@@ -19,6 +19,7 @@
   "dependencies": {
     "@sero.run/sero": "^0.0.19",
     "chalk": "^4.1.2",
+    "fastify": "^3.21.6",
     "pretty-print-json": "^1.0.3"
   }
 }

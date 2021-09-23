@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@sero.run/sero": "^0.0.19",
+    "fastify": "^3.21.6",
     "pino-pretty": "^5.1.2"
   },
   "devDependencies": {
