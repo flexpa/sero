@@ -1,13 +1,21 @@
-import { Http, CDSHooks, start } from "@sero.run/sero";
+import { CDSHooks } from "@sero.run/sero";
+import Fastify from "fastify";
+
 import patientView from "./patient-view/patient-view.js";
 
 const config = {
-  cdsHooks: {
-    services: [patientView],
-    cors: true,
-  },
+  services: [patientView],
+  cors: true,
 };
 
-const http = Http(config);
-CDSHooks(config, http);
-start(http);
+const fastify = Fastify({
+  logger: true,
+});
+
+fastify.register(CDSHooks, config);
+fastify.listen(8080, (err) => {
+  if (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+});

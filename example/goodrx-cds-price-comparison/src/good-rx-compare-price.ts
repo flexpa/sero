@@ -1,5 +1,10 @@
 /* eslint-disable indent */
-import { Service, Card, HookRequest, NoDecisionResponse } from "@sero.run/sero";
+import {
+  CDSService,
+  CDSCard,
+  CDSHookRequest,
+  CDSNoDecisionResponse,
+} from "@sero.run/sero";
 import { Hooks } from "@sero.run/sero/cds-hooks/util";
 import { comparePrice } from "./api.js";
 
@@ -11,7 +16,7 @@ const options = {
     "GoodRx's Compare Price API is used to provide drug cost estimates during the prescription order workflow",
 };
 
-const handler = async (request: HookRequest<any>) => {
+const handler = async (request: CDSHookRequest<any>) => {
   /**
    * draftOrders is a required context submission for the order-select hook
    *
@@ -36,7 +41,7 @@ const handler = async (request: HookRequest<any>) => {
    * If no MedicationRequest was found, throw a NoDecisionResponse - which is
    * handled by Sero automatically and returns an empty Card set
    */
-  if (!medicationRequest) throw new NoDecisionResponse();
+  if (!medicationRequest) throw new CDSNoDecisionResponse();
 
   /**
    * Otherwise, we have a MedicationRequest, so let's use the text associated
@@ -68,7 +73,7 @@ const handler = async (request: HookRequest<any>) => {
    */
   return {
     cards: [
-      new Card({
+      new CDSCard({
         source: {
           label: "GoodRx",
         },
@@ -94,4 +99,4 @@ const handler = async (request: HookRequest<any>) => {
  * interface/API envisioned to run directly on the rails of existing EHR
  * systems.
  */
-export default new Service(options, handler);
+export default new CDSService(options, handler);

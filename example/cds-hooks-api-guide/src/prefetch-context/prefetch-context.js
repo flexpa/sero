@@ -1,4 +1,4 @@
-import { Service, Card } from "@sero.run/sero";
+import { CDSService, CDSCard } from "@sero.run/sero";
 import {
   processAddresses,
   processPatientNames,
@@ -29,7 +29,7 @@ const handler = async (request) => {
   return {
     cards: [
       // Name(s)
-      new Card({
+      new CDSCard({
         detail: `This patient has ${patientNames.length} name${
           patientNames.length ? "s" : ""
         } on record.`,
@@ -41,7 +41,7 @@ const handler = async (request) => {
         indicator: "info",
       }),
       // DOB
-      new Card({
+      new CDSCard({
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
@@ -50,7 +50,7 @@ const handler = async (request) => {
         indicator: "info",
       }),
       // Active
-      new Card({
+      new CDSCard({
         detail: data.patient.active ? "Yes" : "No",
         source: {
           label: "Automate Medical, Inc.",
@@ -60,7 +60,7 @@ const handler = async (request) => {
         indicator: "info",
       }),
       // Address
-      new Card({
+      new CDSCard({
         detail: `${addresses[0].line}, ${addresses[0].city}, ${addresses[0].state} ${addresses[0].postalCode}`,
         source: {
           label: "Automate Medical, Inc.",
@@ -70,7 +70,7 @@ const handler = async (request) => {
         indicator: "info",
       }),
       // Gender
-      new Card({
+      new CDSCard({
         detail: `${data.patient.gender}`,
         source: {
           label: "Automate Medical, Inc.",
@@ -80,7 +80,7 @@ const handler = async (request) => {
         indicator: "info",
       }),
       // Telecom (only pulls value of first element in array)
-      new Card({
+      new CDSCard({
         detail: `${telecom[0].value}`,
         source: {
           label: "Automate Medical, Inc.",
@@ -90,7 +90,7 @@ const handler = async (request) => {
         indicator: "info",
       }),
       // Information on the last encounter
-      new Card({
+      new CDSCard({
         detail: `Last visit was on ${
           encounters.pop().resource.period.start
         }. There are ${encounters.length} encounter${
@@ -104,7 +104,7 @@ const handler = async (request) => {
         indicator: "info",
       }),
       // Seeing the last encounter information
-      new Card({
+      new CDSCard({
         detail: `Make a new appointment? ${
           newApp[0] ? "Yes" : "No"
         }, last appointment was ${newApp[1]} day${newApp[1] ? "s" : ""} ago.`,
@@ -119,4 +119,4 @@ const handler = async (request) => {
   };
 };
 
-export default new Service(options, handler);
+export default new CDSService(options, handler);

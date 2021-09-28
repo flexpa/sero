@@ -1,4 +1,4 @@
-import { Service, Card } from "@sero.run/sero";
+import { CDSService, CDSCard } from "@sero.run/sero";
 
 const options = {
   id: "get-current-time",
@@ -16,7 +16,7 @@ const handler = async () => {
   }${minutes}:${today.getSeconds()}`;
   return {
     cards: [
-      new Card({
+      new CDSCard({
         source: {
           label: "Automate Medical, Inc.",
           url: "https://www.automatemedical.com/",
@@ -29,4 +29,4 @@ const handler = async () => {
   };
 };
 
-export default new Service(options, handler);
+export default new CDSService(options, handler);
