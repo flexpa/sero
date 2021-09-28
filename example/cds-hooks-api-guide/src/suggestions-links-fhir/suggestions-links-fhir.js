@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 
-import { Service, Card } from "@sero.run/sero";
+import { CDSService, CDSCard } from "@sero.run/sero";
 import {
   reynoldsRiskScore,
   getAge,
@@ -55,7 +55,7 @@ const handler = async (request) => {
    * This assumes that the reynolds risk score card will be sent every time
    */
   let cards = [
-    new Card({
+    new CDSCard({
       detail: `More information on this score:`,
       source: {
         label: "Reynold's Risk Score",
@@ -77,7 +77,7 @@ const handler = async (request) => {
    */
   if (riskScore[1] === "warning" || riskScore[1] === "critical") {
     cards.push(
-      new Card({
+      new CDSCard({
         detail: `This patient has a ${riskThresholdString} risk of cardiovascular disease over the next 10 years. ${
           riskScore[1] === "warning"
             ? "Consider prescribing an anti-inflammatory like aspirin."
@@ -128,4 +128,4 @@ const handler = async (request) => {
   };
 };
 
-export default new Service(options, handler);
+export default new CDSService(options, handler);
