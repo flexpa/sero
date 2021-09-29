@@ -4,5 +4,6 @@
     },
     "cSpell.words": [
         "fhir"
-    ]
+    ],
+    "todo-tree.tree.scanMode": "workspace only"
 }

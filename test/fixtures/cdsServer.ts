@@ -1,4 +1,6 @@
-import { Config, Http, CDSHooks, Rest } from "../../src"
+import {
+  CDSHooks,
+} from "../../src"
 
 import appointmentBookExample from "../cds-hooks/appointment-book";
 import encounterDischargeExample from "../cds-hooks/encounter-discharge";
@@ -8,24 +10,22 @@ import orderReviewExample from "../cds-hooks/order-review";
 import orderSelectExample from "../cds-hooks/order-select";
 import orderSignExample from "../cds-hooks/order-sign";
 import patientViewExample from "../cds-hooks/patient-view";
+import Http from "fastify";
 
-const config: Config = {
-  cdsHooks: {
-    services: [
-      appointmentBookExample,
-      medicationPrescribeExample,
-      encounterDischargeExample,
-      encounterStartExample,
-      orderReviewExample,
-      orderSelectExample,
-      orderSignExample,
-      patientViewExample
-    ],
-    cors: true
-  }
+const pluginConfig = {
+  services: [
+    appointmentBookExample,
+    medicationPrescribeExample,
+    encounterDischargeExample,
+    encounterStartExample,
+    orderReviewExample,
+    orderSelectExample,
+    orderSignExample,
+    patientViewExample,
+  ],
+  cors: true
 }
 
-export const http = Http(config);
+export const http = Http();
 
-CDSHooks(config, http);
-Rest(config, http);
+http.register(CDSHooks, pluginConfig)

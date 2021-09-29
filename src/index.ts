@@ -3,26 +3,26 @@
  */
 
 export {
-  mount as Rest
+  default as Rest
 } from "./rest/index.js";
 
 export {
-  mount as CDSHooks,
-  HookRequest,
-  HookResponse,
-  Card,
-  Service,
-  Suggestion,
-  NoDecisionResponse,
+  default as SmartAuth,
+  SmartAuthCredentials,
+  SmartAuthProvider,
+  SmartAuthNamespace,
+  SmartAuthRedirectQuerystringSchema,
+  SmartAuthRedirectQuerystring
+} from "./smart-auth/index.js";
+
+export {
+  default as CDSHooks,
+  CDSHookRequest,
+  CDSHookResponse,
+  CDSCard,
+  CDSService,
+  CDSSuggestion,
+  CDSNoDecisionResponse,
 } from "./cds-hooks/index.js";
-
-export {
-  default as Config
-} from "./config";
-
-export {
-  default as Http,
-  start
-} from "./http/index.js";
 
 export { default as Client } from "./client/index.js"

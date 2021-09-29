@@ -1,11 +1,12 @@
 import { randomUUID } from "crypto";
-import { http as app } from "../../test/fixtures/server"
+import { http as app } from "../../test/fixtures/cdsServer"
 
 /**
  * Setting a mock UUID for all tests
  */
 jest.mock('crypto', () => ({
-  randomUUID: () => "0fe932e4-0e10-4ce4-b6a8-324ce858924d"
+  randomUUID: () => "0fe932e4-0e10-4ce4-b6a8-324ce858924d",
+  randomBytes: (_number: number) => "smart-auth-static-bytes-not-random-mock"
 }));
 
 test('Discovery service call returns 200', async () => {

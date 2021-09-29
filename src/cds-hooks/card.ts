@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
-import Suggestion, { AcceptedSuggestion } from "./suggestion.js";
+import CDSSuggestion, { AcceptedSuggestion } from "./suggestion.js";
 
 /**
- * A **Card** contains decision support from a CDS Service.
+ * A **CDSCard** contains decision support from a CDS Service.
  *
  * Generally speaking, cards are intended for display to an end user. The data
  * format of a card defines a very minimal set of required attributes with
@@ -10,13 +10,13 @@ import Suggestion, { AcceptedSuggestion } from "./suggestion.js";
  * instance, narrative informational decision support, actionable suggestions to
  * modify data, and links to SMART apps.
  *
- * One or many {@link Suggestion} can be created with each card.
+ * One or many {@link CDSSuggestion} can be created with each card.
  *
  * @version https://cds-hooks.hl7.org/ballots/2020Sep/
  *
  * @example Here's an example of creating a Card without any suggestions:
  * ```typescript
- * new Card({
+ * new CDSCard({
  *   summary: "High risk for opioid overdose - taper now",
  *   detail: "Total morphine milligram equivalent (MME) is 125mg. Taper to less than 50.",
  *   source: {
@@ -31,7 +31,7 @@ import Suggestion, { AcceptedSuggestion } from "./suggestion.js";
  * })
  * ```
  */
-export default class Card {
+export default class CDSCard {
   /**
    * Unique identifier of the card. MAY be used for auditing and logging cards
    * and SHALL be included in any subsequent calls to the CDS service's feedback
@@ -69,7 +69,7 @@ export default class Card {
    * prescribed, for the `medication-prescribe` activity). If suggestions are
    * present, `selectionBehavior` MUST also be provided.
    */
-  suggestions?: Suggestion[];
+  suggestions?: CDSSuggestion[];
   /**
    * Describes the intended selection behavior of the suggestions in the card.
    * Allowed values are: at-most-one, indicating that the user may choose none
@@ -93,7 +93,7 @@ export default class Card {
    */
   links?: Link[];
 
-  constructor(options: Partial<Card> & { source: Source; summary: string; indicator: 'info' | 'warning' | 'critical' } ) {
+  constructor(options: Partial<CDSCard> & { source: Source; summary: string; indicator: 'info' | 'warning' | 'critical' } ) {
     this.uuid = options.uuid || randomUUID();
     this.detail = options.detail;
     this.suggestions = options.suggestions;

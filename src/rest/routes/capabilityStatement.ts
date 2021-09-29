@@ -1,8 +1,8 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
-import Config from "../../config"
+import { FastifyPluginCallback, FastifyReply, FastifyRequest } from "fastify"
+import { RestPluginConfig } from "..";
 import { CapabilityStatement, TerminologyCapabilities } from "../capabilities.js";
 
-function capabilities(config: Config) {
+function capabilities(config: RestPluginConfig) {
   return (request: FastifyRequest<{ Querystring: { mode: string }}>, reply: FastifyReply) => {
     switch (request.query.mode) {
     case "normative":
@@ -22,7 +22,7 @@ function capabilities(config: Config) {
   }
 }
 
-export function capabilityStatement(config: Config, http: FastifyInstance): void {
+export const capabilityStatement: FastifyPluginCallback<RestPluginConfig> = function (http, options, next) {
   // Get a capability statement for the system
   http.route({
     method: 'GET',
@@ -39,6 +39,8 @@ export function capabilityStatement(config: Config, http: FastifyInstance): void
         }
       },
     },
-    handler: capabilities(config)
+    handler: capabilities(options)
   })
+
+  next()
 }

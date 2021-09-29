@@ -1,36 +1,36 @@
 import { randomUUID } from "crypto";
 import { Hooks, SystemAction, FhirAuthorization } from "./util";
-import Card from "./card";
+import CDSCard from "./card";
 
 /**
  * ServiceHandler is a function signature for the function invoked on the
- * service to resolve a HookRequest
+ * service to resolve a CDSHookRequest
  *
  * @todo Is it possible to structure the generic here on something other than
  * `any`?
  */
 type ServiceHandler = {
-  (request: HookRequest<any>): Promise<HookResponse> | HookResponse;
+  (request: CDSHookRequest<any>): Promise<CDSHookResponse> | CDSHookResponse;
 };
 
 /**
- * A **Service** that provides patient-specific recommendations and guidance
+ * A **CDSService** that provides patient-specific recommendations and guidance
  * through RESTful APIs as described by the CDS Hooks spec.
  *
  * The primary APIs are Discovery, which allows a CDS Developer to publish the
  * types of CDS Services it provides, and the Service endpoint that CDS Clients
  * use to request and invoke decision support services.
  *
- * **Service** automatically creates an HTTP API conformant with the CDS Hooks
- * spec for you with just a few lines of code. Internally, **Service** uses
- * {@link http} and to deliver its HTTP API. **Service** can be used in
+ * **CDSService** automatically creates an HTTP API conformant with the CDS Hooks
+ * spec for you with just a few lines of code. Internally, **CDSService** uses
+ * {@link http} and to deliver its HTTP API. **CDSService** can be used in
  * isolation or in combination with other modules composed on top of
  * {@link http} like {@link rest} and {@link smart}.
  *
- * When invoked in response to a HookRequest event by a CDS Client, Service will
+ * When invoked in response to a CDSHookRequest event by a CDS Client, Service will
  * first validate the request and then call the invocation function as defined
  * at construction. This function, {@link handler}, receives the prefetch
- * response in the HookRequest as defined by the Service up front. You can
+ * response in the CDSHookRequest as defined by the Service up front. You can
  * perform any necessary work here necessary to satisfy the request. Calling out
  * to a tensorflow model, or passing parameters to an external API for example.
  *
@@ -41,7 +41,7 @@ type ServiceHandler = {
  *
  * @example Here's an example:
  * ```typescript
- *  new Service(
+ *  new CDSService(
  *    {
  *      title: "patient-view Hook Service Example",
  *      hook: "patient-view",
@@ -58,7 +58,7 @@ type ServiceHandler = {
  * )
  * ```
  */
-export default class Service implements Service {
+export default class CDSService implements CDSService {
   /**
    * The id portion of the URL to this service which is available at
    * `{baseUrl}/cds-services/{id}`
@@ -84,7 +84,7 @@ export default class Service implements Service {
    */
   public prefetch?: PrefetchTemplate;
   /**
-   * A function to execute on HookRequest invocation events
+   * A function to execute on CDSHookRequest invocation events
    */
   public handler: ServiceHandler;
   /**
@@ -98,14 +98,14 @@ export default class Service implements Service {
   public extension?: Extension;
 
   /**
-   * Pass any options along with a function that will execute on HookRequest
+   * Pass any options along with a function that will execute on CDSHookRequest
    * invocation events
    *
    * @param options -
    * @param fn -
    */
   constructor(
-    options: Partial<Service> & { hook: Hooks; description: string },
+    options: Partial<CDSService> & { hook: Hooks; description: string },
     handler: ServiceHandler
   ) {
     this.hook = options.hook;
@@ -118,7 +118,7 @@ export default class Service implements Service {
   }
 }
 
-export interface HookResponse {
+export interface CDSHookResponse {
   /**
    * An array of Cards. Cards can provide a combination of information (for
    * reading), suggested actions (to be applied if a user selects them), and
@@ -126,7 +126,7 @@ export interface HookResponse {
    * how to display cards, but this specification recommends displaying
    * suggestions using buttons, and links using underlined text.
    */
-  cards?: Card[];
+  cards?: CDSCard[];
 
   /**
    * An array of actions that the CDS Service proposes to auto-apply. Each
@@ -156,7 +156,7 @@ interface Extension {
   [key: string]: any;
 }
 
-interface HookRequestWithFhir<T> extends HookRequestBasic<T> {
+interface CDSHookRequestWithFhir<T> extends CDSHookRequestBasic<T> {
   /**
    * The base URL of the CDS Client's FHIR server. If fhirAuthorization is
    * provided, this field is REQUIRED. The scheme should be https
@@ -171,7 +171,7 @@ interface HookRequestWithFhir<T> extends HookRequestBasic<T> {
   fhirAuthorization: FhirAuthorization;
 }
 
-interface HookRequestBasic<T> {
+interface CDSHookRequestBasic<T> {
   /**
    * The hook that triggered this CDS Service call. See:
    * https://cds-hooks.org/specification/current/#hooks
@@ -196,4 +196,4 @@ interface HookRequestBasic<T> {
   prefetch: T;
 }
 
-export type HookRequest<T> = HookRequestBasic<T> | HookRequestWithFhir<T>;
+export type CDSHookRequest<T> = CDSHookRequestBasic<T> | CDSHookRequestWithFhir<T>;

@@ -1,13 +1,9 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyPluginCallback, FastifyReply, FastifyRequest } from "fastify";
+import fastifyPlugin from "fastify-plugin";
 import Service from "./service.js";
-import Config from "../config";
 import { Feedback } from "./card.js";
-import { HookRequest } from "./service.js";
-import { validateHookRequest, getService, NoDecisionResponse } from "./util.js";
-
-export default function mount(config: Config, http: FastifyInstance): void {
-  routes(http, config.cdsHooks);
-}
+import { CDSHookRequest } from "./service.js";
+import { validateHookRequest, getService, CDSNoDecisionResponse } from "./util.js";
 
 /**
  * @deprecated This should be invoked some other way
@@ -19,8 +15,14 @@ function addCorsHeaders(reply: FastifyReply): void {
   reply.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 }
 
+interface CDSServicePluginOptions {
+	services: Service[];
+	cors?: boolean;
+}
+
+
 /**
- * Responsible for validating the HookRequest, finding the service, and calling it
+ * Responsible for validating the CDSHookRequest, finding the service, and calling it
  * - or appropriately responding with and error
  *
  * @remarks This function is expected to increase in complexity significantly if
@@ -31,7 +33,7 @@ function addCorsHeaders(reply: FastifyReply): void {
  *
  * @param options -
  */
-function invoke(options: Config["cdsHooks"]) {
+function invoke(options: CDSServicePluginOptions) {
   return async (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
 
     if (options?.cors) addCorsHeaders(reply);
@@ -46,10 +48,10 @@ function invoke(options: Config["cdsHooks"]) {
       reply.log.info("SchemaValidationError")
       reply.code(400).send(request.validationError);
     } else {
-      const hookRequest = request.body as HookRequest<Record<string, string>>;
+      const hookRequest = request.body as CDSHookRequest<Record<string, string>>;
       const validationError = validateHookRequest(hookRequest, service);
 
-      // 3. Is there a dynamic validation error on this HookRequest?
+      // 3. Is there a dynamic validation error on this CDSHookRequest?
       if (validationError) {
         reply.log.info("HookRequestValidationError")
         reply.code(400).send(validationError)
@@ -59,7 +61,7 @@ function invoke(options: Config["cdsHooks"]) {
           const response = await service.handler(hookRequest);
           reply.send(response);
         } catch (error) {
-          if (error instanceof NoDecisionResponse) {
+          if (error instanceof CDSNoDecisionResponse) {
             reply.log.info("NoDecisionResponse")
             reply.send({
               cards: []
@@ -78,11 +80,11 @@ function invoke(options: Config["cdsHooks"]) {
  * Responsible for accepting feedback requests as defined by the protocol. Logs the request
  * but doesn't otherwise process or validate it.
  *
- * @todo validate that the feedback has referrential integrity to some original HookRequest
+ * @todo validate that the feedback has referrential integrity to some original CDSHookRequest
  *
  * @param options -
  */
-function feedback(options: Config["cdsHooks"]) {
+function feedback(options: CDSServicePluginOptions) {
   return (request: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) => {
     if (options?.cors) addCorsHeaders(reply);
 
@@ -149,7 +151,7 @@ const feedbackSchema = {
  * @param http - A fastify instance
  * @param options - The services and
  */
-function routes(http: FastifyInstance, options: Config["cdsHooks"]): void {
+const oauthPlugin: FastifyPluginCallback<CDSServicePluginOptions> = function (http, options: CDSServicePluginOptions, next) {
   http.route({
     method: 'GET',
     url: '/cds-services',
@@ -197,7 +199,11 @@ function routes(http: FastifyInstance, options: Config["cdsHooks"]): void {
       }
     })
   }
+
+  next();
 }
+
+export default fastifyPlugin(oauthPlugin, { name: "cds-services"})
 
 /**
  * The response to the discovery endpoint SHALL be an object containing a list
