@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml) [![Test](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml) [![CodeQL](https://github.com/Automate-Medical/sero/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/codeql-analysis.yml)
 
-## Sero is a Node.js framework for FHIR + Fastify
+## Sero is a JS framework for FHIR
 
 * 🏍️ **SMART Auth** and **CDS Hooks** implemented as Fastify plugins
 * 🔥 **Modern JavaScript** (**ES2020** and **TypeScript**)
