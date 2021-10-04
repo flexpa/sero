@@ -1,4 +1,4 @@
-# 🌲 Sero
+   <img width="340" align="right" src="https://user-images.githubusercontent.com/704789/135895296-45e52c29-f5ff-47e2-92cc-d6fe6bc6c89a.png">
 
 [![Build](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml) [![Test](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml) [![CodeQL](https://github.com/Automate-Medical/sero/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/codeql-analysis.yml)
 
@@ -11,9 +11,7 @@ Health data is spreading everywhere. FHIR is a big part of that. Sero is built f
 * 😎 Easy local **FHIR REST** server for testing
 * 📖 **Open source license**
 
-Sponsored by [Automate Medical](https://www.automatemedical.com/)
-
-<img width="176" alt="Automate Medical Inc." src="https://user-images.githubusercontent.com/704789/123880097-31e0ac80-d8ff-11eb-996b-1b852b187e6a.png">
+Sponsored by [Automate Medical]()
 
 ## Features
 * 💯 TypeScript source with out of box type declaration support for FHIR R4, CDS Hooks, and SMART App launch contexts
