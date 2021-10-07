@@ -1,26 +1,21 @@
-# 🌲 Sero
+   <img width="340" align="right" src="https://user-images.githubusercontent.com/704789/135895296-45e52c29-f5ff-47e2-92cc-d6fe6bc6c89a.png">
 
 [![Build](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml) [![Test](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml) [![CodeQL](https://github.com/Automate-Medical/sero/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/codeql-analysis.yml)
 
-## Sero is a toolkit for devs building in health 
+## A Node.js framework for FHIR
 
-Health data is spreading everywhere. FHIR is a big part of that. Sero is built for developers who need tools in the languages they know, with opinionated answers to solve common problems.
-
-* 🏍️ Launch **SMART on FHIR Apps** and **Decision Support APIs** fast
-* 🔥 Work with **modern JavaScript** (**ES2020** and **TypeScript**)
-* 😎 Easy local **FHIR REST** server for testing
+* 🏍️ **SMART Auth** and **CDS Hooks** implemented as Fastify plugins
+* 🔥 **Modern JavaScript** (**ES2020** and **TypeScript**)
 * 📖 **Open source license**
 
-Sponsored by [Automate Medical](https://www.automatemedical.com/)
-
-<img width="176" alt="Automate Medical Inc." src="https://user-images.githubusercontent.com/704789/123880097-31e0ac80-d8ff-11eb-996b-1b852b187e6a.png">
+Sponsored by [Automate Medical]()
 
 ## Features
-* 💯 TypeScript source with out of box type declaration support for FHIR R4, CDS Hooks, and SMART App launch contexts
-* 🏎️ Fastify + AJV schema validation
-* ⚛️ ESM and CommonJS module support
-* ⚗️ Experimental in-memory FHIR Resource storage via Redux
-* 👩‍💻 Modules for CDS Hooks, a FHIR Client, a FHIR REST API, and SMART Apps
+* 🏎️ Ultra fast `cds-hooks` and `smart-auth` implementations as Fastify plugins
+* 💯 TypeScript support via @types/fhir
+* ⚛️ ESM and CommonJS module support for ease of use
+* ⚗️ Experimental Client and REST modules
+* 🧪 Tested with Epic and Corrohealth at [HL7 FHIR Connectathon 28](https://automatemedical.substack.com/p/-real-world-healthcare-software-testing)
 
 ## Getting started
 * [docs.sero.run](http://docs.sero.run/)
