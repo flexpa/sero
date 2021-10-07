@@ -16,8 +16,8 @@ export interface SmartAuthProvider {
   name: string;
   scope: string[]; // @todo this could be typed to the FHIR spec
   credentials: SmartAuthCredentials;
-  redirectPath?: string;
-  redirectUri?: string;
+  redirectHost: string;
+  redirectPath?: string; 
   authorizePath?: string;
   authorizeParams?: Object; // @todo
   prefix?: string;
@@ -66,13 +66,13 @@ function checkState(state: string) {
 }
 
 const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, options, next) {
-  const { name, credentials, scope } = options
+  const { name, credentials, scope, redirectHost } = options
 
   const prefix = options.prefix = "/smart";
   const authorizeParams = options.authorizeParams || {}
   const authorizePath = options.authorizePath || `${prefix}/${name.toLowerCase()}/auth`
   const redirectPath = options.redirectPath || `${prefix}/${name.toLowerCase()}/redirect`
-  const redirectUri = options.redirectUri || `http://localhost:8080${redirectPath}`
+  const redirectUri = `${redirectHost}${redirectPath}`
 
   function generateAuthorizationUri() {
     const state = generateState();
