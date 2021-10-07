@@ -3,6 +3,7 @@ import { SmartAuthProvider } from "../../src";
 const smartAuthProviderExample: SmartAuthProvider = {
   name: "idp",
   scope: ["launch"],
+  redirectHost: "http://localhost:3000",
   credentials: {
     client: {
       id: "123",
