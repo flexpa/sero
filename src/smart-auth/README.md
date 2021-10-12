@@ -33,15 +33,14 @@ const fastify = Fastify();
 const smartHealthIdConfig: SmartAuthProvider = {
   name: "smartHealthIdProvider",
   scope: ["launch"],
-  credentials: {
-    client: {
-      id: "123",
-      secret: "somesecret"
-    },
-    auth: {
-      tokenHost: "http://external.localhost/smart/idp/token"
-    }
-  }
+  client: {
+    id: "123",
+    secret: "somesecret"
+  },
+  redirect: {
+    host: "http://localhost:3000"
+  },
+  iss: "http://external.localhost/smart/"
 }
 
 // Initialize the plugin with our Smart Health ID Provider config
@@ -132,7 +131,10 @@ getAccessTokenFromAuthorizationCodeFlow(
 `getNewAccessTokenUsingRefreshToken`:
 
 ```
-getNewAccessTokenUsingRefreshToken(refreshToken: string, params: Object): Promise<AccessToken>;
+getNewAccessTokenUsingRefreshToken(
+  refreshToken: string,
+  params: Record<string, any>
+): Promise<AccessToken>;
 ```
 
 `generateAuthorizationUri`:
@@ -147,22 +149,44 @@ generateAuthorizationUri(
 
 The supported configuration for the provider config is just a TypeScript interface:
 
-```
-export interface SmartAuthProvider {
+```typescript
+export type SmartAuthProvider = {
+  /** A name to label the provider */
   name: string;
+  /** @todo this could be typed to the FHIR spec */
   scope: string[];
-  credentials: SmartAuthCredentials;
-  redirectPath?: string;
-  redirectUri?: string;
-  authorizePath?: string;
-  authorizeParams?: Object;
-  prefix?: string;
+  /** Client registration */
+  client: {
+    id: string;
+    secret: string;
+  }
+  /** Auth related config */
+  auth?: {
+    /** An optional prefix to add to every route path */
+    pathPrefix?: string;
+    /** Optional params to append to the authorization redirect */
+    authorizeParams?: Record<string, any>;
+    /** String used to set the host to request the tokens to. Required. */
+    tokenHost?: string;
+    /** String path to request an access token. Default to /oauth/token. */
+    tokenPath?: string;
+    /** String path to revoke an access token. Default to /oauth/revoke. */
+    revokePath?: string;
+    /** String used to set the host to request an "authorization code". Default to the value set on auth.tokenHost. */
+    authorizeHost?: string;
+    /** String path to request an authorization code. Default to /oauth/authorize. */
+    authorizePath?: string;
+  };
+  redirect: {
+    /** A required host name for the auth code exchange redirect path. */
+    host: string;
+    /** An optional authorize path override. */
+    path?: string;
+  };
+  /** The default host name for the authorization service. Used to redirect users to the authorization URL. */
+  iss: string;
 }
 ```
-
-`SmartAuthCredentials` is an interface from `simple-oauth2`. 
-
-
 ### Redirect/Callback 
 
 By default, you need to define a redirect/callback path for your provider. This plugin is flexible about what you can do in this route.
