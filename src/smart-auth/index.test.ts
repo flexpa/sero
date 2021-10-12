@@ -10,7 +10,7 @@ test("an authorize url short path helper is built from the ID of the SmartProvid
     url: `/smart/idp/auth`
   })
 
- expect(response.statusCode).toBe(302)
+  expect(response.statusCode).toBe(302)
 })
 
 test("an authorize url correctly redirects to the configured tokenHost", async () => {
@@ -19,7 +19,7 @@ test("an authorize url correctly redirects to the configured tokenHost", async (
     url: `/smart/idp/auth`
   })
 
- expect(response.headers['location']).toBe("http://external.localhost/oauth/authorize?response_type=code&client_id=123&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fsmart%2Fidp%2Fredirect&scope=launch&state=smart-auth-static-bytes-not-random-mock")
+  expect(response.headers['location']).toBe("http://external.localhost/oauth/authorize?response_type=code&client_id=123&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fsmart%2Fidp%2Fredirect&scope=launch&state=smart-auth-static-bytes-not-random-mock")
 })
 
 // @todo this requires implementing a mocked oauth server response

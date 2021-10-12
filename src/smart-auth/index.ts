@@ -6,21 +6,45 @@
  */
 
 import { randomBytes } from "crypto";
-import { AccessToken, AuthorizationCode, ModuleOptions } from "simple-oauth2";
+import { AccessToken, AuthorizationCode } from "simple-oauth2";
 import { FastifyPluginCallback, FastifyReply, FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
-export type SmartAuthCredentials = ModuleOptions;
-
-export interface SmartAuthProvider {
+export type SmartAuthProvider = {
+  /** A name to label the provider */
   name: string;
-  scope: string[]; // @todo this could be typed to the FHIR spec
-  credentials: SmartAuthCredentials;
-  redirectHost: string;
-  redirectPath?: string; 
-  authorizePath?: string;
-  authorizeParams?: Object; // @todo
-  prefix?: string;
+  /** @todo this could be typed to the FHIR spec */
+  scope: string[];
+  /** Client registration */
+  client: {
+    id: string;
+    secret: string;
+  }
+  /** Auth related config */
+  auth?: {
+    /** An optional prefix to add to every route path */
+    pathPrefix?: string;
+    /** Optional params to append to the authorization redirect */
+    authorizeParams?: Record<string, any>;
+    /** String used to set the host to request the tokens to. Required. */
+    tokenHost?: string;
+    /** String path to request an access token. Default to /oauth/token. */
+    tokenPath?: string;
+    /** String path to revoke an access token. Default to /oauth/revoke. */
+    revokePath?: string;
+    /** String used to set the host to request an "authorization code". Default to the value set on auth.tokenHost. */
+    authorizeHost?: string;
+    /** String path to request an authorization code. Default to /oauth/authorize. */
+    authorizePath?: string;
+  };
+  redirect: {
+    /** A required host name for the auth code exchange redirect path. */
+    host: string;
+    /** An optional authorize path override. */
+    path?: string;
+  };
+  /** The default host name for the authorization service. Used to redirect users to the authorization URL. */
+  iss: string;
 }
 
 export interface SmartAuthNamespace {
@@ -30,7 +54,10 @@ export interface SmartAuthNamespace {
     request: FastifyRequest<{Querystring: { code: string, state: string }}>,
   ): Promise<AccessToken>;
 
-  getNewAccessTokenUsingRefreshToken(refreshToken: string, params: Object): Promise<AccessToken>;
+  getNewAccessTokenUsingRefreshToken(
+    refreshToken: string,
+    params: Record<string, any>
+  ): Promise<AccessToken>;
 
   generateAuthorizationUri(
     request: FastifyRequest,
@@ -66,13 +93,14 @@ function checkState(state: string) {
 }
 
 const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, options, next) {
-  const { name, credentials, scope, redirectHost } = options
+  const { name, auth, client, scope, iss, redirect } = options
 
-  const prefix = options.prefix = "/smart";
-  const authorizeParams = options.authorizeParams || {}
-  const authorizePath = options.authorizePath || `${prefix}/${name.toLowerCase()}/auth`
-  const redirectPath = options.redirectPath || `${prefix}/${name.toLowerCase()}/redirect`
-  const redirectUri = `${redirectHost}${redirectPath}`
+  const prefix = auth?.pathPrefix || "/smart";
+  const tokenHost = auth?.tokenHost || iss;
+  const authorizeParams = auth?.authorizeParams || {}
+  const authorizeRedirectPath = `${prefix}/${name.toLowerCase()}/auth`
+  const redirectPath = redirect.path || `${prefix}/${name.toLowerCase()}/redirect`
+  const redirectUri = `${redirect.host}${redirectPath}`
 
   function generateAuthorizationUri() {
     const state = generateState();
@@ -107,9 +135,20 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
     return await this.authorizationCodeFlow.createToken({ refresh_token: refreshToken }).refresh()
   }
 
-  const authorizationCodeFlow = new AuthorizationCode(credentials)
+  const authCodeOptions = {
+    client,
+    auth: {
+      tokenPath: auth?.tokenPath,
+      revokePath: auth?.revokePath,
+      authorizeHost: auth?.authorizeHost,
+      authorizePath: auth?.authorizePath,
+      tokenHost
+    }
+  }
 
-  http.get(authorizePath, startRedirect)
+  const authorizationCodeFlow = new AuthorizationCode(authCodeOptions)
+
+  http.get(authorizeRedirectPath, startRedirect)
 
   try {
     http.decorate(name, {

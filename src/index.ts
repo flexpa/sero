@@ -8,7 +8,6 @@ export {
 
 export {
   default as SmartAuth,
-  SmartAuthCredentials,
   SmartAuthProvider,
   SmartAuthNamespace,
   SmartAuthRedirectQuerystringSchema,
