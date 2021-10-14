@@ -11,4 +11,9 @@ updates:
     reviewers:
       - "flexpa/devs"
     schedule:
-      interval: "daily"
+        interval: "weekly"
+      # possible, but not in documentation as explicit (if we want to do daily)
+      # day: ["monday", "tuesday", "wednesday", "thursday", "friday"]
+      day: "monday"
+      time: "10:00"
+      timezone: "America/Toronto"
