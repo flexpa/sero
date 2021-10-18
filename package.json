@@ -82,7 +82,7 @@
     "@types/simple-oauth2": "^4.1.1",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
-    "eslint": "^7.29.0",
+    "eslint": "^8.0.1",
     "eslint-plugin-tsdoc": "^0.2.14",
     "jest": "^27.0.5",
     "nodemon": "^2.0.7",
