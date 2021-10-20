@@ -1,5 +1,4 @@
 import Client from ".";
-import { fastify as app } from "../../test/fixtures/authServer"
 
 test('Calling Capabilities returns a 200', async () => {
   // @todo this test should use a mock, not the live
@@ -10,7 +9,6 @@ test('Calling Capabilities returns a 200', async () => {
 
   expect(statement.status).toEqual(200)
   expect(body.resourceType).toEqual("CapabilityStatement")
-  app.close();
 });
 
 test('Calling Patient query returns some', async () => {
@@ -30,7 +28,6 @@ test('Calling Patient query returns some', async () => {
 
   // expect(patientQuery.status).toEqual(200)
   expect(patientQuery.resourceType).toEqual("Patient")
-  app.close();
 });
 
 test('search returns pagination', async () => {
@@ -45,5 +42,4 @@ test('search returns pagination', async () => {
   const testCall = await searchQuery.next();
   
   expect(testCall.done).toEqual(false);
-  app.close();
 });

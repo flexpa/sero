@@ -11,7 +11,7 @@ const smartAuthProviderExample: SmartAuthProvider = {
   redirect: {
     host: "http://localhost:3000"
   },
-  iss: "http://external.localhost/smart/"
+  iss: "http://external.localhost/test"
 }
 
 export default smartAuthProviderExample;
