@@ -41,7 +41,7 @@ export type SmartAuthProvider = {
     /** A required host name for the auth code exchange redirect path. */
     host: string;
     /** An optional authorize path override. */
-    path?: string | undefined;
+    path?: string;
   };
   /** The default host name for the authorization service. Used to redirect users to the authorization URL. */
   iss: string;
