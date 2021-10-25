@@ -20,17 +20,6 @@ test("an authorize url correctly redirects to the configured tokenHost", async (
   });
 
   expect(response.headers["location"]).toBe(
-    "http://external.localhost/oauth/authorize?response_type=code&client_id=123&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fsmart%2Fidp%2Fredirect&scope=launch&state=smart-auth-static-bytes-not-random-mock"
-  );
-});
-
-test("a slash is included in the url - this should re-direct us to th", async () => {
-  const response = await app.inject({
-    method: "GET",
-    url: "/smart/idp/auth",
-  });
-
-  expect(response.headers["location"]).toBe(
     "http://external.localhost/test/oauth/authorize?response_type=code&client_id=123&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fsmart%2Fidp%2Fredirect&scope=launch&state=smart-auth-static-bytes-not-random-mock"
   );
 });
