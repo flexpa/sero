@@ -1,0 +1,27 @@
+# .kodiak.toml
+# Minimal config. version is the only required field.
+version = 1
+
+[update]
+always = true # default: false
+require_automerge_label = false # default: true
+ignored_usernames = ["dependabot"]
+
+[merge]
+automerge_label = "automerge"
+
+[merge.automerge_dependencies]
+# only auto merge "minor" and "patch" version upgrades.
+# do not automerge "major" version upgrades.
+versions = ["minor", "patch"]
+usernames = ["dependabot"]
+
+[merge.message]
+title = "pull_request_title" # default: "github_default"
+body = "pull_request_body" # default: "github_default"
+
+# add the PR number to the merge commit title, like GitHub.
+include_pr_number = true # default: true
+
+# remove html comments to auto remove PR templates.
+strip_html_comments = true # default: false
