@@ -1,0 +1,17 @@
+# .kodiak.toml
+# Minimal config. version is the only required field.
+version = 1
+
+[update]
+always = true # default: false
+require_automerge_label = false # default: true
+ignored_usernames = ["dependabot"]
+
+[merge]
+automerge_label = "automerge"
+
+[merge.automerge_dependencies]
+# only auto merge "minor" and "patch" version upgrades.
+# do not automerge "major" version upgrades.
+versions = ["minor", "patch"]
+usernames = ["dependabot"]
