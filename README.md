@@ -8,7 +8,9 @@
 * 🔥 **Modern JavaScript** (**ES2020** and **TypeScript**)
 * 📖 **Open source license**
 
-Sponsored by [Automate Medical]()
+Requires Node.JS >= 14
+
+Sponsored by [Automate Medical](https://www.automatemedical.com/)
 
 ## Features
 * 🏎️ Ultra fast `cds-hooks` and `smart-auth` implementations as Fastify plugins

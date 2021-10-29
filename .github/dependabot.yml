@@ -18,3 +18,4 @@ updates:
       timezone: "America/Toronto"
     labels: 
       - "dependencies"
+      - "automerge"
