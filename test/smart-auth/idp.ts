@@ -8,13 +8,13 @@ const smartAuthProviderExample: SmartAuthProvider = {
     secret: "somesecret",
   },
   auth: {
-    tokenHost: "http://external.localhost/",
+    tokenHost: "http://external.localhost",
     authorizePath: "/smart/oauth/authorize",
   },
   redirect: {
     host: "http://localhost:3000",
   },
-  iss: "http://external.localhost/",
+  iss: "http://external.localhost/issuer",
 };
 
 export default smartAuthProviderExample;
