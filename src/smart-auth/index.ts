@@ -21,13 +21,13 @@ export type SmartAuthProvider = {
     secret: string;
   }
   /** Auth related config */
-  auth?: {
+  auth: {
     /** An optional prefix to add to every route path */
     pathPrefix?: string;
     /** Optional params to append to the authorization redirect */
     authorizeParams?: Record<string, any>;
     /** String used to set the host to request the tokens to. Required. */
-    tokenHost?: string;
+    tokenHost: string;
     /** String path to request an access token. Default to /oauth/token. */
     tokenPath?: string;
     /** String path to revoke an access token. Default to /oauth/revoke. */
@@ -93,14 +93,14 @@ function checkState(state: string) {
 }
 
 const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, options, next) {
-  const { name, auth, client, scope, iss, redirect } = options
+  const { name, auth, client, scope, redirect } = options
 
-  const prefix = auth?.pathPrefix || "/smart";
-  const tokenHost = auth?.tokenHost || iss;
-  const authorizeParams = auth?.authorizeParams || {}
+  const prefix                = auth?.pathPrefix || "/smart";
+  const tokenHost             = auth.tokenHost;
+  const authorizeParams       = auth?.authorizeParams || {}
   const authorizeRedirectPath = `${prefix}/${name.toLowerCase()}/auth`
-  const redirectPath = redirect.path || `${prefix}/${name.toLowerCase()}/redirect`
-  const redirectUri = `${redirect.host}${redirectPath}`
+  const redirectPath          = redirect.path || `${prefix}/${name.toLowerCase()}/redirect`
+  const redirectUri           = `${redirect.host}${redirectPath}`
 
   function generateAuthorizationUri() {
     const state = generateState();
@@ -157,6 +157,8 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
       getNewAccessTokenUsingRefreshToken,
       generateAuthorizationUri
     })
+
+
   } catch (e) {
     next(e as Error)
     return

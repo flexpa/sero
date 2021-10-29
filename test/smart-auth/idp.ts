@@ -5,13 +5,16 @@ const smartAuthProviderExample: SmartAuthProvider = {
   scope: ["launch"],
   client: {
     id: "123",
-    secret: "somesecret"
+    secret: "somesecret",
   },
-  auth: {},
+  auth: {
+    tokenHost: "http://external.localhost",
+    authorizePath: "/smart/oauth/authorize",
+  },
   redirect: {
-    host: "http://localhost:3000"
+    host: "http://localhost:3000",
   },
-  iss: "http://external.localhost/smart/"
-}
+  iss: "http://external.localhost/issuer",
+};
 
 export default smartAuthProviderExample;
