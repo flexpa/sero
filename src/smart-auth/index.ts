@@ -9,12 +9,21 @@ import { randomBytes } from "crypto";
 import { AccessToken, AuthorizationCode } from "simple-oauth2";
 import { FastifyPluginCallback, FastifyReply, FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
+// @todo this should come from @types/fhir - and specifically fhir3.FhirResourceList but it 
+// hasn't been released yet - we use our deprecated enum
+import FHIRResourceList from "../resources";
+
+type LaunchContext = "launch" | "launch/patient"
+type Profile = "openid" | "fhirUser" | "profile"
+type Refresh = "online_access" | "offline_access"
+type Resources = `${"patient" | "user"}/${FHIRResourceList | "*"}.${"read" | "write" | "*"}`
+
+export type SmartAuthScope = LaunchContext | Profile | Refresh | Resources
 
 export type SmartAuthProvider = {
   /** A name to label the provider */
   name: string;
-  /** @todo this could be typed to the FHIR spec */
-  scope: string[];
+  scope: SmartAuthScope[];
   /** Client registration */
   client: {
     id: string;
@@ -51,7 +60,7 @@ export interface SmartAuthNamespace {
   authorizationCodeFlow: AuthorizationCode;
 
   getAccessTokenFromAuthorizationCodeFlow(
-    request: FastifyRequest<{Querystring: { code: string, state: string }}>,
+    request: FastifyRequest<SmartAuthRedirectQuerystring>,
   ): Promise<AccessToken>;
 
   getNewAccessTokenUsingRefreshToken(
@@ -60,7 +69,7 @@ export interface SmartAuthNamespace {
   ): Promise<AccessToken>;
 
   generateAuthorizationUri(
-    request: FastifyRequest,
+    scope?: SmartAuthScope[],
   ): string;
 }
 
@@ -80,6 +89,12 @@ export interface SmartAuthRedirectQuerystring {
   }
 }
 
+export interface SmartAuthUrlQuerystring {
+  Querystring?: {
+    scope?: SmartAuthScope[]
+  }
+} 
+
 const defaultState = randomBytes(10).toString('hex')
 
 function generateState(): string {
@@ -93,7 +108,7 @@ function checkState(state: string) {
 }
 
 const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, options, next) {
-  const { name, auth, client, scope, iss, redirect } = options
+  const { name, auth, client, scope: defaultScope, iss, redirect } = options
 
   const prefix = auth?.pathPrefix || "/smart";
   const tokenHost = auth?.tokenHost || iss;
@@ -102,11 +117,11 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
   const redirectPath = redirect.path || `${prefix}/${name.toLowerCase()}/redirect`
   const redirectUri = `${redirect.host}${redirectPath}`
 
-  function generateAuthorizationUri() {
+  function generateAuthorizationUri(scope?: SmartAuthScope[]) {
     const state = generateState();
     const urlOptions = Object.assign({}, authorizeParams, {
       redirect_uri: redirectUri,
-      scope,
+      scope: scope || defaultScope,
       state
     })
 
@@ -114,13 +129,19 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
     return authorizationUri
   }
 
-  function startRedirect(_request: FastifyRequest, reply: FastifyReply) {
-    const authorizationUri = generateAuthorizationUri()
+  function startRedirect(
+    request: FastifyRequest<SmartAuthUrlQuerystring>,
+    reply: FastifyReply
+  ) {
+    const authorizationUri = generateAuthorizationUri(request?.query?.scope)
 
     reply.redirect(authorizationUri);
   }
 
-  async function getAccessTokenFromAuthorizationCodeFlow(this: SmartAuthNamespace, request: FastifyRequest<{Querystring: { code: string, state: string }}>) {
+  async function getAccessTokenFromAuthorizationCodeFlow(
+    this: SmartAuthNamespace,
+    request: FastifyRequest<SmartAuthRedirectQuerystring>
+  ): Promise<AccessToken> {
     const { code, state } = request.query;
 
     checkState(state);
@@ -131,7 +152,10 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
     })
   }
 
-  async function getNewAccessTokenUsingRefreshToken(this: SmartAuthNamespace, refreshToken: string): Promise<AccessToken> {
+  async function getNewAccessTokenUsingRefreshToken(
+    this: SmartAuthNamespace,
+    refreshToken: string
+  ): Promise<AccessToken> {
     return await this.authorizationCodeFlow.createToken({ refresh_token: refreshToken }).refresh()
   }
 

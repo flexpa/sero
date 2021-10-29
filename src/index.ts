@@ -8,10 +8,12 @@ export {
 
 export {
   default as SmartAuth,
+  SmartAuthScope,
   SmartAuthProvider,
   SmartAuthNamespace,
   SmartAuthRedirectQuerystringSchema,
-  SmartAuthRedirectQuerystring
+  SmartAuthRedirectQuerystring,
+  SmartAuthUrlQuerystring
 } from "./smart-auth/index.js";
 
 export {
