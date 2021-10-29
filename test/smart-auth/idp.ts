@@ -9,7 +9,7 @@ const smartAuthProviderExample: SmartAuthProvider = {
   },
   auth: {
     tokenHost: "http://external.localhost/",
-    authorizePath: "/test/oauth/authorize",
+    authorizePath: "/smart/oauth/authorize",
   },
   redirect: {
     host: "http://localhost:3000",
