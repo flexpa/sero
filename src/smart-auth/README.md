@@ -30,18 +30,22 @@ import Fastify from "fastify";
 const fastify = Fastify();
 
 // Our Smart Health ID Provider config
-const smartHealthIdConfig: SmartAuthProvider = {
-  name: "smartHealthIdProvider",
+const smartAuthProviderExample: SmartAuthProvider = {
+  name: "idp",
   scope: ["launch"],
   client: {
     id: "123",
-    secret: "somesecret"
+    secret: "somesecret",
+  },
+  auth: {
+    tokenHost: "http://external.localhost",
+    authorizePath: "/smart/oauth/authorize",
   },
   redirect: {
-    host: "http://localhost:3000"
+    host: "http://localhost:3000",
   },
-  iss: "http://external.localhost/smart/"
-}
+  iss: "http://external.localhost/issuer",
+};
 
 // Initialize the plugin with our Smart Health ID Provider config
 fastify.register(SmartAuth, smartHealthIdConfig)
@@ -199,7 +203,7 @@ export type SmartAuthProvider = {
     /** Optional params to append to the authorization redirect */
     authorizeParams?: Record<string, any>;
     /** String used to set the host to request the tokens to. Required. */
-    tokenHost?: string;
+    tokenHost: string;
     /** String path to request an access token. Default to /oauth/token. */
     tokenPath?: string;
     /** String path to revoke an access token. Default to /oauth/revoke. */
