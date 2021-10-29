@@ -93,10 +93,10 @@ function checkState(state: string) {
 }
 
 const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, options, next) {
-  const { name, auth, client, scope, iss, redirect } = options
+  const { name, auth, client, scope, redirect } = options
 
   const prefix                = auth?.pathPrefix || "/smart";
-  const tokenHost             = auth.tokenHost || iss;
+  const tokenHost             = auth.tokenHost;
   const authorizeParams       = auth?.authorizeParams || {}
   const authorizeRedirectPath = `${prefix}/${name.toLowerCase()}/auth`
   const redirectPath          = redirect.path || `${prefix}/${name.toLowerCase()}/redirect`
