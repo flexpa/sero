@@ -85,11 +85,43 @@ You can send users of your application to this route to initiate the auth code f
 
 The redirect/callback route is your responsibility to define, like in the example above.
 
-### Imports/Types
+### Scopes
+
+You can dynamically request [SMART Auth scopes](http://www.hl7.org/fhir/smart-app-launch/scopes-and-launch-context/) on a request level.
+
+Per the above authorizational URL example, you can also pass additional per-request scope overrides via `scopes` in the query string:
+
+`/{prefix}/{SmartAuthProvider.name}/auth?scope=launch`
+
+For lists, like this:
+
+```javascript
+{
+  scope: ["launch", "patient/Observation.read"]
+}
+```
+
+You can encode it correctly with `new URLSearchParams`:
+
+```
+let querystring = new URLSearchParams({
+  scope: ["launch", "patient/Observation.read"]
+}).toString()
+```
+
+Which you can use to build the final URL:
+
+`/{prefix}/{SmartAuthProvider.name}/auth?scope=launch%20patient%2FObservation.read`
+
+Sero will pass your scoped parameters in its generated authorization URL for your request.
+
+### Exports/Imports/Types
 
 * `SmartAuth` is the Fastify plugin itself
+* `SmartAuthScope` is the union of all possible scope values in the SMART Auth protocol
 * `SmartAuthProvider` is a TS interface for the function namespace the plugin exposes back to you on the decorated server object (see decorators and functions below)
 * `SmartAuthRedirectQuerystring` is a TS interface that types the Fastify route contraints for the redirect/callback url - see example for use
+* `SmartAuthUrlQuerystring` is a TS interface that types the Fastify route contraints for the auto-generated authorization URL starting point described above. You can customize scopes on a per request basis.
 * `SmartAuthRedirectQuerystringSchema` is the AJV schema definition that corresponds to `SmartAuthRedirectQuerystring`, and can be used in the Fastify runtime - see example for use
 
 ### Decorators
@@ -128,7 +160,7 @@ authorizationCodeFlow: AuthorizationCode
 
 ```
 getAccessTokenFromAuthorizationCodeFlow(
-  request: FastifyRequest<{Querystring: { code: string, state: string }}>,
+  request: FastifyRequest<SmartAuthRedirectQuerystring>,
 ): Promise<AccessToken>;
 ```
 
@@ -145,7 +177,7 @@ getNewAccessTokenUsingRefreshToken(
 
 ```
 generateAuthorizationUri(
-  request: FastifyRequest,
+  scope?: SmartAuthScope[],
 ): string;
 ```
 
