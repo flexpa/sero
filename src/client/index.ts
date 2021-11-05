@@ -18,7 +18,7 @@
  * 
  * @example Iterables returned for the search operation:
  * ```typescript
- *  const { searche } = Client("https://r4.smarthealthit.org")
+ *  const { search } = Client("https://r4.smarthealthit.org")
  *  const search = search("Patient");
  *  search.next(); 
  * ```

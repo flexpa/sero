@@ -107,14 +107,18 @@ function checkState(state: string) {
   new Error('Invalid state')
 }
 
+function routeCase(value: string): string {
+  return value.toLowerCase().replace(/\s/g,'-');
+}
+
 const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, options, next) {
   const { name, auth, client, scope: defaultScope, redirect } = options
 
   const prefix                = auth?.pathPrefix || "/smart";
   const tokenHost             = auth.tokenHost;
   const authorizeParams       = auth?.authorizeParams || {}
-  const authorizeRedirectPath = `${prefix}/${name.toLowerCase()}/auth`
-  const redirectPath          = redirect.path || `${prefix}/${name.toLowerCase()}/redirect`
+  const authorizeRedirectPath = `${prefix}/${routeCase(name)}/auth`
+  const redirectPath          = redirect.path || `${prefix}/${routeCase(name)}/redirect`
   const redirectUri           = `${redirect.host}${redirectPath}`
 
   function generateAuthorizationUri(scope?: SmartAuthScope[]) {
