@@ -43,7 +43,18 @@ describe("an authorize url", () => {
   })
 })
 
-
+describe("a provider with a weird name", () => {
+  test("still has nice pretty URLs", async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: `/smart/bad-name/auth`
+    })
+  
+    expect(response.statusCode).toBe(302)
+    expect(response.headers['location']).toBe("http://external.localhost/smart/oauth/authorize?response_type=code&client_id=123&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fsmart%2Fbad-name%2Fredirect&scope=launch&state=smart-auth-static-bytes-not-random-mock")
+  })
+})
+  
 // @todo this requires implementing a mocked oauth server response
 test.todo("a callback url (in the server fixture) is successfully callable") 
 //, async () => {

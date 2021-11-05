@@ -1,6 +1,6 @@
 import { SmartAuthProvider } from "../../src";
 
-const smartAuthProviderExample: SmartAuthProvider = {
+export const smartAuthProviderExample: SmartAuthProvider = {
   name: "idp",
   scope: ["launch"],
   client: {
@@ -17,4 +17,19 @@ const smartAuthProviderExample: SmartAuthProvider = {
   iss: "http://external.localhost/issuer",
 };
 
-export default smartAuthProviderExample;
+export const badNameProviderExample: SmartAuthProvider = {
+  name: "Bad Name",
+  scope: ["launch"],
+  client: {
+    id: "123",
+    secret: "somesecret",
+  },
+  auth: {
+    tokenHost: "http://external.localhost",
+    authorizePath: "/smart/oauth/authorize",
+  },
+  redirect: {
+    host: "http://localhost:3000",
+  },
+  iss: "http://external.localhost/issuer",
+};
