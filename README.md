@@ -17,7 +17,7 @@ Sponsored by [Automate Medical](https://www.automatemedical.com/)
 * 💯 TypeScript support via @types/fhir
 * ⚛️ ESM and CommonJS module support for ease of use
 * ⚗️ Experimental Client and REST modules
-* 🧪 Tested with Epic and Corrohealth at [HL7 FHIR Connectathon 28](https://automatemedical.substack.com/p/-real-world-healthcare-software-testing)
+* 🧪 Tested with Epic and Corrohealth at [HL7 FHIR Connectathon 28](https://automatemedical.substack.com/p/-real-world-healthcare-software-testing) and with Humana and MITRE at [2021 CARIN Digital Insurance Card public testing event](https://confluence.hl7.org/display/CAR/Track+Page+CARIN+IG+For+Digital+Insurance+@+the+CARIN+Testing+event?preview=/79507703/81005440/CARIN%20Digital%20Insurance%20Card%20111121.pdf)
 
 ## Getting started
 * [docs.sero.run](http://docs.sero.run/)
