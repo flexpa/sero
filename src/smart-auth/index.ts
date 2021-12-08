@@ -35,16 +35,19 @@ export type SmartAuthProvider = {
     pathPrefix?: string;
     /** Optional params to append to the authorization redirect */
     authorizeParams?: Record<string, any>;
+    /** String used to set the host to request an "authorization code". Default to the value set on auth.tokenHost. */
+    authorizeHost?: string;
+    /** String path to request an authorization code. Default to /oauth/authorize. */
+    authorizePath?: string;
+    /** Optional params to post to the token exchange */
+    tokenParams?: Record<string, any>;
     /** String used to set the host to request the tokens to. Required. */
     tokenHost: string;
     /** String path to request an access token. Default to /oauth/token. */
     tokenPath?: string;
     /** String path to revoke an access token. Default to /oauth/revoke. */
     revokePath?: string;
-    /** String used to set the host to request an "authorization code". Default to the value set on auth.tokenHost. */
-    authorizeHost?: string;
-    /** String path to request an authorization code. Default to /oauth/authorize. */
-    authorizePath?: string;
+
   };
   redirect: {
     /** A required host name for the auth code exchange redirect path. */
@@ -115,6 +118,7 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
   const { name, auth, client, scope: defaultScope, redirect } = options
 
   const prefix                = auth?.pathPrefix || "/smart";
+  const tokenParams           = auth?.tokenParams || {}
   const tokenHost             = auth.tokenHost;
   const authorizeParams       = auth?.authorizeParams || {}
   const authorizeRedirectPath = `${prefix}/${routeCase(name)}/auth`
@@ -150,10 +154,12 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
 
     checkState(state);
 
-    return await this.authorizationCodeFlow.getToken({
+    const params = Object.assign({}, tokenParams, {
       code: code,
       redirect_uri: redirectUri
     })
+
+    return await this.authorizationCodeFlow.getToken(params)
   }
 
   async function getNewAccessTokenUsingRefreshToken(
