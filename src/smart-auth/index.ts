@@ -6,7 +6,7 @@
  */
 
 import { randomBytes } from "crypto";
-import { AccessToken, AuthorizationCode } from "simple-oauth2";
+import { AccessToken, AuthorizationCode, ClientCredentials } from "simple-oauth2";
 import { FastifyPluginCallback, FastifyReply, FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 // @todo this should come from @types/fhir - and specifically fhir3.FhirResourceList but it 
@@ -47,7 +47,8 @@ export type SmartAuthProvider = {
     tokenPath?: string;
     /** String path to revoke an access token. Default to /oauth/revoke. */
     revokePath?: string;
-
+    /** Overrides for client credentials */
+    clientCredentialsScope?: (SmartAuthScope | string)[];
   };
   redirect: {
     /** A required host name for the auth code exchange redirect path. */
@@ -64,6 +65,10 @@ export interface SmartAuthNamespace {
 
   getAccessTokenFromAuthorizationCodeFlow(
     request: FastifyRequest<SmartAuthRedirectQuerystring>,
+  ): Promise<AccessToken>;
+
+  getAccessTokenFromClientCredentialFlow(
+    smartAuthProvider: SmartAuthProvider,
   ): Promise<AccessToken>;
 
   getNewAccessTokenUsingRefreshToken(
@@ -200,6 +205,29 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
 
   next();
 }
+
+export const getAccessTokenFromClientCredentialFlow = async (
+  smartAuthProvider: SmartAuthProvider,
+): Promise<AccessToken | undefined> => {
+  const clientCredentialsOptions = {
+    client: smartAuthProvider.client,
+    auth: {
+      tokenPath: smartAuthProvider.auth?.tokenPath,
+      tokenHost: smartAuthProvider.auth?.tokenHost
+    },
+  };
+
+  const client = new ClientCredentials(clientCredentialsOptions);
+  const tokenParams = {
+    scope: smartAuthProvider.auth?.clientCredentialsScope || smartAuthProvider.scope,
+  };
+
+  try {
+    return await client.getToken(tokenParams);
+  } catch (error: any) {
+    console.log('Access Token error', error.message);
+  }
+};
 
 export default fastifyPlugin(oauthPlugin, {
   name: "smart-auth"
