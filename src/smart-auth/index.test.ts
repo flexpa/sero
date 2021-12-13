@@ -1,5 +1,22 @@
 import { fastify as app } from "../../test/fixtures/authServer"
 
+import {
+  SmartAuthProvider,
+  getAccessTokenFromClientCredentialFlow,
+} from './index';
+
+import { ClientCredentials } from "simple-oauth2";
+
+jest.mock("simple-oauth2", () => {
+  const original = jest.requireActual('simple-oauth2');
+  return {
+    ...original,
+    ClientCredentials: jest.fn().mockImplementation(() => ({
+      getToken: () => new Promise(resolve => resolve('faketoken')),
+    })),
+  };
+});
+
 jest.mock('crypto', () => ({
   randomBytes: (_number: number) => "smart-auth-static-bytes-not-random-mock"
 }));
@@ -54,6 +71,31 @@ describe("a provider with a weird name", () => {
     expect(response.headers['location']).toBe("http://external.localhost/smart/oauth/authorize?response_type=code&client_id=123&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fsmart%2Fbad-name%2Fredirect&scope=launch&state=smart-auth-static-bytes-not-random-mock")
   })
 })
+
+describe("getAccessTokenFromClientCredentialFlow", () => {
+  const stubSmartAuthProvider = {
+    name: 'smart-stub',
+    scope: ['fhirUser'],
+    client: {
+      id: 'foo',
+      secret: 'bar',
+    },
+    auth: {
+      tokenHost: 'http://localhost/token',
+      clientCredentialsScope: ['Public NonPII'],
+    },
+    redirect: {
+      host: 'http://localhost:3000/smart/smart-stub/auth',
+    },
+    iss: '',
+  } as SmartAuthProvider;
+
+  it("returns an access token", async () => {
+    const token = await getAccessTokenFromClientCredentialFlow(stubSmartAuthProvider);
+    expect(ClientCredentials).toHaveBeenCalled();
+    expect(token).toEqual('faketoken');
+  });
+});
   
 // @todo this requires implementing a mocked oauth server response
 test.todo("a callback url (in the server fixture) is successfully callable") 
