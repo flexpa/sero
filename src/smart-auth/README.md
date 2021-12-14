@@ -164,6 +164,14 @@ getAccessTokenFromAuthorizationCodeFlow(
 ): Promise<AccessToken>;
 ```
 
+`getAccessTokenFromClientCredentialFlow`:
+
+```
+getAccessTokenFromClientCredentialFlow(
+  smartAuthProvider: SmartAuthProvider,
+): Promise<AccessToken>;
+```
+
 `getNewAccessTokenUsingRefreshToken`:
 
 ```
