@@ -47,8 +47,6 @@ export type SmartAuthProvider = {
     tokenPath?: string;
     /** String path to revoke an access token. Default to /oauth/revoke. */
     revokePath?: string;
-    /** Overrides for client credentials */
-    clientCredentialsScope?: (SmartAuthScope | string)[];
   };
   redirect: {
     /** A required host name for the auth code exchange redirect path. */
@@ -69,6 +67,7 @@ export interface SmartAuthNamespace {
 
   getAccessTokenFromClientCredentialFlow(
     smartAuthProvider: SmartAuthProvider,
+    scope?: string[],
   ): Promise<AccessToken>;
 
   getNewAccessTokenUsingRefreshToken(
@@ -208,6 +207,7 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
 
 export const getAccessTokenFromClientCredentialFlow = async (
   smartAuthProvider: SmartAuthProvider,
+  scope?: string[]
 ): Promise<AccessToken | undefined> => {
   const clientCredentialsOptions = {
     client: smartAuthProvider.client,
@@ -219,7 +219,7 @@ export const getAccessTokenFromClientCredentialFlow = async (
 
   const client = new ClientCredentials(clientCredentialsOptions);
   const tokenParams = {
-    scope: smartAuthProvider.auth?.clientCredentialsScope || smartAuthProvider.scope,
+    scope: scope || smartAuthProvider.scope,
   };
 
   try {
