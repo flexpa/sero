@@ -82,7 +82,6 @@ describe("getAccessTokenFromClientCredentialFlow", () => {
     },
     auth: {
       tokenHost: 'http://localhost/token',
-      clientCredentialsScope: ['Public NonPII'],
     },
     redirect: {
       host: 'http://localhost:3000/smart/smart-stub/auth',
