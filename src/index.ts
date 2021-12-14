@@ -13,7 +13,8 @@ export {
   SmartAuthNamespace,
   SmartAuthRedirectQuerystringSchema,
   SmartAuthRedirectQuerystring,
-  SmartAuthUrlQuerystring
+  SmartAuthUrlQuerystring,
+  getAccessTokenFromClientCredentialFlow,
 } from "./smart-auth/index.js";
 
 export {
