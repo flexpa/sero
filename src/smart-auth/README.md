@@ -123,6 +123,7 @@ Sero will pass your scoped parameters in its generated authorization URL for you
 * `SmartAuthRedirectQuerystring` is a TS interface that types the Fastify route contraints for the redirect/callback url - see example for use
 * `SmartAuthUrlQuerystring` is a TS interface that types the Fastify route contraints for the auto-generated authorization URL starting point described above. You can customize scopes on a per request basis.
 * `SmartAuthRedirectQuerystringSchema` is the AJV schema definition that corresponds to `SmartAuthRedirectQuerystring`, and can be used in the Fastify runtime - see example for use
+* `getAccessTokenFromClientCredentialFlow` function to fetch a `client_credential` access token for a given `SmartAuthProvider`
 
 ### Decorators
 
@@ -161,14 +162,6 @@ authorizationCodeFlow: AuthorizationCode
 ```
 getAccessTokenFromAuthorizationCodeFlow(
   request: FastifyRequest<SmartAuthRedirectQuerystring>,
-): Promise<AccessToken>;
-```
-
-`getAccessTokenFromClientCredentialFlow`:
-
-```
-getAccessTokenFromClientCredentialFlow(
-  smartAuthProvider: SmartAuthProvider,
 ): Promise<AccessToken>;
 ```
 
