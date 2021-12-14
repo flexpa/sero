@@ -20,43 +20,56 @@ type Resources = `${"patient" | "user"}/${FHIRResourceList | "*"}.${"read" | "wr
 
 export type SmartAuthScope = LaunchContext | Profile | Refresh | Resources
 
-export type SmartAuthProvider = {
+export type GrantFlow = "authorization_code" | "client_credentials"
+
+export interface SmartAuthProvider {
   /** A name to label the provider */
   name: string;
-  scope: SmartAuthScope[];
   /** Client registration */
   client: {
     id: string;
     secret: string;
-  }
-  /** Auth related config */
-  auth: {
-    /** An optional prefix to add to every route path */
-    pathPrefix?: string;
-    /** Optional params to append to the authorization redirect */
-    authorizeParams?: Record<string, any>;
-    /** String used to set the host to request an "authorization code". Default to the value set on auth.tokenHost. */
-    authorizeHost?: string;
-    /** String path to request an authorization code. Default to /oauth/authorize. */
-    authorizePath?: string;
-    /** Optional params to post to the token exchange */
-    tokenParams?: Record<string, any>;
-    /** String used to set the host to request the tokens to. Required. */
-    tokenHost: string;
-    /** String path to request an access token. Default to /oauth/token. */
-    tokenPath?: string;
-    /** String path to revoke an access token. Default to /oauth/revoke. */
-    revokePath?: string;
   };
+  /** Auth related config */
+  auth: AuthCodeConfig | ClientCredentialsConfig;
+}
+
+interface SmartAuthConfig {
+  /** Supported grant flow */
+  grantFlow: GrantFlow;
+  /** String used to set the host to request the tokens to. Required. */
+  tokenHost: string;
+  /** String path to request an access token. Default to /oauth/token. */
+  tokenPath?: string;
+  /** Optional params to post to the token exchange */
+  tokenParams?: Record<string, any>;
+}
+
+interface ClientCredentialsConfig extends SmartAuthConfig {
+  grantFlow: "client_credentials"
+};
+
+interface AuthCodeConfig extends SmartAuthConfig {
+  grantFlow: "authorization_code"
+  scope: SmartAuthScope[];
+  /** An optional prefix to add to every route path */
+  pathPrefix?: string;
+  /** Optional params to append to the authorization redirect */
+  authorizeParams?: Record<string, any>;
+  /** String used to set the host to request an "authorization code". Default to the value set on auth.tokenHost. */
+  authorizeHost?: string;
+  /** String path to request an authorization code. Default to /oauth/authorize. */
+  authorizePath?: string;
+  /** String path to revoke an access token. Default to /oauth/revoke. */
+  revokePath?: string;
+  /** Where should users (with the auth code) be redirected to? */
   redirect: {
     /** A required host name for the auth code exchange redirect path. */
     host: string;
     /** An optional authorize path override. */
     path?: string;
   };
-  /** The default host name for the authorization service. Used to redirect users to the authorization URL. */
-  iss: string;
-}
+};
 
 export interface SmartAuthNamespace {
   authorizationCodeFlow: AuthorizationCode;
@@ -100,7 +113,11 @@ export interface SmartAuthUrlQuerystring {
   Querystring?: {
     scope?: SmartAuthScope[]
   }
-} 
+}
+
+function supports(provider: SmartAuthProvider, flow: GrantFlow): boolean {
+  return provider.auth.grantFlow === flow
+}
 
 const defaultState = randomBytes(10).toString('hex')
 
@@ -119,14 +136,17 @@ function routeCase(value: string): string {
 }
 
 const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, options, next) {
-  const { name, auth, client, scope: defaultScope, redirect } = options
+  const { name, client } = options;
+  supports(options, "authorization_code");
+  const auth =  options.auth as AuthCodeConfig;
+  const { scope: defaultScope, redirect } = auth;
 
   const prefix                = auth?.pathPrefix || "/smart";
   const tokenParams           = auth?.tokenParams || {}
   const tokenHost             = auth.tokenHost;
   const authorizeParams       = auth?.authorizeParams || {}
   const authorizeRedirectPath = `${prefix}/${routeCase(name)}/auth`
-  const redirectPath          = redirect.path || `${prefix}/${routeCase(name)}/redirect`
+  const redirectPath          = redirect?.path || `${prefix}/${routeCase(name)}/redirect`
   const redirectUri           = `${redirect.host}${redirectPath}`
 
   function generateAuthorizationUri(scope?: SmartAuthScope[]) {
@@ -209,6 +229,10 @@ export const getAccessTokenFromClientCredentialFlow = async (
   smartAuthProvider: SmartAuthProvider,
   scope?: string[]
 ): Promise<AccessToken | undefined> => {
+  if (!supports(smartAuthProvider, "client_credentials")) {
+    throw new Error(`SmartAuthProvider ${smartAuthProvider.name} does not support client_credentials - client_credentials must be explicitly set as a suppoedGrantFlow`)
+  }
+
   const clientCredentialsOptions = {
     client: smartAuthProvider.client,
     auth: {
@@ -218,12 +242,13 @@ export const getAccessTokenFromClientCredentialFlow = async (
   };
 
   const client = new ClientCredentials(clientCredentialsOptions);
-  const tokenParams = {
-    scope: scope || smartAuthProvider.scope,
-  };
-
+  const params = {
+    scope,
+    ...smartAuthProvider.auth.tokenParams
+  }
+  
   try {
-    return await client.getToken(tokenParams);
+    return await client.getToken(params);
   } catch (error: any) {
     console.log('Access Token error', error.message);
   }

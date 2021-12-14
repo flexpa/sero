@@ -1,7 +1,7 @@
 import { fastify as app } from "../../test/fixtures/authServer"
+import { ClientCredentialsExample } from "../../test/smart-auth/idp"
 
 import {
-  SmartAuthProvider,
   getAccessTokenFromClientCredentialFlow,
 } from './index';
 
@@ -73,24 +73,8 @@ describe("a provider with a weird name", () => {
 })
 
 describe("getAccessTokenFromClientCredentialFlow", () => {
-  const stubSmartAuthProvider = {
-    name: 'smart-stub',
-    scope: ['fhirUser'],
-    client: {
-      id: 'foo',
-      secret: 'bar',
-    },
-    auth: {
-      tokenHost: 'http://localhost/token',
-    },
-    redirect: {
-      host: 'http://localhost:3000/smart/smart-stub/auth',
-    },
-    iss: '',
-  } as SmartAuthProvider;
-
   it("returns an access token", async () => {
-    const token = await getAccessTokenFromClientCredentialFlow(stubSmartAuthProvider);
+    const token = await getAccessTokenFromClientCredentialFlow(ClientCredentialsExample);
     expect(ClientCredentials).toHaveBeenCalled();
     expect(token).toEqual('faketoken');
   });
