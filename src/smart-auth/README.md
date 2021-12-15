@@ -32,19 +32,19 @@ const fastify = Fastify();
 // Our Smart Health ID Provider config
 const smartAuthProviderExample: SmartAuthProvider = {
   name: "idp",
-  scope: ["launch"],
   client: {
     id: "123",
     secret: "somesecret",
   },
   auth: {
+    grantFlow: "authorization_code",
+    scope: ["launch"],
     tokenHost: "http://external.localhost",
     authorizePath: "/smart/oauth/authorize",
+    redirect: {
+      host: "http://localhost:3000",
+    }
   },
-  redirect: {
-    host: "http://localhost:3000",
-  },
-  iss: "http://external.localhost/issuer",
 };
 
 // Initialize the plugin with our Smart Health ID Provider config
@@ -68,16 +68,22 @@ fastify.listen(3000)
 
 ## Features
 
+### SMART App Launch + Client Credentials
+
+SMART Auth profiles can be configured for both the Authorization Code grant flow (i.e. standard SMART App Launch) and, separately, for the Client Credentials grant flow introduced in some SMART + FHIR systems even though it is not standard.
+
+The rest of this document will assume the perspective of the SMART App Launch flow. See more config details in [Smart Health ID Provider Config](#Smart-Health-ID-Provider-Config). 
+
 ### Routes
 
-By default, the above example will scaffold an authorization URL in the format:
+By default, the above example in [Usage](#Usage) will scaffold an authorization URL from the `const smartAuthProviderExample` configuration object in this format:
 
-`/{prefix}/{SmartAuthProvider.name}/auth`
+`/{prefix}/{smartAuthProviderExample.name}/auth`
 
-* Prefix by default is `smart` - you can customize in the SmartAuthProvider config 
-* `SmartAuthProvider.name` is the id field of the config
+* Prefix by default is `smart` - you can customize in `const smartAuthProviderExample`
+* `smartAuthProviderExample.name` is the id field of the config
 
-For the above example the authorization URL will be:
+For the above example in [Usage](#Usage) the authorization URL will be:
 
 `/smart/smartHealthIdProvider/auth`
 
@@ -187,43 +193,62 @@ generateAuthorizationUri(
 The supported configuration for the provider config is just a TypeScript interface:
 
 ```typescript
-export type SmartAuthProvider = {
+export interface SmartAuthProvider {
   /** A name to label the provider */
   name: string;
-  /** @todo this could be typed to the FHIR spec */
-  scope: string[];
   /** Client registration */
   client: {
     id: string;
     secret: string;
-  }
-  /** Auth related config */
-  auth?: {
-    /** An optional prefix to add to every route path */
-    pathPrefix?: string;
-    /** Optional params to append to the authorization redirect */
-    authorizeParams?: Record<string, any>;
-    /** String used to set the host to request the tokens to. Required. */
-    tokenHost: string;
-    /** String path to request an access token. Default to /oauth/token. */
-    tokenPath?: string;
-    /** String path to revoke an access token. Default to /oauth/revoke. */
-    revokePath?: string;
-    /** String used to set the host to request an "authorization code". Default to the value set on auth.tokenHost. */
-    authorizeHost?: string;
-    /** String path to request an authorization code. Default to /oauth/authorize. */
-    authorizePath?: string;
   };
+  /** Auth related config */
+  auth: AuthCodeConfig | ClientCredentialsConfig;
+}
+```
+
+SMART Auth profiles can be configured for both the Authorization Code grant flow (i.e. as in CARIN BlueButton 2.0's SMART support) and, separately, for the Client Credentials grant flow introduced in some SMART + FHIR systems even though it is not standard.
+
+These are typed this way:
+
+```typescript
+interface SmartAuthConfig {
+  /** Supported grant flow */
+  grantFlow: GrantFlow;
+  /** String used to set the host to request the tokens to. Required. */
+  tokenHost: string;
+  /** String path to request an access token. Default to /oauth/token. */
+  tokenPath?: string;
+  /** Optional params to post to the token exchange */
+  tokenParams?: Record<string, any>;
+}
+
+interface ClientCredentialsConfig extends SmartAuthConfig {
+  grantFlow: "client_credentials"
+};
+
+interface AuthCodeConfig extends SmartAuthConfig {
+  grantFlow: "authorization_code"
+  scope: SmartAuthScope[];
+  /** An optional prefix to add to every route path */
+  pathPrefix?: string;
+  /** Optional params to append to the authorization redirect */
+  authorizeParams?: Record<string, any>;
+  /** String used to set the host to request an "authorization code". Default to the value set on auth.tokenHost. */
+  authorizeHost?: string;
+  /** String path to request an authorization code. Default to /oauth/authorize. */
+  authorizePath?: string;
+  /** String path to revoke an access token. Default to /oauth/revoke. */
+  revokePath?: string;
+  /** Where should users (with the auth code) be redirected to? */
   redirect: {
     /** A required host name for the auth code exchange redirect path. */
     host: string;
     /** An optional authorize path override. */
     path?: string;
   };
-  /** The default host name for the authorization service. Used to redirect users to the authorization URL. */
-  iss: string;
-}
+};
 ```
+
 ### Redirect/Callback 
 
 By default, you need to define a redirect/callback path for your provider. This plugin is flexible about what you can do in this route.
