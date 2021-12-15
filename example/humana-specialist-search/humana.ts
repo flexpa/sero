@@ -48,7 +48,7 @@ const { practitioner } = specialistRole;
 // Guard against the possibility of the pracitioner not existing
 if (!practitioner?.reference) throw new Error("No practitioner matched that search")
 // Read the Practitioner from the API
-let readPractitioner = await read(practitioner.reference) as fhir4.Practitioner
+const readPractitioner = await read(practitioner.reference) as fhir4.Practitioner
 
 /**
  * Step 4: Log the results of the search

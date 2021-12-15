@@ -45,7 +45,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
   batch: { (bundle: fhir4.Bundle): Promise<Response> }
   transaction: { (bundle: fhir4.Bundle): Promise<Response> }
 } {
-  let options = {
+  const options = {
     ...init
   }
 
@@ -120,7 +120,7 @@ export default function(baseUrl: string, init: RequestInit = {}): {
    * @todo doesn't implement search-system
    * @todo has a max call stack bug for large page counts
    */
-   async function* search(type: string, query?: Record<string, any>) {
+  async function* search(type: string, query?: Record<string, any>) {
     const params = new URLSearchParams(query);
     const uri = `${baseUrl}/${type}${params ? "?".concat(params.toString()) : null}`;
     return yield * paginated(uri, options);

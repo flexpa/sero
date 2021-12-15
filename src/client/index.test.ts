@@ -18,7 +18,7 @@ test('Calling Patient query returns some', async () => {
   const searchQuery = search("Patient");
   const searchResponse = await searchQuery.next()
 
-  let resourceType = searchResponse.value?.resourceType
+  const resourceType = searchResponse.value?.resourceType
   expect(resourceType).toEqual("Bundle")
 
   const patientQuery = await read({ type: "Patient", id: "87a339d0-8cae-418e-89c7-8651e6aab3c6" });
