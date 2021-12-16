@@ -130,6 +130,9 @@ Sero will pass your scoped parameters in its generated authorization URL for you
 * `SmartAuthUrlQuerystring` is a TS interface that types the Fastify route contraints for the auto-generated authorization URL starting point described above. You can customize scopes on a per request basis.
 * `SmartAuthRedirectQuerystringSchema` is the AJV schema definition that corresponds to `SmartAuthRedirectQuerystring`, and can be used in the Fastify runtime - see example for use
 * `getAccessTokenFromClientCredentialFlow` is a function to fetch a `client_credential` access token for a given `SmartAuthProvider`. It will also prioritize the passed in `scope: string[]` over the `smartAuthProvider.scope`, in case you need special scope(s) for this flow. This function is not decorated on the fastify server, so it can be called directly on a `SmartAuthProvider`.
+* `ClientCredentialsConfig` a TS interface that types the auth configuration for the Client Credentials grant flow inside of a `SmartAuthProvider`
+* `AuthCodeConfig` is a TS interface that types the auth configuration for the Authorization Code grant flow inside of a `SmartAuthProvider`
+* `GrantFlow` is a TS union type for `"authorization_code"` and `"client_credentials"`
 
 ### Decorators
 

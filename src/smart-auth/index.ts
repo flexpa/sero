@@ -22,7 +22,7 @@ export type SmartAuthScope = LaunchContext | Profile | Refresh | Resources
 
 export type GrantFlow = "authorization_code" | "client_credentials"
 
-export interface SmartAuthProvider {
+export interface SmartAuthProvider<T = AuthCodeConfig | ClientCredentialsConfig> {
   /** A name to label the provider */
   name: string;
   /** Client registration */
@@ -31,10 +31,10 @@ export interface SmartAuthProvider {
     secret: string;
   };
   /** Auth related config */
-  auth: AuthCodeConfig | ClientCredentialsConfig;
+  auth: T;
 }
 
-interface SmartAuthConfig {
+export interface SmartAuthConfig {
   /** Supported grant flow */
   grantFlow: GrantFlow;
   /** String used to set the host to request the tokens to. Required. */
@@ -45,11 +45,11 @@ interface SmartAuthConfig {
   tokenParams?: Record<string, any>;
 }
 
-interface ClientCredentialsConfig extends SmartAuthConfig {
+export interface ClientCredentialsConfig extends SmartAuthConfig {
   grantFlow: "client_credentials"
 };
 
-interface AuthCodeConfig extends SmartAuthConfig {
+export interface AuthCodeConfig extends SmartAuthConfig {
   grantFlow: "authorization_code"
   scope: SmartAuthScope[];
   /** An optional prefix to add to every route path */
@@ -115,10 +115,6 @@ export interface SmartAuthUrlQuerystring {
   }
 }
 
-function supports(provider: SmartAuthProvider, flow: GrantFlow): boolean {
-  return provider.auth.grantFlow === flow
-}
-
 const defaultState = randomBytes(10).toString('hex')
 
 function generateState(): string {
@@ -135,10 +131,9 @@ function routeCase(value: string): string {
   return value.toLowerCase().replace(/\s/g,'-');
 }
 
-const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, options, next) {
+const oauthPlugin: FastifyPluginCallback<SmartAuthProvider<AuthCodeConfig>> = function (http, options, next) {
   const { name, client } = options;
-  supports(options, "authorization_code");
-  const auth =  options.auth as AuthCodeConfig;
+  const auth =  options.auth;
   const { scope: defaultScope, redirect } = auth;
 
   const prefix                = auth?.pathPrefix || "/smart";
@@ -215,8 +210,6 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
       getNewAccessTokenUsingRefreshToken,
       generateAuthorizationUri
     })
-
-
   } catch (e) {
     next(e as Error)
     return
@@ -226,13 +219,9 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider> = function (http, op
 }
 
 export const getAccessTokenFromClientCredentialFlow = async (
-  smartAuthProvider: SmartAuthProvider,
+  smartAuthProvider: SmartAuthProvider<ClientCredentialsConfig>,
   scope?: string[]
 ): Promise<AccessToken | undefined> => {
-  if (!supports(smartAuthProvider, "client_credentials")) {
-    throw new Error(`SmartAuthProvider ${smartAuthProvider.name} does not support client_credentials - client_credentials must be explicitly set as a suppoedGrantFlow`)
-  }
-
   const clientCredentialsOptions = {
     client: smartAuthProvider.client,
     auth: {
