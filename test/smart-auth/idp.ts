@@ -1,6 +1,6 @@
-import { SmartAuthProvider } from "../../src";
+import { AuthCodeConfig, ClientCredentialsConfig, SmartAuthProvider } from "../../src";
 
-export const AuthorizationCodeExample: SmartAuthProvider = {
+export const AuthorizationCodeExample: SmartAuthProvider<AuthCodeConfig> = {
   name: "idp",
   client: {
     id: "123",
@@ -17,7 +17,7 @@ export const AuthorizationCodeExample: SmartAuthProvider = {
   },
 };
 
-export const badNameExample: SmartAuthProvider = {
+export const badNameExample: SmartAuthProvider<AuthCodeConfig> = {
   name: "Bad Name",
   client: {
     id: "123",
@@ -34,7 +34,7 @@ export const badNameExample: SmartAuthProvider = {
   }
 };
 
-export const ClientCredentialsExample: SmartAuthProvider = {
+export const ClientCredentialsExample: SmartAuthProvider<ClientCredentialsConfig> = {
   name: 'smart-stub',
   client: {
     id: 'foo',
