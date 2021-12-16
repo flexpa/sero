@@ -15,6 +15,8 @@ export {
   SmartAuthRedirectQuerystring,
   SmartAuthUrlQuerystring,
   getAccessTokenFromClientCredentialFlow,
+  ClientCredentialsConfig,
+  AuthCodeConfig,
   GrantFlow
 } from "./smart-auth/index.js";
 
