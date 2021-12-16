@@ -221,7 +221,7 @@ const oauthPlugin: FastifyPluginCallback<SmartAuthProvider<AuthCodeConfig>> = fu
 export const getAccessTokenFromClientCredentialFlow = async (
   smartAuthProvider: SmartAuthProvider<ClientCredentialsConfig>,
   scope?: string[]
-): Promise<AccessToken | undefined> => {
+): Promise<AccessToken> => {
   const clientCredentialsOptions = {
     client: smartAuthProvider.client,
     auth: {
@@ -236,11 +236,7 @@ export const getAccessTokenFromClientCredentialFlow = async (
     ...smartAuthProvider.auth.tokenParams
   }
   
-  try {
-    return await client.getToken(params);
-  } catch (error: any) {
-    console.log('Access Token error', error.message);
-  }
+  return await client.getToken(params);
 };
 
 export default fastifyPlugin(oauthPlugin, {
