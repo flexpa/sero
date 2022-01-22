@@ -47,7 +47,7 @@ export interface SmartAuthConfig {
 
 export interface ClientCredentialsConfig extends SmartAuthConfig {
   grantFlow: "client_credentials"
-};
+}
 
 export interface AuthCodeConfig extends SmartAuthConfig {
   grantFlow: "authorization_code"
@@ -69,7 +69,7 @@ export interface AuthCodeConfig extends SmartAuthConfig {
     /** An optional authorize path override. */
     path?: string;
   };
-};
+}
 
 export interface SmartAuthNamespace {
   authorizationCodeFlow: AuthorizationCode;
