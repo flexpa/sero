@@ -1,4 +1,6 @@
-   <img width="340" align="right" src="https://user-images.githubusercontent.com/704789/135895296-45e52c29-f5ff-47e2-92cc-d6fe6bc6c89a.png">
+**NOTICE** THIS REPOSITORY IS UNMAINTAINED AND PRESENTED HERE FOR EDUCATIONAL PURPOSES ONLY.
+
+<img width="340" align="right" src="https://user-images.githubusercontent.com/704789/135895296-45e52c29-f5ff-47e2-92cc-d6fe6bc6c89a.png">
 
 [![Build](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/build.yaml) [![Test](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/test.yaml) [![CodeQL](https://github.com/Automate-Medical/sero/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Automate-Medical/sero/actions/workflows/codeql-analysis.yml)
 
